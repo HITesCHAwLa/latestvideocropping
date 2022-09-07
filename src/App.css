@@ -1,38 +1,209 @@
-.App {
-  text-align: center;
+.react-player {
+  width: 854px !important;
+  height: auto !important;
+
+  margin: 0 auto;
+}
+.Crop-Controls {
+  margin-bottom: 10px;
+}
+.Crop-Controls > * {
+  margin-bottom: 3px;
 }
 
-.App-logo {
-  height: 40vmin;
+img {
+  max-width: 100%;
+}
+.ReactCrop__drag-handle::after {
+  border: none !important;
+  border-left: 13px solid #dea32c !important;
+  border-top: 13px solid #dea32c !important;
+  background-color: transparent !important;
+  width: 35px !important;
+  height: 35px !important;
+}
+.ReactCrop .ord-n::after {
+  border-left: none !important;
+}
+.ReactCrop .ord-ne::after {
+  border-left: none !important;
+  border-right: 13px solid #dea32c !important;
+}
+.ReactCrop .ord-w::after {
+  border-top: none !important;
+}
+.ReactCrop .ord-sw::after {
+  border-top: none !important;
+  border-bottom: 13px solid #dea32c !important;
+}
+.ReactCrop .ord-se::after {
+  border: none !important;
+  border-bottom: 13px solid #dea32c !important;
+  border-right: 13px solid #dea32c !important;
+}
+.ReactCrop .ord-e::after {
+  border: none !important;
+  border-right: 13px solid #dea32c !important;
+}
+.ReactCrop .ord-s::after {
+  border: none !important;
+  border-bottom: 13px solid #dea32c !important;
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 669px !important;
+    margin: 0 auto !important;
+    /* margin: 1.75rem auto; */
+  }
+}
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 1000ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+.imagecrop img {
+  width: 85px;
+  height: 100%;
+  margin: 3px;
+}
+.imagecrop {
+  background-color: red;
+}
+.react-player {
+  width: 640px !important;
+  height: 338px !important;
+}
+
+.irs--round .irs-bar {
+  background-color: #00c2c0;
+}
+
+.irs--round .irs-handle {
+  background-color: #00c2c0;
+  border-color: #00c2c0;
+  box-shadow: 0px 0px 0px 5px rgba(0, 194, 192, 0.2);
+}
+
+.irs--round .irs-handle.state_hover,
+.irs--round .irs-handle:hover {
+  background-color: #00c2c0;
+}
+
+.irs--round .irs-handle {
+  width: 16px;
+  height: 16px;
+  top: 29px;
+}
+
+.irs--round .irs-from,
+.irs--round .irs-to,
+.irs--round .irs-single {
+  background-color: transparent;
+  color: #666666;
+}
+
+.irs--round .irs-from:before,
+.irs--round .irs-to:before,
+.irs--round .irs-single:before,
+.irs--round .irs-min,
+.irs--round .irs-max {
+  display: none;
+}
+
+body {
+  padding: 4em;
+}
+input[type="range"] {
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 400px;
+  margin: 0;
+  padding: 0 2px;
+  /* Add some L/R padding to ensure box shadow of handle is shown */
+  overflow: hidden;
+  border: 0;
+  border-radius: 1px;
+  outline: none;
+  background: linear-gradient(grey, grey) no-repeat center;
+  /* Use a linear gradient to generate only the 2px height background */
+  background-size: 100% 2px;
   pointer-events: none;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+input[type="range"]:active,
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  height: 28px;
+  width: 28px;
+  border-radius: 28px;
+  background-color: #fff;
+  position: relative;
+  margin: 5px 0;
+  /* Add some margin to ensure box shadow is shown */
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: all;
+  box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
+}
+input[type="range"]::-webkit-slider-thumb::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 13px;
+  left: 100%;
+  width: 2000px;
+  height: 2px;
+}
+.multi-range {
+  position: relative;
+  height: 50px;
+}
+.multi-range input[type="range"] {
+  position: absolute;
+}
+.multi-range input[type="range"]:nth-child(1)::-webkit-slider-thumb::before {
+  background-color: red;
+}
+.multi-range input[type="range"]:nth-child(2) {
+  background: none;
+}
+.multi-range input[type="range"]:nth-child(2)::-webkit-slider-thumb::before {
+  background-color: grey;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* new change  */
+
+/* video css */
+.videoframe-slider-box {
+  position: relative;
+}
+.video-frame {
+  position: relative;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  max-width: 100%;
 }
-
-.App-link {
-  color: #61dafb;
+.video-frame img {
+  width: 100%;
+  max-width: 100%;
+  height: 65px;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.video-slider {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translate(0%, -50%);
+  color: rgb(158, 0, 0);
 }
