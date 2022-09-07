@@ -108,7 +108,7 @@ function Main() {
     try {
       alert("start");
       await ffmpeg.current.load();
-      alert("start");
+      alert("end");
       setReady(true);
     } catch (error) {
       alert(JSON.stringify(error));
