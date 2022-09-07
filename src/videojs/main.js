@@ -216,64 +216,65 @@ function Main() {
   };
   return (
     ready && (
-      <div style={{ width: "450px", height: "250px", margin: "auto" }}>
-        {!flag ? (
-          <>
-            {" "}
-            <input
-              type="file"
-              className="hidden"
-              id="up_file"
-              onChange={(e) => uploadFile(e.target.files, e.target.value, e)}
-            />
-            <FileDrop
-              onDrop={(e) => uploadFile(e)}
-              onTargetClick={() => document.getElementById("up_file").click()}
-            >
-              Click or drop your video here to edit!
-            </FileDrop>
-          </>
-        ) : (
-          <h1>Loading.........</h1>
-        )}
-        {check && (
-          <>
-            <div style={{ width: "640px", height: "338px" }}>
-              <ReactCrop
-                crop={crop}
-                onChange={(c, percentCrop) => setCrop(c)}
-                minHeight={100}
-                minWidth={100}
-                maxHeight={340}
-                keepSelection={true}
+      <div className="video-main-box">
+        <div style={{ width: "450px", height: "250px", margin: "auto" }}>
+          {!flag ? (
+            <>
+              {" "}
+              <input
+                type="file"
+                className="hidden"
+                id="up_file"
+                onChange={(e) => uploadFile(e.target.files, e.target.value, e)}
+              />
+              <FileDrop
+                onDrop={(e) => uploadFile(e)}
+                onTargetClick={() => document.getElementById("up_file").click()}
               >
-                <ReactPlayer
-                  ref={ref}
-                  id="videoid"
-                  url={metadata?.url}
-                  className="react-player"
-                  playing={false}
-                  width="100%"
-                  height="100%"
-                  controls={true}
-                  onDuration={(e) => {}}
-                  onClickPreview={(ok) => {
-                    // console.log(ok, "onClickPreview");
-                  }}
-                  onProgress={(e) => {
-                    setTimings([
-                      {
-                        end: e.loadedSeconds,
-                        start: e.playedSeconds,
-                      },
-                    ]);
+                Click or drop your video here to edit!
+              </FileDrop>
+            </>
+          ) : (
+            <h1>Loading.........</h1>
+          )}
+          {check && (
+            <>
+              <div style={{ width: "640px", height: "338px" }}>
+                <ReactCrop
+                  crop={crop}
+                  onChange={(c, percentCrop) => setCrop(c)}
+                  minHeight={100}
+                  minWidth={100}
+                  maxHeight={340}
+                  keepSelection={true}
+                >
+                  <ReactPlayer
+                    ref={ref}
+                    id="videoid"
+                    url={metadata?.url}
+                    className="react-player"
+                    playing={false}
+                    width="100%"
+                    height="100%"
+                    controls={true}
+                    onDuration={(e) => {}}
+                    onClickPreview={(ok) => {
+                      // console.log(ok, "onClickPreview");
+                    }}
+                    onProgress={(e) => {
+                      setTimings([
+                        {
+                          end: e.loadedSeconds,
+                          start: e.playedSeconds,
+                        },
+                      ]);
 
-                    // setvideostart(e.playedSeconds);
-                    // setvideoduration(e.loadedSeconds);
-                    // setRange(e.played);
-                  }}
-                />
-                {/* <video
+                      // setvideostart(e.playedSeconds);
+                      // setvideoduration(e.loadedSeconds);
+                      // setRange(e.played);
+                    }}
+                  />
+                  {/* <video
                 width="100%"
                 height="100%"
                 src={metadata?.url}
@@ -285,23 +286,23 @@ function Main() {
                   );
                 }}
               ></video> */}
-              </ReactCrop>
+                </ReactCrop>
 
-              <div className="videoframe-slider-box">
-                <div className="video-frame">
-                  {imagedata.map((e) => {
-                    return <img src={e} alt="" />;
-                  })}
-                  <div className="video-slider">
-                    <HeaderMemo
-                      start={secondtomilisecond(Number(metadata.start))}
-                      end={secondtomilisecond(Number(metadata.duration))}
-                      setTimings={setTimings}
-                    />
+                <div className="videoframe-slider-box">
+                  <div className="video-frame" style={{ marginTop: "18px" }}>
+                    {imagedata.map((e) => {
+                      return <img src={e} alt="" />;
+                    })}
+                    <div className="video-slider">
+                      <HeaderMemo
+                        start={secondtomilisecond(Number(metadata.start))}
+                        end={secondtomilisecond(Number(metadata.duration))}
+                        setTimings={setTimings}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* <div
+                  {/* <div
                   className="video-slider"
                   id="my-slider"
                   data-min={metadata?.start}
@@ -309,29 +310,33 @@ function Main() {
                   data-range={metadata?.duration}
                   step={0.1}
                 ></div> */}
+                </div>
+                <button
+                  className="btn btn-dark crop-video-btn"
+                  onClick={(e) => cropvideo(e)}
+                >
+                  Crop video
+                </button>
+                {urldata !== "" && (
+                  <video
+                    width="100%"
+                    height="100%"
+                    src={urldata}
+                    controls
+                    style={{ marginTop: "80px" }}
+                    onProgress={(e) => {}}
+                  ></video>
+                )}
               </div>
-              {urldata !== "" && (
-                <video
-                  width="100%"
-                  height="100%"
-                  src={urldata}
-                  controls
-                  style={{ marginTop: "80px" }}
-                  onProgress={(e) => {}}
-                ></video>
-              )}
-            </div>
-            {/* <div
+              {/* <div
               id="my-slider"
               data-min={0}
               data-max={metadata?.duration}
               data-range={metadata?.duration}
             ></div> */}
-            <button onClick={(e) => cropvideo(e)} style={{ marginTop: "87px" }}>
-              crop-video
-            </button>
-            {/* <Rangeslider /> */}
-            {/* <Rangeslider
+
+              {/* <Rangeslider /> */}
+              {/* <Rangeslider
               data={
                 <div style={{ width: "100%", height: "65px", display: "flex" }}>
                   {imagedata.map((e) => {
@@ -340,8 +345,9 @@ function Main() {
                 </div>
               }
             /> */}
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
     )
   );
