@@ -106,10 +106,12 @@ function Main() {
   }
   const load = async () => {
     try {
+      alert("start");
       await ffmpeg.current.load();
-
+      alert("end");
       setReady(true);
     } catch (error) {
+      alert(JSON.stringify(error));
       throw error;
     }
   };
