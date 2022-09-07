@@ -4,6 +4,7 @@ import "./App.css";
 import Main from "./videojs/main";
 
 function App() {
+  alert("start");
   return <Main />;
 }
 
