@@ -116,7 +116,7 @@ function Main() {
   useEffect(() => {
     try {
       ffmpeg.current = createFFmpeg({
-        log: true,
+        log: false,
         // corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
       });
     } catch (err) {
