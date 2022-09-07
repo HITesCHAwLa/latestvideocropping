@@ -108,7 +108,7 @@ function Main() {
     try {
       alert("start");
       await ffmpeg.current.load();
-      alert("end");
+      alert("start");
       setReady(true);
     } catch (error) {
       alert(JSON.stringify(error));
@@ -124,17 +124,7 @@ function Main() {
     } catch (err) {
       throw err;
     }
-    (async () => {
-      try {
-        alert("start");
-        await ffmpeg.current.load();
-        alert("end");
-        setReady(true);
-      } catch (error) {
-        alert(JSON.stringify(error));
-        throw error;
-      }
-    })();
+    load();
   }, []);
   const [first, setfirst] = useState({ min: "", max: "" });
   // useEffect(() => {
