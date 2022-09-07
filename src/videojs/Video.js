@@ -60,15 +60,6 @@ function Video({ file, ffmpeg, crop }) {
           //   console.log(ok, "onClickPreview");
         }}
         onProgress={(e) => {
-          console.log(
-            `%c${JSON.stringify({
-              ...e,
-              playedSeconds: Math.floor(e.playedSeconds),
-              loadedSeconds: Math.ceil(e.loadedSeconds),
-            })}`,
-            "font-size:8px;color:red"
-          );
-
           setTimings([
             {
               end: e.loadedSeconds,

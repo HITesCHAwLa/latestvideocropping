@@ -51,7 +51,7 @@ function Main() {
   async function uploadFile(file) {
     setFlag(true);
     let urlfile = URL.createObjectURL(file[0]);
-    console.log("before");
+
     let data = await getVideoDimensionsOf(urlfile, file[0]);
     // alert(JSON.stringify(data));
     if (data.height > 1032 && data.width > 1920) {
@@ -106,12 +106,10 @@ function Main() {
   }
   const load = async () => {
     try {
-      alert("start");
       await ffmpeg.current.load();
-      alert("end");
+
       setReady(true);
     } catch (error) {
-      alert(JSON.stringify(error));
       throw error;
     }
   };
@@ -148,10 +146,7 @@ function Main() {
         "myFile.mp4",
         await fetchFile(metadata?.url)
       );
-      console.log(
-        metadata,
-        "++++++++++++++++++++++++++++++++++++++++++++++++++++"
-      );
+
       await ffmpeg.current.run(
         "-i",
         "myFile.mp4",
@@ -169,7 +164,7 @@ function Main() {
         "-2",
         "output.mp4"
       );
-      console.log(ffmpeg.current, "----------------------");
+
       const data = ffmpeg.current.FS("readFile", "output.mp4");
 
       const newurl = URL.createObjectURL(
@@ -266,15 +261,6 @@ function Main() {
                     // console.log(ok, "onClickPreview");
                   }}
                   onProgress={(e) => {
-                    console.log(
-                      `%c${JSON.stringify({
-                        ...e,
-                        playedSeconds: Math.floor(e.playedSeconds),
-                        loadedSeconds: Math.ceil(e.loadedSeconds),
-                      })}`,
-                      "font-size:8px;color:red"
-                    );
-
                     setTimings([
                       {
                         end: e.loadedSeconds,
@@ -331,12 +317,7 @@ function Main() {
                   src={urldata}
                   controls
                   style={{ marginTop: "80px" }}
-                  onProgress={(e) => {
-                    console.log(
-                      e,
-                      "--------------------------------------------"
-                    );
-                  }}
+                  onProgress={(e) => {}}
                 ></video>
               )}
             </div>

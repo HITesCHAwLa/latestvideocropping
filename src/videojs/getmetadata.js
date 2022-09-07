@@ -13,7 +13,7 @@ export function getVideoDimensionsOf(url, file) {
         const duration = video.duration.toFixed(2);
         const start = video.currentTime;
         const size = file.size;
-        console.log(video, "=====================================");
+
         // send back result
         resolve({ height, width, duration, start, size });
       },
