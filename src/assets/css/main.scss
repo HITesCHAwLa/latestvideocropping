@@ -1,0 +1,135 @@
+// styling
+.video-main-box {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .video-box {
+    width: 100%;
+    height: 350px;
+    margin: 0 auto;
+    max-width: 600px;
+    video {
+      width: 100%;
+      height: 350px;
+      object-fit: revert;
+      margin: 0 auto;
+    }
+  }
+
+  .file-drop-target {
+    border: 3px solid #454c6f;
+    padding: 10px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .crop-video-btn {
+    background-color: #454c6f;
+    border: none;
+    color: white;
+    font-weight: 600;
+    border: 1px solid #454c6f;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: white;
+      color: #454c6f;
+    }
+  }
+  .reatake-btn {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
+  .file-drop {
+    width: 65%;
+    height: auto;
+    margin: 0 auto;
+    padding: 0px 0px;
+  }
+}
+.video-modal {
+  .modal-content {
+    .modal-header {
+      background-color: #454c6f;
+      color: white;
+      .btn-close {
+        border: 1px solid white;
+        background-color: white;
+        opacity: 1;
+        border-radius: 30px;
+      }
+    }
+    .modal-footer {
+      border: none;
+      padding-top: 0px;
+      button {
+        background-color: #454c6f;
+        border: none;
+        color: white;
+        font-weight: 600;
+        border: 1px solid #454c6f;
+        transition: all 0.3s ease;
+        &:hover {
+          background-color: white;
+          color: #454c6f;
+        }
+      }
+    }
+  }
+  .current-time {
+    font-size: 20px;
+    font-weight: bold;
+    display: block;
+    top: 45px;
+    position: absolute;
+    color: #454c6f;
+    margin: 0 -1px;
+    transform: rotate(90deg);
+    font-size: 15px;
+  }
+  .video-frame {
+    margin-top: 0px;
+  }
+  .frame-content {
+    p {
+      text-align: center;
+      color: #454c6f;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 0px;
+      line-height: 1;
+      span {
+        font-size: 30px;
+        margin: 0px 4px;
+        &.xe {
+          padding: 0px 20px;
+          font-size: 22px;
+        }
+      }
+    }
+  }
+  .length-frame-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+}
+.video-length{
+    font-weight: bold;
+    color: black;
+    font-size: 15px;
+    span{
+    color: #454c6f;
+    svg{
+     margin: 0px 6px;
+     position: relative;
+    top: -2px;
+    }
+}
+}
+.modal-body {
+    padding: 30px 25px;
+}
+}

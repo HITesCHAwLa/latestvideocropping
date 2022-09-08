@@ -7,6 +7,9 @@ import Video from "./Video";
 import "react-image-crop/dist/ReactCrop.css";
 import ReactPlayer from "react-player";
 // import Modal from "../modal";
+import { MdHorizontalSplit, MdBorderVertical } from "react-icons/md"
+import {BsClockHistory, BsFillClockFill} from "react-icons/bs"
+import {CgDanger} from "react-icons/cg"
 
 import { generateVideoThumbnails } from "@rajesh896/video-thumbnails-generator";
 import Rangeslider from "./Rangeslider";
@@ -16,6 +19,8 @@ import {
   secondtomilisecond,
 } from "../dualrangeslider/timmer";
 import { formatSizeUnits, niceBytes } from "../bytetomb";
+import Modaldemo from "../Modaldemo";
+import { Button } from "react-bootstrap";
 // import Modal from "react-modal";
 const HeaderMemo = React.memo(Newrange);
 // Modal.setAppElement("#root");
@@ -24,6 +29,7 @@ function Main() {
   const [imagedata, setimagedata] = useState([]);
   const [flag, setFlag] = useState(false);
   const ffmpeg = useRef(null);
+  const [show, setShow] = useState(false);
   const [check, setcheck] = useState(false);
   const [ready, setReady] = React.useState(false);
   const ref = React.useRef("");
@@ -77,32 +83,11 @@ function Main() {
     }
     let imagedatas = await generateVideoThumbnails(file[0], 4);
     setimagedata(imagedatas);
-    // try {
-    //   ffmpeg.current.FS("writeFile", "myFile.mp4", await fetchFile(urlfile));
-    //   await ffmpeg.current.run(
-    //     "-i",
-    //     "myFile.mp4",
-    //     "-vf",
-    //     `fps=1`,
-    //     "out_%d.png"
-    //   );
-    //   let arr = [];
-
-    //   for (let i = 1; i <= data.duration; i++) {
-    //     const data = ffmpeg.current.FS("readFile", `out_${i}.png`);
-    //     const url = URL.createObjectURL(
-    //       new Blob([data.buffer], { type: "image/png" })
-    //     );
-    //     arr.push(url);
-    //     setimagedata(arr);
-    //   }
-    // } catch (err) {
-    //   throw err;
-    // }
 
     setMetadata({ ...data, url: urlfile });
     setFlag(false);
     setcheck(true);
+    setShow(true)
   }
   const load = async () => {
     try {
@@ -155,10 +140,8 @@ function Main() {
         "-t",
         `${timings[0].end - timings[0].start}`,
         "-vf",
-        `crop=${(metadata.width * crop?.width) / 640}:${
-          (metadata.height * crop?.height) / 338
-        }:${(metadata.width * crop?.x) / 640}:${
-          (metadata.height * crop?.y) / 338
+        `crop=${(metadata.width * crop?.width) / 640}:${(metadata.height * crop?.height) / 338
+        }:${(metadata.width * crop?.x) / 640}:${(metadata.height * crop?.y) / 338
         }`,
         "-strict",
         "-2",
@@ -173,6 +156,7 @@ function Main() {
       e.target.innerText = "cut the video";
       e.target.removeAttribute("disabled");
       seturldata(newurl);
+      setShow(false)
     } catch (err) {
       throw err;
     }
@@ -217,9 +201,9 @@ function Main() {
   return (
     ready && (
       <div className="video-main-box">
-        <div style={{ width: "450px", height: "250px", margin: "auto" }}>
-          {!flag ? (
-            <>
+        <div className="video-box">
+          {!check ? (
+            <div className="choose-video">
               {" "}
               <input
                 type="file"
@@ -233,13 +217,22 @@ function Main() {
               >
                 Click or drop your video here to edit!
               </FileDrop>
-            </>
-          ) : (
-            <h1>Loading.........</h1>
-          )}
+            </div>
+          ) : urldata !== "" ? (
+            <video
+              width="100%"
+              height="100%"
+              src={urldata}
+              controls
+              style={{ marginTop: "80px" }}
+              onProgress={(e) => { }}
+            ></video>
+          ) : ""}
           {check && (
             <>
-              <div style={{ width: "640px", height: "338px" }}>
+
+
+              <Modaldemo check={check} clickhandle={cropvideo} setcheck={setcheck} show={show} setShow={setShow}>
                 <ReactCrop
                   crop={crop}
                   onChange={(c, percentCrop) => setCrop(c)}
@@ -257,7 +250,7 @@ function Main() {
                     width="100%"
                     height="100%"
                     controls={true}
-                    onDuration={(e) => {}}
+                    onDuration={(e) => { }}
                     onClickPreview={(ok) => {
                       // console.log(ok, "onClickPreview");
                     }}
@@ -269,9 +262,7 @@ function Main() {
                         },
                       ]);
 
-                      // setvideostart(e.playedSeconds);
-                      // setvideoduration(e.loadedSeconds);
-                      // setRange(e.played);
+
                     }}
                   />
                   {/* <video
@@ -287,19 +278,27 @@ function Main() {
                 }}
               ></video> */}
                 </ReactCrop>
-
                 <div className="videoframe-slider-box">
-                  <div className="video-frame" style={{ marginTop: "18px" }}>
-                    {imagedata.map((e) => {
-                      return <img src={e} alt="" />;
-                    })}
-                    <div className="video-slider">
-                      <HeaderMemo
-                        start={secondtomilisecond(Number(metadata.start))}
-                        end={secondtomilisecond(Number(metadata.duration))}
-                        setTimings={setTimings}
-                      />
+                  <div className="frame-content">
+                    <p>Max 1920 <span><MdHorizontalSplit /></span> <span className="xe">X</span><span><MdBorderVertical /></span>1080 Max <span></span></p>
+                  </div>
+                  <div className="video-frame-box">
+                    <div className="video-frame">
+                      {imagedata.map((e) => {
+                        return <img src={e} alt="" />;
+                      })}
+                      <div className="video-slider">
+                        <HeaderMemo
+                          start={secondtomilisecond(Number(metadata.start))}
+                          end={secondtomilisecond(Number(metadata.duration))}
+                          setTimings={setTimings}
+                        />
+                      </div>
                     </div>
+                  </div>
+                  <div className="length-frame-box">
+                    <div className="video-length">Video Length 00:10 <span className="clock"><BsClockHistory/>00:10 Max</span></div>
+                    <div className="video-length frame-seconds">Frame Per Second: 30<span className="clock"><BsFillClockFill/>30 Max</span><span><CgDanger/></span></div>
                   </div>
 
                   {/* <div
@@ -311,13 +310,16 @@ function Main() {
                   step={0.1}
                 ></div> */}
                 </div>
-                <button
+              </Modaldemo>
+              <div className="reatake-btn">
+                <Button
                   className="btn btn-dark crop-video-btn"
-                  onClick={(e) => cropvideo(e)}
+                  onClick={() => setcheck(false)}
                 >
-                  Crop video
-                </button>
-                {urldata !== "" && (
+                  Retake
+                </Button>
+              </div>
+              {/* {urldata !== "" && (
                   <video
                     width="100%"
                     height="100%"
@@ -326,8 +328,8 @@ function Main() {
                     style={{ marginTop: "80px" }}
                     onProgress={(e) => {}}
                   ></video>
-                )}
-              </div>
+                )} */}
+
               {/* <div
               id="my-slider"
               data-min={0}
