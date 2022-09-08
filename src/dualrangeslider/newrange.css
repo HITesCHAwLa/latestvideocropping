@@ -43,7 +43,7 @@ section.range-slider input {
 }
 .video-slider {
   position: absolute;
-  top: -26px;
+  /* top: -26px; */
   left: 0;
   right: 0;
 }
@@ -68,4 +68,21 @@ section.range-slider input[type="range"] {
 }
 .crop-video-btn {
   margin-top: 20px;
+}
+
+.noUi-horizontal {
+  height: 66px !important;
+}
+
+.noUi-horizontal .noUi-handle {
+  width: 19px !important;
+  height: 72px !important;
+}
+
+.noUi-target {
+  background: #fafafa00 !important;
+}
+
+.noUi-connect {
+  background: #3fb8af29 !important;
 }

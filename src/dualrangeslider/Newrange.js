@@ -1,7 +1,9 @@
+import Nouislider from "nouislider-react";
 import React, { useEffect, useState } from "react";
 import "./newrange.css";
+import "nouislider/distribute/nouislider.css";
 import { millisToMinutesAndSeconds } from "./timmer";
-function Newrange({ start, end, setTimings }) {
+function Newrange({ start, end, setTimings, newchangeslide }) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
 
@@ -25,7 +27,7 @@ function Newrange({ start, end, setTimings }) {
     var displayElement = parent.getElementsByClassName("rangeValues")[0];
     displayElement.innerHTML = "$ " + slide1 + "k - $" + slide2 + "k";
   }
-  window.onload = function() {
+  window.onload = function () {
     // Initialize Sliders
     var sliderSections = document.getElementsByClassName("range-slider");
     for (var x = 0; x < sliderSections.length; x++) {
@@ -66,7 +68,7 @@ function Newrange({ start, end, setTimings }) {
       },
     ]);
   }
-  return (
+  return !newchangeslide ? (
     <section className="range-slider">
       <span className="rangeValues" />
       <span className="start current-time">
@@ -98,6 +100,13 @@ function Newrange({ start, end, setTimings }) {
         {millisToMinutesAndSeconds(timeduration.end)}
       </span>
     </section>
+  ) : (
+    <Nouislider
+      range={{ min: timeduration.start, max: timeduration.end }}
+      start={[timeduration.start, timeduration.end]}
+      connect
+      tooltips={true}
+    />
   );
 }
 

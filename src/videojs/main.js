@@ -292,6 +292,7 @@ function Main() {
                           start={secondtomilisecond(Number(metadata.start))}
                           end={secondtomilisecond(Number(metadata.duration))}
                           setTimings={setTimings}
+                          newchangeslide
                         />
                       </div>
                     </div>
