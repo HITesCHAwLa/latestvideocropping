@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.11.4",
     "@rajesh896/video-thumbnails-generator": "^2.3.9",
