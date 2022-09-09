@@ -4,5 +4,5 @@ export function secondtomilisecond(timmer) {
 export function millisToMinutesAndSeconds(videotime) {
   var minutes = Math.floor(videotime / 60000);
   var seconds = ((videotime % 60000) / 1000).toFixed(0);
-  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  return minutes + "0:" + (seconds < 10 ? "0" : "") + seconds;
 }

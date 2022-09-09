@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./newrange.css";
 import "nouislider/distribute/nouislider.css";
 import { millisToMinutesAndSeconds } from "./timmer";
+import { timechange } from "../timetomilisecond";
 function Newrange({ start, end, setTimings, newchangeslide }) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
@@ -68,6 +69,7 @@ function Newrange({ start, end, setTimings, newchangeslide }) {
       },
     ]);
   }
+
   return !newchangeslide ? (
     <section className="range-slider">
       <span className="rangeValues" />
@@ -103,9 +105,32 @@ function Newrange({ start, end, setTimings, newchangeslide }) {
   ) : (
     <Nouislider
       range={{ min: timeduration.start, max: timeduration.end }}
-      start={[timeduration.start, timeduration.end]}
+      start={[Number(timeduration.start), Number(timeduration.end)]}
       connect
+      step={500}
+      format={{
+        from: Number,
+        to: function (value) {
+          return millisToMinutesAndSeconds(value);
+        },
+      }}
+      animate={true}
       tooltips={true}
+      margin={1000}
+      onChange={(e) => {
+        setTimings([
+          {
+            start: timechange(e[0]),
+            end: timechange(e[1]),
+          },
+        ]);
+      }}
+      onSlide={(e) => {
+        console.log({
+          start: timechange(e[0]),
+          end: timechange(e[1]),
+        });
+      }}
     />
   );
 }

@@ -90,7 +90,7 @@
     font-size: 15px;
   }
   .video-frame {
-    margin-top: 0px;
+    margin-top: 35px;
   }
   .frame-content {
     p {
@@ -132,4 +132,17 @@
 .modal-body {
     padding: 30px 25px;
 }
+}
+
+
+
+
+// Hitesh 
+
+.noUi-horizontal .noUi-tooltip {
+
+  bottom: 102% !important;
+}
+.noUi-tooltip{
+  padding: 0 !important;
 }
