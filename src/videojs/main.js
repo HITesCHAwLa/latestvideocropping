@@ -163,6 +163,13 @@ function Main() {
       e.target.removeAttribute("disabled");
       seturldata(newurl);
       setShow(false);
+      setCrop({
+        height: 338,
+        unit: "px",
+        width: 640,
+        x: 0,
+        y: 0,
+      });
     } catch (err) {
       throw err;
     }
