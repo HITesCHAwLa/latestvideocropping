@@ -4,7 +4,7 @@ import "./newrange.css";
 import "nouislider/distribute/nouislider.css";
 import { millisToMinutesAndSeconds } from "./timmer";
 import { timechange } from "../timetomilisecond";
-function Newrange({ start, end, setTimings, newchangeslide }) {
+function Newrange({ start, end, setTimings, newchangeslide, refdata }) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
 
@@ -125,12 +125,7 @@ function Newrange({ start, end, setTimings, newchangeslide }) {
           },
         ]);
       }}
-      onSlide={(e) => {
-        console.log({
-          start: timechange(e[0]),
-          end: timechange(e[1]),
-        });
-      }}
+      onSlide={(e) => {}}
     />
   );
 }

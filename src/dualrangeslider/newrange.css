@@ -75,8 +75,11 @@ section.range-slider input[type="range"] {
 }
 
 .noUi-horizontal .noUi-handle {
-  width: 19px !important;
-  height: 72px !important;
+  width: 25px !important;
+  height: 65px !important;
+  background-color: #454c6f;
+  background: #454c6f;
+  box-shadow: 0px 0px 4px 1px #ffffff0d;
 }
 
 .noUi-target {
@@ -85,4 +88,79 @@ section.range-slider input[type="range"] {
 
 .noUi-connect {
   background: #3fb8af29 !important;
+}
+/* .noUi-horizontal .noUi-handle:before,
+.noUi-horizontal .noUi-handle:after {
+  display: none;
+} */
+/* .noUi-horizontal .noUi-handle.noUi-handle-lower {
+  content: url("/public/left-chevron.png");
+}
+.noUi-horizontal .noUi-handle.noUi-handle-upper {
+  content: url("/public/next.png");
+} */
+.noUi-handle {
+  position: relative;
+  display: inline-block;
+  display: block;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-lower:after {
+  content: url("/public/left-chevron.png");
+  position: absolute;
+  top: 15px;
+  left: -5px;
+  display: block;
+  transform: scale(0.06);
+  display: inline-block;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-upper::after {
+  content: url("/public/next.png");
+  position: absolute;
+  top: 15px;
+  left: -5px;
+  display: block;
+  transform: scale(0.06);
+  display: inline-block;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-lower,
+.noUi-horizontal .noUi-handle.noUi-handle-upper {
+  position: relative;
+}
+.noUi-horizontal .noUi-handle:before {
+  display: none;
+}
+.noUi-horizontal .noUi-connect {
+  border: 5px solid #454c6f !important;
+  background: #ffffff45 !important;
+}
+.noUi-horizontal .noUi-handle {
+  top: 0 !important;
+  border: none;
+}
+.noUi-horizontal .noUi-tooltip {
+  transform: translate(-50%, 0);
+  left: 50%;
+  bottom: 120%;
+  border: 1px solid black;
+  border-radius: 30px;
+  background-color: #000000c4;
+  color: white;
+  font-size: 12px;
+  padding: 3px 8px;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-lower {
+  position: absolute;
+  left: 67px;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-upper {
+  position: absolute;
+  right: -3px;
+}
+.noUi-target.noUi-horizontal {
+  border: none;
+  box-shadow: none;
+  position: relative;
+}
+.noUi-horizontal .noUi-tooltip {
+  margin-bottom: 4px;
 }

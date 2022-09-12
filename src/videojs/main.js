@@ -9,6 +9,7 @@ import ReactPlayer from "react-player";
 // import Modal from "../modal";
 import { MdHorizontalSplit, MdBorderVertical } from "react-icons/md";
 import { BsClockHistory, BsFillClockFill } from "react-icons/bs";
+import { BiInfoCircle } from "react-icons/bi";
 import { CgDanger } from "react-icons/cg";
 
 import { generateVideoThumbnails } from "@rajesh896/video-thumbnails-generator";
@@ -35,7 +36,7 @@ function Main() {
   const ref = React.useRef("");
   const [filevalue, setfilevalue] = useState("");
   const [urldata, seturldata] = useState("");
-
+  const [isPlaying, setisPlaying] = useState(false);
   const [timings, setTimings] = React.useState([
     {
       start: 0,
@@ -60,7 +61,7 @@ function Main() {
       setfilevalue(e);
     }
     let data = await getVideoDimensionsOf(urlfile, file[0]);
-    // alert(JSON.stringify(data));
+
     if (data.height > 1032 && data.width > 1920) {
       setErrordata({
         title: "Unable To Create Animation",
@@ -140,9 +141,11 @@ function Main() {
         "-i",
         "myFile.mp4",
         "-ss",
-        `${timings[0].start}`,
+        `${timings[0].start ?? metadata?.start}`,
         "-t",
         `${timings[0].end - timings[0].start}`,
+        // width: 854px;
+        // height: 460px;
         "-vf",
         `crop=${(metadata.width * crop?.width) / 640}:${
           (metadata.height * crop?.height) / 338
@@ -163,6 +166,7 @@ function Main() {
       e.target.removeAttribute("disabled");
       seturldata(newurl);
       setShow(false);
+
       setCrop({
         height: 338,
         unit: "px",
@@ -174,7 +178,7 @@ function Main() {
       throw err;
     }
   }
-
+  const [loadedtime, setloadedtime] = useState(0.22);
   return (
     ready && (
       <div className="video-main-box">
@@ -214,6 +218,7 @@ function Main() {
           {check && (
             <>
               <Modaldemo
+                videoref={ref}
                 check={check}
                 clickhandle={cropvideo}
                 setcheck={setcheck}
@@ -223,6 +228,9 @@ function Main() {
                 setCrop={setCrop}
                 setErrordata={setErrordata}
                 errordata={errordata}
+                timingscheck={timings}
+                setisPlaying={setisPlaying}
+                isPlaying={isPlaying}
               >
                 {errordata.title === "" ? (
                   <>
@@ -231,15 +239,17 @@ function Main() {
                       onChange={(c, percentCrop) => setCrop(c)}
                       minHeight={100}
                       minWidth={100}
-                      maxHeight={340}
+                      // maxHeight={460}
+                      maxHeight={338}
+                      maxWidth={640}
                       keepSelection={true}
                     >
                       <ReactPlayer
                         ref={ref}
                         id="videoid"
                         url={metadata?.url}
+                        playing={isPlaying}
                         className="react-player"
-                        playing={false}
                         width="100%"
                         height="100%"
                         controls={true}
@@ -248,6 +258,10 @@ function Main() {
                           // console.log(ok, "onClickPreview");
                         }}
                         onProgress={(e) => {
+                          if (e.playedSeconds === e.loadedSeconds) {
+                            setisPlaying(false);
+                          }
+                          // setloadedtime((pre) => pre + 10);
                           setTimings([
                             {
                               end: e.loadedSeconds,
@@ -259,8 +273,16 @@ function Main() {
                     </ReactCrop>
                     <div className="videoframe-slider-box">
                       <div className="frame-content">
-                        <p>
+                        {/* <p>
                           Max 1920{" "}
+                          <span>
+                            <input
+                              type="number"
+                              name=""
+                              id=""
+                              className="form-control icontrol"
+                            />
+                          </span>
                           <span>
                             <MdHorizontalSplit />
                           </span>{" "}
@@ -268,8 +290,57 @@ function Main() {
                           <span>
                             <MdBorderVertical />
                           </span>
-                          1080 Max <span></span>
-                        </p>
+                          <span>
+                            <input
+                              type="number"
+                              name=""
+                              id=""
+                              className="form-control icontrol"
+                            />
+                          </span>
+                          1080 Max{" "}
+                        </p> */}
+                        <div className="max-width frame">
+                          MAX 1920 &nbsp;{" "}
+                          <span className="icon">
+                            <MdHorizontalSplit />
+                          </span>
+                          <span>
+                            <input
+                              type="number"
+                              name=""
+                              id=""
+                              className="form-control icontrol"
+                              value={metadata?.width}
+                              disabled
+                            />
+                          </span>
+                        </div>
+                        <span className="xe"> &nbsp; X &nbsp; </span>
+                        <div className="max-height frame">
+                          <span>
+                            <input
+                              type="number"
+                              name=""
+                              id=""
+                              value={metadata?.height}
+                              disabled
+                              className="form-control icontrol"
+                            />
+                          </span>
+                          <span className="icon">
+                            {" "}
+                            <MdBorderVertical />
+                          </span>{" "}
+                          1080 MAX{" "}
+                          <span
+                            className="icon info"
+                            style={{ fontSize: "17px" }}
+                          >
+                            {" "}
+                            <BiInfoCircle />
+                          </span>
+                        </div>
                       </div>
                       <div className="video-frame-box">
                         <div className="video-frame">
@@ -282,30 +353,57 @@ function Main() {
                               end={secondtomilisecond(
                                 Number(metadata.duration)
                               )}
+                              refdata={ref}
                               setTimings={setTimings}
                               newchangeslide
                             />
                           </div>
+                          <div
+                            className="video-playpoint"
+                            style={{ left: `${loadedtime}%` }}
+                          ></div>
                         </div>
-                      </div>
-                      <div className="length-frame-box">
-                        <div className="video-length">
-                          Video Length{" "}
-                          {millisToMinutesAndSeconds(metadata.duration * 1000)}
-                          <span className="clock">
-                            <BsClockHistory />
-                            00:10 Max
-                          </span>
+                        <div className="fix-frame-box">
+                          <div className="fix-frame left">
+                            <input
+                              type="time"
+                              className="form-control icontrol"
+                              value={millisToMinutesAndSeconds(
+                                metadata.start * 1000
+                              )}
+                            />
+                          </div>
+                          <div className="fix-frame right">
+                            <input
+                              type="time"
+                              className="form-control icontrol"
+                              value={millisToMinutesAndSeconds(
+                                metadata.duration * 1000
+                              )}
+                            />
+                          </div>
                         </div>
-                        <div className="video-length frame-seconds">
-                          Frame Per Second: 30
-                          <span className="clock">
-                            <BsFillClockFill />
-                            30 Max
-                          </span>
-                          <span>
-                            <CgDanger />
-                          </span>
+                        <div className="length-frame-box">
+                          <div className="video-length">
+                            Video Length{" "}
+                            {millisToMinutesAndSeconds(
+                              metadata.duration * 1000
+                            )}
+                            <span className="clock">
+                              <BsClockHistory />
+                              00:10 Max
+                            </span>
+                          </div>
+                          <div className="video-length frame-seconds">
+                            Frame Per Second: 30
+                            <span className="clock">
+                              <BsFillClockFill />
+                              30 Max
+                            </span>
+                            <span>
+                              <CgDanger />
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>

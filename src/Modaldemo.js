@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import { FaRegPlayCircle } from "react-icons/fa";
+import { HiOutlinePause } from "react-icons/hi";
 function Modaldemo({
   children,
   clickhandle,
@@ -15,6 +16,10 @@ function Modaldemo({
   setCrop,
   errordata,
   setErrordata,
+  videoref,
+  timingscheck,
+  setisPlaying,
+  isPlaying,
 }) {
   const handleClose = (e) => {
     setcheck(false);
@@ -29,13 +34,22 @@ function Modaldemo({
     });
     setErrordata({ title: "", body: "" });
   };
-  const handleShow = () => setShow(true);
+
+  const playvideo = () => {
+    videoref.current.seekTo(timingscheck[0].start);
+
+    setisPlaying(true);
+  };
+
+  function pausevideo() {
+    setisPlaying(false);
+  }
 
   return (
     <>
       <Modal
         className="video-modal"
-        size="lg"
+        size="xl"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={show}
@@ -52,20 +66,29 @@ function Modaldemo({
         </Modal.Header>
         <Modal.Body>{children}</Modal.Body>
         <Modal.Footer>
-          <Button
+          {/* <Button
             variant="secondary"
             className="close-btn"
             onClick={handleClose}
-          >
-            Close
-          </Button>
+          > */}
+          {errordata.title === "" && (
+            <div className="play-button">
+              {isPlaying ? (
+                <HiOutlinePause onClick={pausevideo} />
+              ) : (
+                <FaRegPlayCircle onClick={playvideo} />
+              )}
+            </div>
+          )}
+
+          {/* </Button> */}
           {errordata.title === "" && (
             <Button
               variant="primary"
               className="crop-btn"
               onClick={(e) => clickhandle(e)}
             >
-              Crop video
+              Save
             </Button>
           )}
         </Modal.Footer>

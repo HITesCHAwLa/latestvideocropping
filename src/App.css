@@ -1,8 +1,11 @@
 .react-player {
-  width: 854px !important;
-  height: auto !important;
-
   margin: 0 auto;
+}
+.react-player video {
+  max-height: 360px;
+  object-fit: cover;
+  max-width: 640px;
+  width: 100%;
 }
 .Crop-Controls {
   margin-bottom: 10px;
@@ -54,9 +57,9 @@ img {
   .modal-dialog {
     max-width: 669px !important;
     margin: 0 auto !important;
-    /* margin: 1.75rem auto; */
   }
 }
+
 .ReactModal__Overlay {
   opacity: 0;
   transition: opacity 1000ms ease-in-out;
@@ -76,10 +79,6 @@ img {
 }
 .imagecrop {
   background-color: #454c6f;
-}
-.react-player {
-  width: 640px !important;
-  height: 338px !important;
 }
 
 .irs--round .irs-bar {
@@ -129,13 +128,13 @@ input[type="range"] {
   width: 400px;
   margin: 0;
   padding: 0 2px;
-  /* Add some L/R padding to ensure box shadow of handle is shown */
+
   overflow: hidden;
   border: 0;
   border-radius: 1px;
   outline: none;
   background: linear-gradient(grey, grey) no-repeat center;
-  /* Use a linear gradient to generate only the 2px height background */
+
   background-size: 100% 2px;
   pointer-events: none;
 }
@@ -150,7 +149,6 @@ input[type="range"]::-webkit-slider-thumb {
   background-color: #fff;
   position: relative;
   margin: 5px 0;
-  /* Add some margin to ensure box shadow is shown */
   cursor: pointer;
   -webkit-appearance: none;
   appearance: none;
@@ -183,30 +181,6 @@ input[type="range"]::-webkit-slider-thumb::before {
   background-color: grey;
 }
 
-
-/* new change  */
-
 /* video css */
-.videoframe-slider-box {
-  position: relative;
-}
-.video-frame {
-  position: relative;
-  width: 100%;
-  display: flex;
-  max-width: 100%;
-}
-.video-frame img {
-  width: 100%;
-  max-width: 100%;
-  height: 65px;
-}
-.video-slider {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  transform: translate(0%, -50%);
-  color: #454c6f;
-}
 
 /* Styling Nemi */
