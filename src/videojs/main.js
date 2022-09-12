@@ -366,20 +366,24 @@ function Main() {
                         <div className="fix-frame-box">
                           <div className="fix-frame left">
                             <input
-                              type="time"
+                              type="text"
+                              disabled
                               className="form-control icontrol"
                               value={millisToMinutesAndSeconds(
                                 metadata.start * 1000
                               )}
+                              style={{ margin: "0 !important", width: "70px" }}
                             />
                           </div>
                           <div className="fix-frame right">
                             <input
-                              type="time"
+                              disabled
+                              type="text"
                               className="form-control icontrol"
                               value={millisToMinutesAndSeconds(
                                 metadata.duration * 1000
                               )}
+                              style={{ margin: "0 !important", width: "70px" }}
                             />
                           </div>
                         </div>
