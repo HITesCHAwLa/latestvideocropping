@@ -22,6 +22,7 @@ import {
 import { formatSizeUnits, niceBytes } from "../bytetomb";
 import Modaldemo from "../Modaldemo";
 import { Alert, Button } from "react-bootstrap";
+import { timechange } from "../timetomilisecond";
 // import Modal from "react-modal";
 const HeaderMemo = React.memo(Newrange);
 // Modal.setAppElement("#root");
@@ -29,6 +30,7 @@ function Main() {
   const [metadata, setMetadata] = useState();
   const [imagedata, setimagedata] = useState([]);
   const [flag, setFlag] = useState(false);
+  const [playpausetime, setPlaypausetime] = useState({});
   const ffmpeg = useRef(null);
   const [show, setShow] = useState(false);
   const [check, setcheck] = useState(false);
@@ -48,7 +50,7 @@ function Main() {
     body: "",
   });
   const [crop, setCrop] = React.useState({
-    height: 338,
+    height: 360,
     unit: "px",
     width: 640,
     x: 0,
@@ -101,11 +103,13 @@ function Main() {
     setimagedata(imagedatas);
 
     setMetadata({ ...data, url: urlfile });
+    setTimings([{ start: data.start, end: Number(data.duration) }]);
 
     setfilevalue("");
     setcheck(true);
     setShow(true);
   }
+
   const load = async () => {
     try {
       await ffmpeg.current.load();
@@ -141,16 +145,16 @@ function Main() {
         "-i",
         "myFile.mp4",
         "-ss",
-        `${timings[0].start ?? metadata?.start}`,
+        `${timings[0].start}`,
         "-t",
         `${timings[0].end - timings[0].start}`,
         // width: 854px;
         // height: 460px;
         "-vf",
         `crop=${(metadata.width * crop?.width) / 640}:${
-          (metadata.height * crop?.height) / 338
+          (metadata.height * crop?.height) / 360
         }:${(metadata.width * crop?.x) / 640}:${
-          (metadata.height * crop?.y) / 338
+          (metadata.height * crop?.y) / 360
         }`,
         "-strict",
         "-2",
@@ -168,7 +172,7 @@ function Main() {
       setShow(false);
 
       setCrop({
-        height: 338,
+        height: 360,
         unit: "px",
         width: 640,
         x: 0,
@@ -178,7 +182,19 @@ function Main() {
       throw err;
     }
   }
-  const [loadedtime, setloadedtime] = useState(0.22);
+
+  const [loadedtime, setloadedtime] = useState(0);
+
+  function dynamicdata(playtime, duration) {
+    // if (playtime == duration) {
+    //   setloadedtime(0);
+    //   return false;
+    // }
+    let a = playtime * 100;
+    let b = a / duration;
+    setloadedtime(b);
+  }
+
   return (
     ready && (
       <div className="video-main-box">
@@ -240,7 +256,7 @@ function Main() {
                       minHeight={100}
                       minWidth={100}
                       // maxHeight={460}
-                      maxHeight={338}
+                      maxHeight={360}
                       maxWidth={640}
                       keepSelection={true}
                     >
@@ -261,13 +277,23 @@ function Main() {
                           if (e.playedSeconds === e.loadedSeconds) {
                             setisPlaying(false);
                           }
-                          // setloadedtime((pre) => pre + 10);
-                          setTimings([
-                            {
-                              end: e.loadedSeconds,
-                              start: e.playedSeconds,
-                            },
-                          ]);
+
+                          if (Math.ceil(e.playedSeconds) == timings[0].end) {
+                            setisPlaying(false);
+                          }
+                          // setloadedtime((pre) => pre + 3.1);
+                          // console.log(e);
+                          dynamicdata(e.playedSeconds, e.loadedSeconds);
+                          setPlaypausetime({
+                            end: e.loadedSeconds,
+                            start: e.playedSeconds,
+                          });
+                          // setTimings([
+                          //   {
+                          //     end: e.loadedSeconds,
+                          //     start: e.playedSeconds,
+                          //   },
+                          // ]);
                         }}
                       />
                     </ReactCrop>

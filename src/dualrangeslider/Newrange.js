@@ -118,6 +118,7 @@ function Newrange({ start, end, setTimings, newchangeslide, refdata }) {
       tooltips={true}
       margin={1000}
       onChange={(e) => {
+        refdata.current.seekTo(timechange(e[0]));
         setTimings([
           {
             start: timechange(e[0]),
