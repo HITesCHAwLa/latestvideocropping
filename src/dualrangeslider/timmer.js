@@ -6,3 +6,7 @@ export function millisToMinutesAndSeconds(videotime) {
   var seconds = ((videotime % 60000) / 1000).toFixed(0);
   return minutes + "0:" + (seconds < 10 ? "0" : "") + seconds;
 }
+
+export function fordualrangeslider(videotime) {
+  return (videotime / 1000).toFixed(2);
+}

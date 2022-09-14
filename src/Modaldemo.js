@@ -36,7 +36,7 @@ function Modaldemo({
   };
 
   const playvideo = () => {
-    videoref.current.seekTo(timingscheck[0].start);
+    videoref.current.seekTo(timingscheck[0].start, "seconds");
 
     setisPlaying(true);
   };

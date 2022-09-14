@@ -33,6 +33,7 @@ function Main() {
   const [playpausetime, setPlaypausetime] = useState({});
   const ffmpeg = useRef(null);
   const [show, setShow] = useState(false);
+  const [playtimevideo, setplaytimevideo] = useState(0);
   const [check, setcheck] = useState(false);
   const [ready, setReady] = React.useState(false);
   const ref = React.useRef("");
@@ -45,6 +46,7 @@ function Main() {
       end: 0,
     },
   ]);
+  const [forplaypause, setforplaypause] = useState({ start: null, end: null });
   const [errordata, setErrordata] = useState({
     title: "",
     body: "",
@@ -266,6 +268,7 @@ function Main() {
                         url={metadata?.url}
                         playing={isPlaying}
                         className="react-player"
+                        progressInterval={30}
                         width="100%"
                         height="100%"
                         controls={true}
@@ -278,12 +281,16 @@ function Main() {
                             setisPlaying(false);
                           }
 
-                          if (Math.ceil(e.playedSeconds) == timings[0].end) {
+                          if (e.playedSeconds.toFixed(2) >= timings[0].end) {
                             setisPlaying(false);
                           }
                           // setloadedtime((pre) => pre + 3.1);
-                          // console.log(e);
-                          dynamicdata(e.playedSeconds, e.loadedSeconds);
+
+                          dynamicdata(
+                            e.playedSeconds.toFixed(2),
+                            e.loadedSeconds
+                          );
+                         
                           setPlaypausetime({
                             end: e.loadedSeconds,
                             start: e.playedSeconds,
@@ -382,6 +389,9 @@ function Main() {
                               refdata={ref}
                               setTimings={setTimings}
                               newchangeslide
+                              playtime={playtimevideo}
+                              setforplaypause={setforplaypause}
+                              playpausetimevideo={forplaypause}
                             />
                           </div>
                           <div

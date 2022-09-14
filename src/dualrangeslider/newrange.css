@@ -150,11 +150,12 @@ section.range-slider input[type="range"] {
 }
 .noUi-horizontal .noUi-handle.noUi-handle-lower {
   position: absolute;
-  left: 67px;
+  /* left: 67px; */
+  left: 38px;
 }
 .noUi-horizontal .noUi-handle.noUi-handle-upper {
   position: absolute;
-  right: -3px;
+  right: -23px;
 }
 .noUi-target.noUi-horizontal {
   border: none;
