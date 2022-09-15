@@ -269,8 +269,8 @@ function Main() {
                         playing={isPlaying}
                         className="react-player"
                         progressInterval={30}
-                        width="100%"
-                        height="100%"
+                        width="640px"
+                        height="360px"
                         controls={true}
                         onDuration={(e) => {}}
                         onClickPreview={(ok) => {
@@ -386,6 +386,7 @@ function Main() {
                               end={secondtomilisecond(
                                 Number(metadata.duration)
                               )}
+                              timings={timings}
                               refdata={ref}
                               setTimings={setTimings}
                               newchangeslide

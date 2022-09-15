@@ -26,7 +26,7 @@ function Modaldemo({
     setShow(false);
     seturldata("");
     setCrop({
-      height: 338,
+      height: 360,
       unit: "px",
       width: 640,
       x: 0,

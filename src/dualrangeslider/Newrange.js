@@ -4,14 +4,26 @@ import "./newrange.css";
 import "nouislider/distribute/nouislider.css";
 import { fordualrangeslider, millisToMinutesAndSeconds } from "./timmer";
 import { timechange } from "../timetomilisecond";
-function Newrange({ start, end, setTimings, newchangeslide, refdata }) {
+function Newrange({
+  start,
+  end,
+  setTimings,
+  newchangeslide,
+  refdata,
+  timings,
+}) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
 
   useEffect(() => {
     settimeduration({ start: start, end: end });
   }, []);
-
+  // useEffect(() => {
+  //   document.getElementsByClassName("noUi-tooltip")[0].innerHTML =
+  //     millisToMinutesAndSeconds(timings[0].start * 1000);
+  //   document.getElementsByClassName("noUi-tooltip")[1].innerHTML =
+  //     millisToMinutesAndSeconds(timings[0].end * 1000);
+  // }, []);
   function getVals() {
     // Get slider values
     var parent = this.parentNode;
@@ -126,7 +138,12 @@ function Newrange({ start, end, setTimings, newchangeslide, refdata }) {
           },
         ]);
       }}
-      onSlide={(e) => {}}
+      onSlide={(e) => {
+        // document.getElementsByClassName("noUi-tooltip")[0].innerHTML =
+        //   millisToMinutesAndSeconds(e[0] * 1000);
+        // document.getElementsByClassName("noUi-tooltip")[1].innerHTML =
+        //   millisToMinutesAndSeconds(e[1] * 1000);
+      }}
     />
   );
 }
