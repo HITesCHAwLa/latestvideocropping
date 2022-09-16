@@ -46,15 +46,16 @@ function Main() {
       end: 0,
     },
   ]);
+  const [videoresolution, setvideoresolution] = useState({});
   const [forplaypause, setforplaypause] = useState({ start: null, end: null });
   const [errordata, setErrordata] = useState({
     title: "",
     body: "",
   });
   const [crop, setCrop] = React.useState({
-    height: 360,
-    unit: "px",
-    width: 640,
+    height: 100,
+    unit: "%",
+    width: 100,
     x: 0,
     y: 0,
   });
@@ -103,6 +104,7 @@ function Main() {
     }
     let imagedatas = await generateVideoThumbnails(file[0], 4);
     setimagedata(imagedatas);
+    setvideoresolution({ width: data.width, height: data.height });
 
     setMetadata({ ...data, url: urlfile });
     setTimings([{ start: data.start, end: Number(data.duration) }]);
@@ -153,10 +155,10 @@ function Main() {
         // width: 854px;
         // height: 460px;
         "-vf",
-        `crop=${(metadata.width * crop?.width) / 640}:${
-          (metadata.height * crop?.height) / 360
-        }:${(metadata.width * crop?.x) / 640}:${
-          (metadata.height * crop?.y) / 360
+        `crop=${(metadata.width * crop?.width) / 100}:${
+          (metadata.height * crop?.height) / 100
+        }:${(metadata.width * crop?.x) / 100}:${
+          (metadata.height * crop?.y) / 100
         }`,
         "-strict",
         "-2",
@@ -174,9 +176,9 @@ function Main() {
       setShow(false);
 
       setCrop({
-        height: 360,
-        unit: "px",
-        width: 640,
+        height: 100,
+        unit: "%",
+        width: 100,
         x: 0,
         y: 0,
       });
@@ -208,7 +210,7 @@ function Main() {
                 type="file"
                 className="hidden"
                 id="up_file"
-                accept="video/*"
+                accept=".3g2,.3gp,.aaf,.asf,.avi,.cavs,.dv,.f4v,.flv,.ivf,.m2ts,.m2v,.m4v,.mkv,.mod,.mov,.mp4,.mpeg,.mpg,.mts,.mxf,.ogv,.qt,.rm,.rmvb,.tod,.ts,.vob,.webm,.wmv,.wtv"
                 value={filevalue}
                 onChange={(e) => uploadFile(e.target.files, e.target.value, e)}
               />
@@ -254,23 +256,37 @@ function Main() {
                   <>
                     <ReactCrop
                       crop={crop}
-                      onChange={(c, percentCrop) => setCrop(c)}
+                      onChange={(c, percentCrop) => {
+                        setCrop(percentCrop);
+
+                        // setvideoresolution({
+                        //   width: Math.round((metadata.width * c.width) / 100),
+                        //   height: Math.round(
+                        //     (metadata.height * c.height) / 100
+                        //   ),
+                        // });
+                      }}
                       minHeight={100}
                       minWidth={100}
                       // maxHeight={460}
-                      maxHeight={360}
-                      maxWidth={640}
+                      maxHeight={"100%"}
+                      maxWidth={"100%"}
                       keepSelection={true}
                     >
                       <ReactPlayer
+                        // css={{
+                        //   position: `absolute`,
+                        //   top: 0,
+                        //   left: 0,
+                        // }}
                         ref={ref}
                         id="videoid"
                         url={metadata?.url}
                         playing={isPlaying}
                         className="react-player"
                         progressInterval={30}
-                        width="640px"
-                        height="360px"
+                        width={"100%"}
+                        height={"100%"}
                         controls={true}
                         onDuration={(e) => {}}
                         onClickPreview={(ok) => {
@@ -290,7 +306,7 @@ function Main() {
                             e.playedSeconds.toFixed(2),
                             e.loadedSeconds
                           );
-                         
+
                           setPlaypausetime({
                             end: e.loadedSeconds,
                             start: e.playedSeconds,
@@ -343,9 +359,42 @@ function Main() {
                               type="number"
                               name=""
                               id=""
+                              min={100}
                               className="form-control icontrol"
-                              value={metadata?.width}
-                              disabled
+                              value={videoresolution?.width}
+                              max={
+                                metadata?.width -
+                                (metadata?.width * crop.x) / 100
+                              }
+                              onChange={(ert) => {
+                                setvideoresolution((e) => {
+                                  return {
+                                    ...e,
+                                    width: Number(ert.target.value),
+                                  };
+                                });
+
+                                // console.log({
+                                //   ...crop,
+                                //   width: Number(
+                                //     (
+                                //       (Number(ert.target.value) * 100) /
+                                //       metadata.width
+                                //     ).toFixed(2)
+                                //   ),
+                                // });
+                                setCrop((e) => {
+                                  return {
+                                    ...e,
+                                    width: Number(
+                                      (
+                                        (Number(ert.target.value) * 100) /
+                                        metadata.width
+                                      ).toFixed(2)
+                                    ),
+                                  };
+                                });
+                              }}
                             />
                           </span>
                         </div>
@@ -356,8 +405,37 @@ function Main() {
                               type="number"
                               name=""
                               id=""
-                              value={metadata?.height}
-                              disabled
+                              value={videoresolution?.height}
+                              max={
+                                metadata?.height -
+                                (metadata?.height * crop.y) / 100
+                              }
+                              onChange={(ert) => {
+                                // setvideoresolution((e) => {
+                                //   return {
+                                //     ...e,
+                                //     height: Number(ert.target.value),
+                                //   };
+                                // });
+                                // setCrop((e) => {
+                                //   return {
+                                //     ...e,
+                                //     height: Number(ert.target.value),
+                                //   };
+                                // });
+                                setCrop((e) => {
+                                  return {
+                                    ...e,
+                                    height: Number(
+                                      (
+                                        (Number(ert.target.value) * 100) /
+                                        metadata.height
+                                      ).toFixed(2)
+                                    ),
+                                  };
+                                });
+                              }}
+                              min={100}
                               className="form-control icontrol"
                             />
                           </span>
@@ -407,7 +485,7 @@ function Main() {
                               disabled
                               className="form-control icontrol"
                               value={millisToMinutesAndSeconds(
-                                metadata.start * 1000
+                                timings[0].start * 1000
                               )}
                               style={{ margin: "0 !important", width: "70px" }}
                             />
@@ -418,7 +496,7 @@ function Main() {
                               type="text"
                               className="form-control icontrol"
                               value={millisToMinutesAndSeconds(
-                                metadata.duration * 1000
+                                timings[0].end * 1000
                               )}
                               style={{ margin: "0 !important", width: "70px" }}
                             />

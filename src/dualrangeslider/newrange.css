@@ -80,6 +80,7 @@ section.range-slider input[type="range"] {
   background-color: #454c6f;
   background: #454c6f;
   box-shadow: 0px 0px 4px 1px #ffffff0d;
+  cursor: pointer;
 }
 
 .noUi-target {

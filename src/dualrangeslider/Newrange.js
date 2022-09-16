@@ -81,7 +81,7 @@ function Newrange({
       },
     ]);
   }
-
+  const [slider, setslider] = useState(false);
   return !newchangeslide ? (
     <section className="range-slider">
       <span className="rangeValues" />
@@ -126,8 +126,9 @@ function Newrange({
           return fordualrangeslider(value);
         },
       }}
+      behaviour="drag"
       animate={true}
-      tooltips={true}
+      tooltips={false}
       margin={1000}
       onChange={(e) => {
         refdata.current.seekTo(Number(e[0]), "seconds");
@@ -139,6 +140,7 @@ function Newrange({
         ]);
       }}
       onSlide={(e) => {
+        setslider(true);
         // document.getElementsByClassName("noUi-tooltip")[0].innerHTML =
         //   millisToMinutesAndSeconds(e[0] * 1000);
         // document.getElementsByClassName("noUi-tooltip")[1].innerHTML =
