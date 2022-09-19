@@ -259,12 +259,14 @@ function Main() {
                       onChange={(c, percentCrop) => {
                         setCrop(percentCrop);
 
-                        // setvideoresolution({
-                        //   width: Math.round((metadata.width * c.width) / 100),
-                        //   height: Math.round(
-                        //     (metadata.height * c.height) / 100
-                        //   ),
-                        // });
+                        setvideoresolution({
+                          width: Math.round(
+                            (metadata.width * percentCrop.width) / 100
+                          ),
+                          height: Math.round(
+                            (metadata.height * percentCrop.height) / 100
+                          ),
+                        });
                       }}
                       minHeight={100}
                       minWidth={100}
@@ -411,6 +413,12 @@ function Main() {
                                 (metadata?.height * crop.y) / 100
                               }
                               onChange={(ert) => {
+                                setvideoresolution((e) => {
+                                  return {
+                                    ...e,
+                                    height: Number(ert.target.value),
+                                  };
+                                });
                                 // setvideoresolution((e) => {
                                 //   return {
                                 //     ...e,
@@ -474,9 +482,25 @@ function Main() {
                             />
                           </div>
                           <div
-                            className="video-playpoint"
-                            style={{ left: `${loadedtime}%` }}
-                          ></div>
+                            className="main-video-playpoint"
+                            style={{
+                              left: `${loadedtime}%`,
+                            }}
+                          >
+                            <div
+                              className="video-playpoint"
+                              // style={{ left: `${loadedtime}%` }}
+                            >
+                              <div className="tool-tip">
+                                <span>
+                                  {millisToMinutesAndSeconds(
+                                    ((loadedtime * metadata.duration) / 100) *
+                                      1000
+                                  )}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                         <div className="fix-frame-box">
                           <div className="fix-frame left">

@@ -122,6 +122,7 @@ section.range-slider input[type="range"] {
   display: block;
   transform: scale(0.06);
   display: inline-block;
+  padding-left: 10px;
 }
 .noUi-horizontal .noUi-handle.noUi-handle-lower,
 .noUi-horizontal .noUi-handle.noUi-handle-upper {
@@ -133,6 +134,7 @@ section.range-slider input[type="range"] {
 .noUi-horizontal .noUi-connect {
   border: 5px solid #454c6f !important;
   background: #ffffff45 !important;
+  overflow: hidden;
 }
 .noUi-horizontal .noUi-handle {
   top: 0 !important;
@@ -151,12 +153,11 @@ section.range-slider input[type="range"] {
 }
 .noUi-horizontal .noUi-handle.noUi-handle-lower {
   position: absolute;
-  /* left: 67px; */
-  left: 38px;
+  left: 42px;
 }
 .noUi-horizontal .noUi-handle.noUi-handle-upper {
   position: absolute;
-  right: -23px;
+  right: -24px;
 }
 .noUi-target.noUi-horizontal {
   border: none;

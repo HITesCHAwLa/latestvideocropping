@@ -1,5 +1,6 @@
 .react-player {
   margin: 0 auto;
+  height: 360px !important;
 }
 .react-player video {
   /* max-height: 100%; */

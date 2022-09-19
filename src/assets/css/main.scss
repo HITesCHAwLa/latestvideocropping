@@ -70,6 +70,7 @@
         font-weight: 600;
         border: 1px solid #454c6f;
         transition: all 0.3s ease;
+        z-index: 100;
         &:hover {
           background-color: white;
           color: #454c6f;
@@ -91,12 +92,12 @@
   .video-frame {
     margin-top: 0px;
     border: 15px solid #454c6f;
-    border-left: 25px solid #454c6f;   
-     border-right: 25px solid #454c6f;
+    border-left: 36px solid #454c6f;   
+     border-right: 44px solid #454c6f;
     border-radius: 14px;
   }
   .frame-content {
-    margin: 10px 0px 30px;
+    margin: 10px 0px 70px;
     border-bottom: 1px solid black;
     display: flex;
     justify-content: center;
@@ -157,8 +158,11 @@
   }
   .video-frame-box{
     width: 100%;
-    max-width: 75%;
+    max-width: 82%;
     margin: 0 auto;
+  }
+  .playpoint-tool-box{
+    position: relative;
   }
 }
 
@@ -168,10 +172,10 @@
     position: absolute;
     top: -62px;
     &.left {
-      left: -120px;
+      left: -84px;
     }
     &.right {
-      right: -120px;
+      right: -84px;
     }
     .icontrol{
       padding: 0px 0px 0px 12px;
@@ -187,7 +191,6 @@
   max-width: 50% !important;
   margin: 0 auto;
   .video-frame img{
-  
     width: 20%;
     max-width: 20%;
     height: 65px;
@@ -214,15 +217,22 @@
     transform: translate(0%, -50%);
     color: #454c6f;
   }
-  .video-playpoint{
+  // .video-playpoint{
+  //   position: absolute;
+  //   width: 2px;
+  //   height: 100%;
+  //   background-color: #f5cd05;
+  //   left: 0;
+  // }
+  .main-video-playpoint {
     position: absolute;
     width: 2px;
     height: 100%;
     background-color: #f5cd05;
     left: 0;
-  }
+}
   .play-button {
-    position: relative;
+    position: absolute;
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -233,6 +243,36 @@
     text-align: center;
     font-size: 45px;
     cursor: pointer;
+}
+.video-playpoint {
+  position: relative;
+}
+.tool-tip:after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 40px;
+  background-color: #dea32c;
+  left: -1px;
+  right: 0;
+  top: -47px;
+}
+.tool-tip{
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+ .tool-tip span {
+  position: absolute;
+  top: -75px;
+  left: -27px;
+  background-color: #000000b5;
+  color: white;
+  border-radius: 30px;
+  padding: 0px 12px;
+  font-size: 14px;
 }
 }
 // Media Query
