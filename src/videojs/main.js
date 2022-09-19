@@ -46,16 +46,15 @@ function Main() {
       end: 0,
     },
   ]);
-  const [videoresolution, setvideoresolution] = useState({});
   const [forplaypause, setforplaypause] = useState({ start: null, end: null });
   const [errordata, setErrordata] = useState({
     title: "",
     body: "",
   });
   const [crop, setCrop] = React.useState({
-    height: 100,
-    unit: "%",
-    width: 100,
+    height: 360,
+    unit: "px",
+    width: 640,
     x: 0,
     y: 0,
   });
@@ -104,7 +103,6 @@ function Main() {
     }
     let imagedatas = await generateVideoThumbnails(file[0], 4);
     setimagedata(imagedatas);
-    setvideoresolution({ width: data.width, height: data.height });
 
     setMetadata({ ...data, url: urlfile });
     setTimings([{ start: data.start, end: Number(data.duration) }]);
@@ -155,10 +153,10 @@ function Main() {
         // width: 854px;
         // height: 460px;
         "-vf",
-        `crop=${(metadata.width * crop?.width) / 100}:${
-          (metadata.height * crop?.height) / 100
-        }:${(metadata.width * crop?.x) / 100}:${
-          (metadata.height * crop?.y) / 100
+        `crop=${(metadata.width * crop?.width) / 640}:${
+          (metadata.height * crop?.height) / 360
+        }:${(metadata.width * crop?.x) / 640}:${
+          (metadata.height * crop?.y) / 360
         }`,
         "-strict",
         "-2",
@@ -176,9 +174,9 @@ function Main() {
       setShow(false);
 
       setCrop({
-        height: 100,
-        unit: "%",
-        width: 100,
+        height: 360,
+        unit: "px",
+        width: 640,
         x: 0,
         y: 0,
       });
@@ -256,37 +254,23 @@ function Main() {
                   <>
                     <ReactCrop
                       crop={crop}
-                      onChange={(c, percentCrop) => {
-                        setCrop(percentCrop);
-
-                        // setvideoresolution({
-                        //   width: Math.round((metadata.width * c.width) / 100),
-                        //   height: Math.round(
-                        //     (metadata.height * c.height) / 100
-                        //   ),
-                        // });
-                      }}
+                      onChange={(c, percentCrop) => setCrop(c)}
                       minHeight={100}
                       minWidth={100}
                       // maxHeight={460}
-                      maxHeight={"100%"}
-                      maxWidth={"100%"}
+                      maxHeight={360}
+                      maxWidth={640}
                       keepSelection={true}
                     >
                       <ReactPlayer
-                        // css={{
-                        //   position: `absolute`,
-                        //   top: 0,
-                        //   left: 0,
-                        // }}
                         ref={ref}
                         id="videoid"
                         url={metadata?.url}
                         playing={isPlaying}
                         className="react-player"
                         progressInterval={30}
-                        width={"100%"}
-                        height={"100%"}
+                        width="640px"
+                        height="360px"
                         controls={true}
                         onDuration={(e) => {}}
                         onClickPreview={(ok) => {
@@ -359,42 +343,9 @@ function Main() {
                               type="number"
                               name=""
                               id=""
-                              min={100}
                               className="form-control icontrol"
-                              value={videoresolution?.width}
-                              max={
-                                metadata?.width -
-                                (metadata?.width * crop.x) / 100
-                              }
-                              onChange={(ert) => {
-                                setvideoresolution((e) => {
-                                  return {
-                                    ...e,
-                                    width: Number(ert.target.value),
-                                  };
-                                });
-
-                                // console.log({
-                                //   ...crop,
-                                //   width: Number(
-                                //     (
-                                //       (Number(ert.target.value) * 100) /
-                                //       metadata.width
-                                //     ).toFixed(2)
-                                //   ),
-                                // });
-                                setCrop((e) => {
-                                  return {
-                                    ...e,
-                                    width: Number(
-                                      (
-                                        (Number(ert.target.value) * 100) /
-                                        metadata.width
-                                      ).toFixed(2)
-                                    ),
-                                  };
-                                });
-                              }}
+                              value={metadata?.width}
+                              disabled
                             />
                           </span>
                         </div>
@@ -405,37 +356,8 @@ function Main() {
                               type="number"
                               name=""
                               id=""
-                              value={videoresolution?.height}
-                              max={
-                                metadata?.height -
-                                (metadata?.height * crop.y) / 100
-                              }
-                              onChange={(ert) => {
-                                // setvideoresolution((e) => {
-                                //   return {
-                                //     ...e,
-                                //     height: Number(ert.target.value),
-                                //   };
-                                // });
-                                // setCrop((e) => {
-                                //   return {
-                                //     ...e,
-                                //     height: Number(ert.target.value),
-                                //   };
-                                // });
-                                setCrop((e) => {
-                                  return {
-                                    ...e,
-                                    height: Number(
-                                      (
-                                        (Number(ert.target.value) * 100) /
-                                        metadata.height
-                                      ).toFixed(2)
-                                    ),
-                                  };
-                                });
-                              }}
-                              min={100}
+                              value={metadata?.height}
+                              disabled
                               className="form-control icontrol"
                             />
                           </span>
@@ -485,7 +407,7 @@ function Main() {
                               disabled
                               className="form-control icontrol"
                               value={millisToMinutesAndSeconds(
-                                timings[0].start * 1000
+                                metadata.start * 1000
                               )}
                               style={{ margin: "0 !important", width: "70px" }}
                             />
@@ -496,7 +418,7 @@ function Main() {
                               type="text"
                               className="form-control icontrol"
                               value={millisToMinutesAndSeconds(
-                                timings[0].end * 1000
+                                metadata.duration * 1000
                               )}
                               style={{ margin: "0 !important", width: "70px" }}
                             />
