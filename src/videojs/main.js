@@ -29,6 +29,7 @@ const HeaderMemo = React.memo(Newrange);
 function Main() {
   const [metadata, setMetadata] = useState();
   const [imagedata, setimagedata] = useState([]);
+  const [slider, setslider] = useState(false);
   const [flag, setFlag] = useState(false);
   const [playpausetime, setPlaypausetime] = useState({});
   const ffmpeg = useRef(null);
@@ -281,6 +282,7 @@ function Main() {
                         //   top: 0,
                         //   left: 0,
                         // }}
+
                         ref={ref}
                         id="videoid"
                         url={metadata?.url}
@@ -519,6 +521,10 @@ function Main() {
                               playtime={playtimevideo}
                               setforplaypause={setforplaypause}
                               playpausetimevideo={forplaypause}
+                              dynamicdata={dynamicdata}
+                              videoduration={metadata.duration}
+                              setslider={setslider}
+                              slider={slider}
                             />
                           </div>
                           <div
@@ -531,14 +537,16 @@ function Main() {
                               className="video-playpoint"
                               // style={{ left: `${loadedtime}%` }}
                             >
-                              <div className="tool-tip">
-                                <span>
-                                  {millisToMinutesAndSeconds(
-                                    ((loadedtime * metadata.duration) / 100) *
-                                      1000
-                                  )}
-                                </span>
-                              </div>
+                              {slider && (
+                                <div className="tool-tip">
+                                  <span>
+                                    {millisToMinutesAndSeconds(
+                                      ((loadedtime * metadata.duration) / 100) *
+                                        1000
+                                    )}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>

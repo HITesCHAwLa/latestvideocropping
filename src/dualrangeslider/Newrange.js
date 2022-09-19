@@ -11,6 +11,10 @@ function Newrange({
   newchangeslide,
   refdata,
   timings,
+  dynamicdata,
+  videoduration,
+  setslider,
+  slider,
 }) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
@@ -81,7 +85,7 @@ function Newrange({
       },
     ]);
   }
-  const [slider, setslider] = useState(false);
+
   return !newchangeslide ? (
     <section className="range-slider">
       <span className="rangeValues" />
@@ -126,6 +130,12 @@ function Newrange({
           return fordualrangeslider(value);
         },
       }}
+      onStart={() => {
+        setslider(true);
+      }}
+      onEnd={() => {
+        setslider(false);
+      }}
       behaviour="drag"
       animate={true}
       tooltips={false}
@@ -140,7 +150,8 @@ function Newrange({
         ]);
       }}
       onSlide={(e) => {
-        setslider(true);
+        dynamicdata(Number(e[0]), Number(videoduration));
+
         // document.getElementsByClassName("noUi-tooltip")[0].innerHTML =
         //   millisToMinutesAndSeconds(e[0] * 1000);
         // document.getElementsByClassName("noUi-tooltip")[1].innerHTML =
