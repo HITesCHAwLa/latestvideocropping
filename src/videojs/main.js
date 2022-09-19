@@ -102,7 +102,7 @@ function Main() {
       seturldata("");
       return false;
     }
-    let imagedatas = await generateVideoThumbnails(file[0], 4);
+    let imagedatas = await generateVideoThumbnails(file[0], 9);
     setimagedata(imagedatas);
     setvideoresolution({ width: data.width, height: data.height });
 
@@ -369,6 +369,26 @@ function Main() {
                                 (metadata?.width * crop.x) / 100
                               }
                               onChange={(ert) => {
+                                if (ert.target.value >= metadata.width) {
+                                  setvideoresolution((e) => {
+                                    return {
+                                      ...e,
+                                      width: Number(metadata.width),
+                                    };
+                                  });
+                                  setCrop((e) => {
+                                    return {
+                                      ...e,
+                                      width: Number(
+                                        (
+                                          (Number(metadata.width) * 100) /
+                                          metadata.width
+                                        ).toFixed(2)
+                                      ),
+                                    };
+                                  });
+                                  return false;
+                                }
                                 setvideoresolution((e) => {
                                   return {
                                     ...e,
@@ -413,6 +433,26 @@ function Main() {
                                 (metadata?.height * crop.y) / 100
                               }
                               onChange={(ert) => {
+                                if (ert.target.value > metadata.height) {
+                                  setvideoresolution((e) => {
+                                    return {
+                                      ...e,
+                                      height: Number(metadata.height),
+                                    };
+                                  });
+                                  setCrop((e) => {
+                                    return {
+                                      ...e,
+                                      height: Number(
+                                        (
+                                          (Number(metadata.height) * 100) /
+                                          metadata.height
+                                        ).toFixed(2)
+                                      ),
+                                    };
+                                  });
+                                  return false;
+                                }
                                 setvideoresolution((e) => {
                                   return {
                                     ...e,

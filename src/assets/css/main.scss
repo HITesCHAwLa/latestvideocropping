@@ -191,10 +191,11 @@
   max-width: 50% !important;
   margin: 0 auto;
   .video-frame img{
-    width: 20%;
-    max-width: 20%;
+    width: 10%;
+    max-width: 10%;
     height: 65px;
     position: relative;
+    object-fit: cover;
     &:last-child{
       border: none;
     }

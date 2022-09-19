@@ -53,7 +53,10 @@ img {
   border: none !important;
   border-bottom: 13px solid #dea32c !important;
 }
-
+.ReactCrop__crop-selection {
+  backdrop-filter: grayscale(1);
+  box-shadow: none !important;
+}
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 669px !important;

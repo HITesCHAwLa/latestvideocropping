@@ -135,6 +135,7 @@ section.range-slider input[type="range"] {
   border: 5px solid #454c6f !important;
   background: #ffffff45 !important;
   overflow: hidden;
+  backdrop-filter: grayscale(1);
 }
 .noUi-horizontal .noUi-handle {
   top: 0 !important;
