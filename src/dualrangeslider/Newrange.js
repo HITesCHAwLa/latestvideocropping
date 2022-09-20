@@ -17,13 +17,16 @@ function Newrange({
   slider,
   dynamicdataforrightslide,
   setslidenew,
+  setsliderpoints,
+  sliderpoints,
 }) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
 
-  useEffect(() => {
-    settimeduration({ start: start, end: end });
-  }, []);
+  // useEffect(() => {
+  //   console.log(start, end, "_++++++++++++++++++++++++++++++++HI");
+  //   settimeduration({ start: start, end: end });
+  // }, []);
   // useEffect(() => {
   //   document.getElementsByClassName("noUi-tooltip")[0].innerHTML =
   //     millisToMinutesAndSeconds(timings[0].start * 1000);
@@ -63,17 +66,17 @@ function Newrange({
   function changehandle(e) {
     if (e.target.name == "start") {
       const val = Math.min(Number(e.target.value), timeduration.end - 1000);
-      settimeduration({
-        ...timeduration,
-        [e.target.name]: val,
-      });
+      // settimeduration({
+      //   ...timeduration,
+      //   [e.target.name]: val,
+      // });
     }
     if (e.target.name == "end") {
       const val2 = Math.max(Number(e.target.value), timeduration.start + 1000);
-      settimeduration({
-        ...timeduration,
-        [e.target.name]: val2,
-      });
+      // settimeduration({
+      //   ...timeduration,
+      //   [e.target.name]: val2,
+      // });
     }
     // settimeduration({
     //   ...timeduration,
@@ -123,7 +126,7 @@ function Newrange({
   ) : (
     <Nouislider
       range={{ min: timeduration.start, max: timeduration.end }}
-      start={[Number(timeduration.start), Number(timeduration.end)]}
+      start={[sliderpoints.start, sliderpoints.end]}
       connect
       step={100}
       format={{
@@ -150,10 +153,10 @@ function Newrange({
         ]);
       }}
       onSlide={(e, handle) => {
-        if (handle == 0) {
+        if (handle === 0) {
           dynamicdata(Number(e[0]), Number(videoduration));
         }
-        if (handle == 1) {
+        if (handle === 1) {
           dynamicdataforrightslide(Number(e[1]));
         }
         // if (e[0] !== timeduration.start) {

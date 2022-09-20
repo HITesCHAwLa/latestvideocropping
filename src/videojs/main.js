@@ -47,6 +47,10 @@ function Main() {
       end: 0,
     },
   ]);
+  const [sliderpoints, setsliderpoints] = useState({
+    start: 0,
+    end: 0,
+  });
   const [videoresolution, setvideoresolution] = useState({});
   const [forplaypause, setforplaypause] = useState({ start: null, end: null });
   const [errordata, setErrordata] = useState({
@@ -108,6 +112,11 @@ function Main() {
     setvideoresolution({ width: data.width, height: data.height });
 
     setMetadata({ ...data, url: urlfile });
+    setsliderpoints({
+      start: secondtomilisecond(Number(data?.start)),
+      end: secondtomilisecond(Number(data?.duration)),
+    });
+
     setTimings([{ start: data.start, end: Number(data.duration) }]);
 
     setfilevalue("");
@@ -216,6 +225,134 @@ function Main() {
     setslidenew(true);
     setslider(false);
   }
+
+  const [value, setValue] = React.useState("0:00");
+  const [value2, setValue2] = React.useState("0:00");
+  const [preValue, setPrevValue] = React.useState("0:00");
+  const [preValuev2, setPrevValue2] = React.useState("0:00");
+
+  useEffect(() => {
+    const time = toHHMMSS(timings?.[0]?.start);
+    setValue(time);
+    // setValue(Math.floor(timings?.[0]?.start));
+  }, [timings?.[0]?.start]);
+
+  useEffect(() => {
+    const time2 = toHHMMSS(timings?.[0]?.end);
+    setValue2(time2);
+    // setValue(Math.floor(timings?.[0]?.start));
+  }, [timings?.[0]?.end]);
+
+  const onChange = (event) => {
+    // setValue(event.target.value);
+    setValue((e) => {
+      setPrevValue(e);
+
+      return event.target.value;
+    });
+  };
+
+  const onBlur = (event) => {
+    const value = event.target.value;
+    const seconds = Math.max(0, getSecondsFromHHMMSS(value));
+
+    if (
+      seconds > metadata?.duration ||
+      seconds >= getSecondsFromHHMMSS(value2)
+    ) {
+      setValue(preValue);
+      return false;
+    }
+
+    setsliderpoints((ert) => {
+      return {
+        ...ert,
+        start: Number(seconds * 1000),
+      };
+    });
+    setTimings([
+      {
+        start: Number(seconds),
+        end: timings?.[0]?.end,
+      },
+    ]);
+    dynamicdata(Number(seconds), metadata.duration);
+    ref.current.seekTo(Number(seconds), "seconds");
+
+    const time = toHHMMSS(seconds);
+    setValue(time);
+  };
+
+  const onChange2 = (event) => {
+    setValue2((e) => {
+      setPrevValue2(e);
+
+      return event.target.value;
+    });
+  };
+
+  const onBlur2 = (event) => {
+    const val2 = event.target.value;
+    const seconds = Math.max(0, getSecondsFromHHMMSS(val2));
+
+    if (
+      seconds > metadata?.duration ||
+      seconds <= 0 ||
+      seconds <= getSecondsFromHHMMSS(value)
+    ) {
+      setValue2(preValuev2);
+
+      return false;
+    }
+    setsliderpoints({ ...sliderpoints, end: Number(seconds * 1000) });
+    // setsliderpoints((ert) => {
+    //   console.log("==========>ert", ert);
+    //   return {
+    //     ...ert,
+    //     end: Number(seconds * 1000),
+    //   };
+    // });
+
+    setTimings([{ ...timings[0], end: Number(val2) }]);
+
+    const time = toHHMMSS(seconds);
+    setValue2(time);
+  };
+
+  const getSecondsFromHHMMSS = (value) => {
+    const [str1, str2, str3] = value.split(":");
+
+    const val1 = Number(str1);
+    const val2 = Number(str2);
+    const val3 = Number(str3);
+
+    if (!isNaN(val1) && isNaN(val2) && isNaN(val3)) {
+      return val1;
+    }
+
+    if (!isNaN(val1) && !isNaN(val2) && isNaN(val3)) {
+      return val1 * 60 + val2;
+    }
+
+    if (!isNaN(val1) && !isNaN(val2) && !isNaN(val3)) {
+      return val1 * 60 * 60 + val2 * 60 + val3;
+    }
+
+    return 0;
+  };
+
+  const toHHMMSS = (secs) => {
+    const secNum = parseInt(secs.toString(), 10);
+    const hours = Math.floor(secNum / 3600);
+    const minutes = Math.floor(secNum / 60) % 60;
+    const seconds = secNum % 60;
+
+    return [hours, minutes, seconds]
+      .map((val) => (val < 10 ? `0${val}` : val))
+      .filter((val, index) => val !== "00" || index > 0)
+      .join(":")
+      .replace(/^0/, "");
+  };
   return (
     ready && (
       <div className="video-main-box">
@@ -545,12 +682,14 @@ function Main() {
                                 dynamicdataforrightslide
                               }
                               setslidenew={setslidenew}
+                              sliderpoints={sliderpoints}
+                              setsliderpoints={setsliderpoints}
                             />
                           </div>
                           <div
                             className="main-video-playpoint"
                             style={{
-                              left: `${loadedtime}%`,
+                              left: `${loadedtime > 100 ? 100 : loadedtime}%`,
                             }}
                           >
                             <div
@@ -573,6 +712,8 @@ function Main() {
                             className="main-video-playpoint"
                             style={{
                               left: `${loadtimeforright}%`,
+                              backgroundColor: "rgba(0, 0, 0, 0)",
+                              width: "0",
                             }}
                           >
                             <div
@@ -597,24 +738,84 @@ function Main() {
                           <div className="fix-frame left">
                             <input
                               type="text"
-                              disabled
+                              pattern="[0-9]"
                               className="form-control icontrol"
-                              value={millisToMinutesAndSeconds(
-                                timings[0].start * 1000
-                              )}
+                              onChange={onChange}
+                              onBlur={onBlur}
+                              value={value}
                               style={{ margin: "0 !important", width: "70px" }}
                             />
+                            {/* <input
+                              type="text"
+                              className="form-control icontrol"
+                              value={timings[0].start}
+                              onChange={(e) => {
+                                // convert into seconds
+                                if (
+                                  Number(e?.target?.value) > metadata?.duration
+                                ) {
+                                  return false;
+                                }
+                                let timingtemp = [
+                                  {
+                                    start: Number(e.target.value),
+                                    end: timings?.[0]?.end,
+                                  },
+                                ];
+                                setsliderpoints((ert) => {
+                                  return {
+                                    ...ert,
+                                    start: Number(e.target.value * 1000),
+                                  };
+                                });
+                                setTimings([
+                                  {
+                                    start: Number(e.target.value),
+                                    end: timings?.[0]?.end,
+                                  },
+                                ]);
+                                dynamicdata(
+                                  Number(e.target.value),
+                                  metadata.duration
+                                );
+                                ref.current.seekTo(
+                                  Number(e.target.value),
+                                  "seconds"
+                                );
+                              }}
+                              style={{ margin: "0 !important", width: "70px" }}
+                            /> */}
                           </div>
                           <div className="fix-frame right">
                             <input
-                              disabled
                               type="text"
+                              pattern="[0-9]"
                               className="form-control icontrol"
-                              value={millisToMinutesAndSeconds(
-                                timings[0].end * 1000
-                              )}
+                              onChange={onChange2}
+                              onBlur={onBlur2}
+                              value={value2}
                               style={{ margin: "0 !important", width: "70px" }}
                             />
+                            {/* <input
+                              type="text"
+                              className="form-control icontrol"
+                              // value={millisToMinutesAndSeconds(
+                              //   timings[0].end * 1000
+                              // )}
+                              onChange={(e) => {
+                                setsliderpoints((ert) => {
+                                  return {
+                                    ...ert,
+                                    end: Number(e.target.value),
+                                  };
+                                });
+                                console.log(
+                                  e.target.value,
+                                  "%%%%%%%%%%%%%%%%%%%%%%%"
+                                );
+                              }}
+                              style={{ margin: "0 !important", width: "70px" }}
+                            /> */}
                           </div>
                         </div>
                         <div className="length-frame-box">
@@ -639,6 +840,14 @@ function Main() {
                             </span>
                           </div>
                         </div>
+                        {/* <div className="fix-frame right">
+                          <input
+                            type="text"
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                          />
+                        </div> */}
                       </div>
                     </div>
                   </>
