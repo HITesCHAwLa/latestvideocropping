@@ -189,17 +189,36 @@ function Main() {
   }
 
   const [loadedtime, setloadedtime] = useState(0);
-
+  const [slidenew, setslidenew] = useState(false);
+  const [loadtimeforright, setloadtimeforright] = useState(100);
+  var count = 0;
   function dynamicdata(playtime, duration) {
     // if (playtime == duration) {
     //   setloadedtime(0);
     //   return false;
     // }
-    let a = playtime * 100;
-    let b = a / duration;
-    setloadedtime(b);
-  }
 
+    if (count > 0) {
+      let a = playtime * 100;
+      let b = a / duration;
+      setloadedtime(b);
+      setslider(true);
+      setslidenew(false);
+    } else {
+      setslider(false);
+      setslidenew(false);
+    }
+
+    count += 1;
+  }
+  function dynamicdataforrightslide(playtime) {
+    console.log(playtime, "--------------");
+    let a = playtime * 100;
+    let b = a / metadata.duration;
+    setloadtimeforright(b);
+    setslidenew(true);
+    setslider(false);
+  }
   return (
     ready && (
       <div className="video-main-box">
@@ -525,6 +544,10 @@ function Main() {
                               videoduration={metadata.duration}
                               setslider={setslider}
                               slider={slider}
+                              dynamicdataforrightslide={
+                                dynamicdataforrightslide
+                              }
+                              setslidenew={setslidenew}
                             />
                           </div>
                           <div
@@ -542,6 +565,29 @@ function Main() {
                                   <span>
                                     {millisToMinutesAndSeconds(
                                       ((loadedtime * metadata.duration) / 100) *
+                                        1000
+                                    )}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className="main-video-playpoint"
+                            style={{
+                              left: `${loadtimeforright}%`,
+                            }}
+                          >
+                            <div
+                              className="video-playpoint"
+                              // style={{ left: `${loadedtime}%` }}
+                            >
+                              {slidenew && (
+                                <div className="tool-tip">
+                                  <span>
+                                    {millisToMinutesAndSeconds(
+                                      ((loadtimeforright * metadata.duration) /
+                                        100) *
                                         1000
                                     )}
                                   </span>

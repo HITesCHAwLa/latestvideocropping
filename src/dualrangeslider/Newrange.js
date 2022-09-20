@@ -15,6 +15,8 @@ function Newrange({
   videoduration,
   setslider,
   slider,
+  dynamicdataforrightslide,
+  setslidenew,
 }) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
@@ -130,11 +132,9 @@ function Newrange({
           return fordualrangeslider(value);
         },
       }}
-      onStart={() => {
-        setslider(true);
-      }}
       onEnd={() => {
         setslider(false);
+        setslidenew(false);
       }}
       behaviour="drag"
       animate={true}
@@ -149,8 +149,16 @@ function Newrange({
           },
         ]);
       }}
-      onSlide={(e) => {
-        dynamicdata(Number(e[0]), Number(videoduration));
+      onSlide={(e, handle) => {
+        if (handle == 0) {
+          dynamicdata(Number(e[0]), Number(videoduration));
+        }
+        if (handle == 1) {
+          dynamicdataforrightslide(Number(e[1]));
+        }
+        // if (e[0] !== timeduration.start) {
+        //   console.log("hello");
+        // }
 
         // document.getElementsByClassName("noUi-tooltip")[0].innerHTML =
         //   millisToMinutesAndSeconds(e[0] * 1000);
