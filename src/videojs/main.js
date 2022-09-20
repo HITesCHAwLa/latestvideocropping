@@ -192,23 +192,21 @@ function Main() {
   const [slidenew, setslidenew] = useState(false);
   const [loadtimeforright, setloadtimeforright] = useState(100);
   var count = 0;
+
   function dynamicdata(playtime, duration) {
     // if (playtime == duration) {
     //   setloadedtime(0);
     //   return false;
     // }
 
-    if (count > 0) {
-      let a = playtime * 100;
-      let b = a / duration;
-      setloadedtime(b);
-      setslider(true);
-      setslidenew(false);
-    } else {
-      setslider(false);
-      setslidenew(false);
-    }
+    let a = playtime * 100;
+    let b = a / duration;
+    setloadedtime(b);
 
+    setslidenew(false);
+    if (count > 0) {
+      setslider(true);
+    }
     count += 1;
   }
   function dynamicdataforrightslide(playtime) {
