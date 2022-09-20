@@ -210,7 +210,6 @@ function Main() {
     count += 1;
   }
   function dynamicdataforrightslide(playtime) {
-    console.log(playtime, "--------------");
     let a = playtime * 100;
     let b = a / metadata.duration;
     setloadtimeforright(b);
