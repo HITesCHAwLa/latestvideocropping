@@ -20,6 +20,7 @@ function Modaldemo({
   timingscheck,
   setisPlaying,
   isPlaying,
+  setslider,
 }) {
   const handleClose = (e) => {
     setcheck(false);
@@ -39,10 +40,12 @@ function Modaldemo({
     videoref.current.seekTo(timingscheck[0].start, "seconds");
 
     setisPlaying(true);
+    setslider(true);
   };
 
   function pausevideo() {
     setisPlaying(false);
+    setslider(false);
   }
 
   return (
@@ -74,9 +77,11 @@ function Modaldemo({
           {errordata.title === "" && (
             <div className="play-button">
               {isPlaying ? (
-                <HiOutlinePause onClick={pausevideo} />
+                <img src="/Pause_Icon.png" onClick={pausevideo} alt="" />
               ) : (
-                <FaRegPlayCircle onClick={playvideo} />
+                // <HiOutlinePause onClick={pausevideo} />
+                <img src="/Play_Icon.png" onClick={playvideo} alt="" />
+                // <FaRegPlayCircle onClick={playvideo} />
               )}
             </div>
           )}

@@ -18,7 +18,7 @@
   }
 
   .file-drop-target {
-    border: 3px solid #454c6f;
+    border: 3px solid #354d74;
     padding: 10px;
     height: 250px;
     display: flex;
@@ -26,15 +26,15 @@
     align-items: center;
   }
   .crop-video-btn {
-    background-color: #454c6f;
+    background-color: #354d74;
     border: none;
     color: white;
     font-weight: 600;
-    border: 1px solid #454c6f;
+    border: 1px solid #354d74;
     transition: all 0.3s ease;
     &:hover {
       background-color: white;
-      color: #454c6f;
+      color: #354d74;
     }
   }
   .reatake-btn {
@@ -52,28 +52,35 @@
 .video-modal {
   .modal-content {
     .modal-header {
-      background-color: #454c6f;
+      background-color: #354d74;
       color: white;
       .btn-close {
-        border: 1px solid white;
-        background-color: white;
+        border: 1px solid #2d3041;
+        background-color: #2d3041;
         opacity: 1;
         border-radius: 30px;
+        background-image: none;
+        position: relative;
+        display: inline-block;
+        transition: all .3s ease-in-out;
+        &:hover{
+          background-color: #2d3041a3;
+        }
       }
     }
     .modal-footer {
       border: none;
       button {
-        background-color: #454c6f;
+        background-color: #354d74;
         border: none;
         color: white;
         font-weight: 600;
-        border: 1px solid #454c6f;
+        border: 1px solid #354d74;
         transition: all 0.3s ease;
         z-index: 100;
         &:hover {
           background-color: white;
-          color: #454c6f;
+          color: #354d74;
         }
       }
     }
@@ -84,16 +91,16 @@
     display: block;
     top: 45px;
     position: absolute;
-    color: #454c6f;
+    color: #354d74;
     margin: 0 -1px;
     transform: rotate(90deg);
     font-size: 15px;
   }
   .video-frame {
     margin-top: 0px;
-    border: 15px solid #454c6f;
-    border-left: 36px solid #454c6f;   
-     border-right: 44px solid #454c6f;
+    border: 15px solid #354d74;
+    border-left: 36px solid #354d74;   
+     border-right: 44px solid #354d74;
     border-radius: 14px;
   }
   .frame-content {
@@ -106,22 +113,50 @@
     .xe{
       font-weight: bold;
       font-size: 26px;
-      color: #454c6f;
+      color: #354d74;
+      position: relative;
+    top: 2px;
     }
     .frame{
       display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: baseline;
     text-align: center;
-    color: #454c6f;
+    color: #354d74;
     font-weight: bold;
-    letter-spacing: 1px;
+    letter-spacing: .1px;
     margin-bottom: 0px;
     line-height: 1;
+    font-size: 14px;
+    b{
+      font-size: 19px;
+      display: inline-block;
+      margin-left: 3px;
+      letter-spacing: 0px;
+      margin-right: 3px;
+    }
 
     .icon{
       font-size: 29px;
-      padding: 0px 8px;
+      svg{
+        position: relative;
+    top: -1px;
+    left: 4px;
+      }
+      img{
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+        &.width{
+          transform: rotate(180deg);
+          margin-left: -1px;
+    margin-right: 5px;
+        }
+        &.height{
+          margin-right: -1px;
+    margin-left: 5px;
+        }
+      }
     }
     .icontrol{
       width: 75px;
@@ -144,11 +179,25 @@
     color: black;
     font-size: 15px;
     span {
-      color: #454c6f;
-      svg {
-        margin: 0px 6px;
+      color: #354d74;
+      b{
+        font-size: 18px;
+      display: inline-block;
+      margin-left: 3px;
+      letter-spacing: 0px;
+      }
+      img {
+       width: 20px;
+       height: 20px;
+       object-fit: contain;
+       margin: 0px 5px;
+       position: relative;
+        top: -1px;
+      }
+      svg{
         position: relative;
-        top: -2px;
+    top: -2px;
+    left: 4px;
       }
     }
   }
@@ -164,6 +213,16 @@
   .playpoint-tool-box{
     position: relative;
   }
+ .modal-content .modal-header .btn-close:after {
+    content: "X";
+    position: absolute;
+    top: 46%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
+    color: white;
+    font-weight: 800;
+}
 }
 
 .fix-frame-box {
@@ -216,7 +275,7 @@
     top: 50%;
     width: 100%;
     transform: translate(0%, -50%);
-    color: #454c6f;
+    color: #354d74;
   }
   // .video-playpoint{
   //   position: absolute;
@@ -244,6 +303,11 @@
     text-align: center;
     font-size: 45px;
     cursor: pointer;
+    img{
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
 }
 .video-playpoint {
   position: relative;

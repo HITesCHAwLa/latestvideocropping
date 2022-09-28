@@ -3,17 +3,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { FileDrop } from "react-file-drop";
 import { getVideoDimensionsOf } from "./getmetadata";
 import ReactCrop from "react-image-crop";
-import Video from "./Video";
 import "react-image-crop/dist/ReactCrop.css";
 import ReactPlayer from "react-player";
-// import Modal from "../modal";
 import { MdHorizontalSplit, MdBorderVertical } from "react-icons/md";
 import { BsClockHistory, BsFillClockFill } from "react-icons/bs";
 import { BiInfoCircle } from "react-icons/bi";
 import { CgDanger } from "react-icons/cg";
 
 import { generateVideoThumbnails } from "@rajesh896/video-thumbnails-generator";
-import Rangeslider from "./Rangeslider";
 import Newrange from "../dualrangeslider/Newrange";
 import {
   millisToMinutesAndSeconds,
@@ -23,18 +20,15 @@ import { formatSizeUnits, niceBytes } from "../bytetomb";
 import Modaldemo from "../Modaldemo";
 import { Alert, Button } from "react-bootstrap";
 import { timechange } from "../timetomilisecond";
-// import Modal from "react-modal";
+
 const HeaderMemo = React.memo(Newrange);
-// Modal.setAppElement("#root");
 function Main() {
   const [metadata, setMetadata] = useState();
   const [imagedata, setimagedata] = useState([]);
   const [slider, setslider] = useState(false);
   const [flag, setFlag] = useState(false);
-  const [playpausetime, setPlaypausetime] = useState({});
   const ffmpeg = useRef(null);
   const [show, setShow] = useState(false);
-  const [playtimevideo, setplaytimevideo] = useState(0);
   const [check, setcheck] = useState(false);
   const [ready, setReady] = React.useState(false);
   const ref = React.useRef("");
@@ -162,8 +156,6 @@ function Main() {
         `${timings[0].start}`,
         "-t",
         `${timings[0].end - timings[0].start}`,
-        // width: 854px;
-        // height: 460px;
         "-vf",
         `crop=${(metadata.width * crop?.width) / 100}:${
           (metadata.height * crop?.height) / 100
@@ -203,11 +195,6 @@ function Main() {
   var count = 0;
 
   function dynamicdata(playtime, duration) {
-    // if (playtime == duration) {
-    //   setloadedtime(0);
-    //   return false;
-    // }
-
     let a = playtime * 100;
     let b = a / duration;
     setloadedtime(b);
@@ -234,17 +221,13 @@ function Main() {
   useEffect(() => {
     const time = toHHMMSS(timings?.[0]?.start);
     setValue(time);
-    // setValue(Math.floor(timings?.[0]?.start));
   }, [timings?.[0]?.start]);
 
   useEffect(() => {
     const time2 = toHHMMSS(timings?.[0]?.end);
     setValue2(time2);
-    // setValue(Math.floor(timings?.[0]?.start));
   }, [timings?.[0]?.end]);
-
   const onChange = (event) => {
-    // setValue(event.target.value);
     setValue((e) => {
       setPrevValue(e);
 
@@ -305,13 +288,6 @@ function Main() {
       return false;
     }
     setsliderpoints({ ...sliderpoints, end: Number(seconds * 1000) });
-    // setsliderpoints((ert) => {
-    //   console.log("==========>ert", ert);
-    //   return {
-    //     ...ert,
-    //     end: Number(seconds * 1000),
-    //   };
-    // });
 
     setTimings([{ ...timings[0], end: Number(val2) }]);
 
@@ -398,6 +374,7 @@ function Main() {
                 setcheck={setcheck}
                 show={show}
                 setShow={setShow}
+                setslider={setslider}
                 seturldata={seturldata}
                 setCrop={setCrop}
                 setErrordata={setErrordata}
@@ -452,22 +429,23 @@ function Main() {
                         onProgress={(e) => {
                           if (e.playedSeconds === e.loadedSeconds) {
                             setisPlaying(false);
+                            setslider(false);
                           }
 
                           if (e.playedSeconds.toFixed(2) >= timings[0].end) {
                             setisPlaying(false);
+                            setslider(false);
                           }
-                          // setloadedtime((pre) => pre + 3.1);
 
                           dynamicdata(
                             e.playedSeconds.toFixed(2),
                             e.loadedSeconds
                           );
 
-                          setPlaypausetime({
-                            end: e.loadedSeconds,
-                            start: e.playedSeconds,
-                          });
+                          // setPlaypausetime({
+                          //   end: e.loadedSeconds,
+                          //   start: e.playedSeconds,
+                          // });
                           // setTimings([
                           //   {
                           //     end: e.loadedSeconds,
@@ -479,37 +457,15 @@ function Main() {
                     </ReactCrop>
                     <div className="videoframe-slider-box">
                       <div className="frame-content">
-                        {/* <p>
-                          Max 1920{" "}
-                          <span>
-                            <input
-                              type="number"
-                              name=""
-                              id=""
-                              className="form-control icontrol"
-                            />
-                          </span>
-                          <span>
-                            <MdHorizontalSplit />
-                          </span>{" "}
-                          <span className="xe">X</span>
-                          <span>
-                            <MdBorderVertical />
-                          </span>
-                          <span>
-                            <input
-                              type="number"
-                              name=""
-                              id=""
-                              className="form-control icontrol"
-                            />
-                          </span>
-                          1080 Max{" "}
-                        </p> */}
                         <div className="max-width frame">
-                          MAX 1920 &nbsp;{" "}
+                          MAX <b>1920</b> &nbsp;{" "}
                           <span className="icon">
-                            <MdHorizontalSplit />
+                            <img
+                              src="/Width_Icon.png"
+                              alt=""
+                              className="width"
+                            />
+                            {/* <MdHorizontalSplit /> */}
                           </span>
                           <span>
                             <input
@@ -550,16 +506,6 @@ function Main() {
                                     width: Number(ert.target.value),
                                   };
                                 });
-
-                                // console.log({
-                                //   ...crop,
-                                //   width: Number(
-                                //     (
-                                //       (Number(ert.target.value) * 100) /
-                                //       metadata.width
-                                //     ).toFixed(2)
-                                //   ),
-                                // });
                                 setCrop((e) => {
                                   return {
                                     ...e,
@@ -614,18 +560,6 @@ function Main() {
                                     height: Number(ert.target.value),
                                   };
                                 });
-                                // setvideoresolution((e) => {
-                                //   return {
-                                //     ...e,
-                                //     height: Number(ert.target.value),
-                                //   };
-                                // });
-                                // setCrop((e) => {
-                                //   return {
-                                //     ...e,
-                                //     height: Number(ert.target.value),
-                                //   };
-                                // });
                                 setCrop((e) => {
                                   return {
                                     ...e,
@@ -644,9 +578,14 @@ function Main() {
                           </span>
                           <span className="icon">
                             {" "}
-                            <MdBorderVertical />
+                            <img
+                              src="/Height_Icon.png"
+                              alt=""
+                              className="height"
+                            />
+                            {/* <MdBorderVertical /> */}
                           </span>{" "}
-                          1080 MAX{" "}
+                          <b>1080</b> MAX{" "}
                           <span
                             className="icon info"
                             style={{ fontSize: "17px" }}
@@ -671,7 +610,6 @@ function Main() {
                               refdata={ref}
                               setTimings={setTimings}
                               newchangeslide
-                              playtime={playtimevideo}
                               setforplaypause={setforplaypause}
                               playpausetimevideo={forplaypause}
                               dynamicdata={dynamicdata}
@@ -694,9 +632,9 @@ function Main() {
                           >
                             <div
                               className="video-playpoint"
-                              // style={{ left: `${loadedtime}%` }}
+                              style={{ left: `${loadedtime}%` }}
                             >
-                              {slider && (
+                              {(slider || isPlaying) && (
                                 <div className="tool-tip">
                                   <span>
                                     {millisToMinutesAndSeconds(
@@ -745,46 +683,6 @@ function Main() {
                               value={value}
                               style={{ margin: "0 !important", width: "70px" }}
                             />
-                            {/* <input
-                              type="text"
-                              className="form-control icontrol"
-                              value={timings[0].start}
-                              onChange={(e) => {
-                                // convert into seconds
-                                if (
-                                  Number(e?.target?.value) > metadata?.duration
-                                ) {
-                                  return false;
-                                }
-                                let timingtemp = [
-                                  {
-                                    start: Number(e.target.value),
-                                    end: timings?.[0]?.end,
-                                  },
-                                ];
-                                setsliderpoints((ert) => {
-                                  return {
-                                    ...ert,
-                                    start: Number(e.target.value * 1000),
-                                  };
-                                });
-                                setTimings([
-                                  {
-                                    start: Number(e.target.value),
-                                    end: timings?.[0]?.end,
-                                  },
-                                ]);
-                                dynamicdata(
-                                  Number(e.target.value),
-                                  metadata.duration
-                                );
-                                ref.current.seekTo(
-                                  Number(e.target.value),
-                                  "seconds"
-                                );
-                              }}
-                              style={{ margin: "0 !important", width: "70px" }}
-                            /> */}
                           </div>
                           <div className="fix-frame right">
                             <input
@@ -796,26 +694,6 @@ function Main() {
                               value={value2}
                               style={{ margin: "0 !important", width: "70px" }}
                             />
-                            {/* <input
-                              type="text"
-                              className="form-control icontrol"
-                              // value={millisToMinutesAndSeconds(
-                              //   timings[0].end * 1000
-                              // )}
-                              onChange={(e) => {
-                                setsliderpoints((ert) => {
-                                  return {
-                                    ...ert,
-                                    end: Number(e.target.value),
-                                  };
-                                });
-                                console.log(
-                                  e.target.value,
-                                  "%%%%%%%%%%%%%%%%%%%%%%%"
-                                );
-                              }}
-                              style={{ margin: "0 !important", width: "70px" }}
-                            /> */}
                           </div>
                         </div>
                         <div className="length-frame-box">
@@ -825,29 +703,23 @@ function Main() {
                               metadata.duration * 1000
                             )}
                             <span className="clock">
-                              <BsClockHistory />
-                              00:10 Max
+                              {/* <BsClockHistory /> */}
+                              <img src="/VideoLength_Icon.png" alt="" />
+                              <b>00:10</b> Max
                             </span>
                           </div>
                           <div className="video-length frame-seconds">
                             Frame Per Second: 30
                             <span className="clock">
-                              <BsFillClockFill />
-                              30 Max
+                              {/* <BsFillClockFill /> */}
+                              <img src="/FPS_Icon.png" alt="" />
+                              <b>30</b> Max
                             </span>
                             <span>
                               <CgDanger />
                             </span>
                           </div>
                         </div>
-                        {/* <div className="fix-frame right">
-                          <input
-                            type="text"
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            value={value}
-                          />
-                        </div> */}
                       </div>
                     </div>
                   </>

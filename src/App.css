@@ -20,8 +20,8 @@ img {
 }
 .ReactCrop__drag-handle::after {
   border: none !important;
-  border-left: 13px solid #dea32c !important;
-  border-top: 13px solid #dea32c !important;
+  border-left: 13px solid #f0b354 !important;
+  border-top: 13px solid #f0b354 !important;
   background-color: transparent !important;
   width: 35px !important;
   height: 35px !important;
@@ -31,30 +31,30 @@ img {
 }
 .ReactCrop .ord-ne::after {
   border-left: none !important;
-  border-right: 13px solid #dea32c !important;
+  border-right: 13px solid #f0b354 !important;
 }
 .ReactCrop .ord-w::after {
   border-top: none !important;
 }
 .ReactCrop .ord-sw::after {
   border-top: none !important;
-  border-bottom: 13px solid #dea32c !important;
+  border-bottom: 13px solid #f0b354 !important;
 }
 .ReactCrop .ord-se::after {
   border: none !important;
-  border-bottom: 13px solid #dea32c !important;
-  border-right: 13px solid #dea32c !important;
+  border-bottom: 13px solid #f0b354 !important;
+  border-right: 13px solid #f0b354 !important;
 }
 .ReactCrop .ord-e::after {
   border: none !important;
-  border-right: 13px solid #dea32c !important;
+  border-right: 13px solid #f0b354 !important;
 }
 .ReactCrop .ord-s::after {
   border: none !important;
-  border-bottom: 13px solid #dea32c !important;
+  border-bottom: 13px solid #f0b354 !important;
 }
 .ReactCrop__crop-selection {
-  backdrop-filter: grayscale(1);
+  /* backdrop-filter: grayscale(1); */
   box-shadow: none !important;
 }
 @media (min-width: 576px) {
@@ -82,7 +82,7 @@ img {
   margin: 3px;
 }
 .imagecrop {
-  background-color: #454c6f;
+  background-color: #354d74;
 }
 
 .irs--round .irs-bar {
@@ -176,7 +176,7 @@ input[type="range"]::-webkit-slider-thumb::before {
   position: absolute;
 }
 .multi-range input[type="range"]:nth-child(1)::-webkit-slider-thumb::before {
-  background-color: #454c6f;
+  background-color: #354d74;
 }
 .multi-range input[type="range"]:nth-child(2) {
   background: none;
