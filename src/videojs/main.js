@@ -23,10 +23,24 @@ import { timechange } from "../timetomilisecond";
 
 const HeaderMemo = React.memo(Newrange);
 function Main() {
+  const [timeformate, settimeformate] = useState({
+    starttime: "",
+    endtime: "",
+  });
+  const [starttime, setstarttime] = useState({
+    start: timeformate.starttime.split(":")[0],
+    end: timeformate.starttime.split(":")[1],
+  });
+  const [endtime, setendtime] = useState({
+    start: timeformate.endtime.split(":")[0],
+    end: timeformate.endtime.split(":")[1],
+  });
+
   const [metadata, setMetadata] = useState();
   const [imagedata, setimagedata] = useState([]);
   const [slider, setslider] = useState(false);
   const [flag, setFlag] = useState(false);
+  const input = useRef("");
   const ffmpeg = useRef(null);
   const [show, setShow] = useState(false);
   const [check, setcheck] = useState(false);
@@ -41,6 +55,8 @@ function Main() {
       end: 0,
     },
   ]);
+  const firstinput = useRef("");
+  const secondinput = useRef("");
   const [sliderpoints, setsliderpoints] = useState({
     start: 0,
     end: 0,
@@ -58,7 +74,18 @@ function Main() {
     x: 0,
     y: 0,
   });
-
+  useEffect(() => {
+    if (check) {
+      setstarttime({
+        start: timeformate.starttime.split(":")[0],
+        end: timeformate.starttime.split(":")[1],
+      });
+      setendtime({
+        start: timeformate.endtime.split(":")[0],
+        end: timeformate.endtime.split(":")[1],
+      });
+    }
+  }, [check]);
   async function uploadFile(file, e) {
     let urlfile = URL.createObjectURL(file[0]);
     if (e) {
@@ -110,7 +137,10 @@ function Main() {
       start: secondtomilisecond(Number(data?.start)),
       end: secondtomilisecond(Number(data?.duration)),
     });
-
+    settimeformate({
+      starttime: toHHMMSS(Number(data.start)),
+      endtime: toHHMMSS(Number(data.duration)),
+    });
     setTimings([{ start: data.start, end: Number(data.duration) }]);
 
     setfilevalue("");
@@ -329,6 +359,20 @@ function Main() {
       .join(":")
       .replace(/^0/, "");
   };
+  function clickhandlechange(e) {
+    input.current.focus();
+    setValue((ert) => {
+      let abc = getSecondsFromHHMMSS(ert) + 1;
+      return toHHMMSS(abc);
+    });
+  }
+  function clickhandlechange2(e) {
+    input.current.focus();
+    setValue((ert) => {
+      let abc = getSecondsFromHHMMSS(ert) - 1;
+      return toHHMMSS(abc);
+    });
+  }
   return (
     ready && (
       <div className="video-main-box">
@@ -455,6 +499,8 @@ function Main() {
                         }}
                       />
                     </ReactCrop>
+                    {/* starttime endtime */}
+
                     <div className="videoframe-slider-box">
                       <div className="frame-content">
                         <div className="max-width frame">
@@ -467,7 +513,10 @@ function Main() {
                             />
                             {/* <MdHorizontalSplit /> */}
                           </span>
-                          <span>
+                          <span
+                            className="input-box"
+                            style={{ display: "flex" }}
+                          >
                             <input
                               type="number"
                               name=""
@@ -479,6 +528,7 @@ function Main() {
                                 metadata?.width -
                                 (metadata?.width * crop.x) / 100
                               }
+                              ref={firstinput}
                               onChange={(ert) => {
                                 if (ert.target.value >= metadata.width) {
                                   setvideoresolution((e) => {
@@ -519,13 +569,57 @@ function Main() {
                                 });
                               }}
                             />
+                            <div
+                              className="num-arrows"
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <svg
+                                width={15}
+                                onClick={() => firstinput.current.stepUp()}
+                                height={15}
+                                viewBox="-2 -4 10 10"
+                                fill="none"
+                                stroke="#354d74"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  name="up"
+                                  d="M4.2506 0.333496C4.1256 0.166829 3.8756 0.166829 3.7506 0.333496L0.625604 4.50016C0.471095 4.70617 0.618089 5.00016 0.875603 5.00016L7.1256 5.00016C7.38312 5.00016 7.53011 4.70617 7.3756 4.50016L4.2506 0.333496Z"
+                                  fill="#f0b354"
+                                />
+                              </svg>
+                              <svg
+                                width={15}
+                                onClick={() => firstinput.current.stepDown()}
+                                height={15}
+                                viewBox="-2 9 10 10"
+                                fill="none"
+                                stroke="#354d74"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  name="down"
+                                  d="M3.74947 14.6668C3.87447 14.8335 4.12447 14.8335 4.24947 14.6668L7.37447 10.5002C7.52898 10.2942 7.38198 10.0002 7.12447 10.0002H0.874469C0.616954 10.0002 0.46996 10.2942 0.624469 10.5002L3.74947 14.6668Z"
+                                  fill="#f0b354"
+                                />
+                              </svg>
+                            </div>
                           </span>
                         </div>
                         <span className="xe"> &nbsp; X &nbsp; </span>
                         <div className="max-height frame">
-                          <span>
+                          <span
+                            className="input-box"
+                            style={{ display: "flex" }}
+                          >
                             <input
                               type="number"
+                              ref={secondinput}
                               name=""
                               id=""
                               value={videoresolution?.height}
@@ -575,6 +669,46 @@ function Main() {
                               min={100}
                               className="form-control icontrol"
                             />
+                            <div
+                              className="num-arrows"
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <svg
+                                stroke="#354d74"
+                                width={15}
+                                onClick={() => secondinput.current.stepUp()}
+                                height={15}
+                                viewBox="-2 -4 10 10"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  name="up"
+                                  d="M4.2506 0.333496C4.1256 0.166829 3.8756 0.166829 3.7506 0.333496L0.625604 4.50016C0.471095 4.70617 0.618089 5.00016 0.875603 5.00016L7.1256 5.00016C7.38312 5.00016 7.53011 4.70617 7.3756 4.50016L4.2506 0.333496Z"
+                                  fill="#f0b354"
+                                />
+                              </svg>
+                              <svg
+                                stroke="#354d74"
+                                width={15}
+                                onClick={() => secondinput.current.stepDown()}
+                                height={15}
+                                viewBox="-2 9 10 10"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  name="down"
+                                  d="M3.74947 14.6668C3.87447 14.8335 4.12447 14.8335 4.24947 14.6668L7.37447 10.5002C7.52898 10.2942 7.38198 10.0002 7.12447 10.0002H0.874469C0.616954 10.0002 0.46996 10.2942 0.624469 10.5002L3.74947 14.6668Z"
+                                  fill="#f0b354"
+                                />
+                              </svg>
+                            </div>
                           </span>
                           <span className="icon">
                             {" "}
@@ -676,13 +810,57 @@ function Main() {
                           <div className="fix-frame left">
                             <input
                               type="text"
+                              ref={input}
                               pattern="[0-9]"
                               className="form-control icontrol"
                               onChange={onChange}
                               onBlur={onBlur}
                               value={value}
-                              style={{ margin: "0 !important", width: "70px" }}
+                              style={{
+                                margin: "0 !important",
+                                width: "40px",
+                                border: "none",
+                                background: "transparent",
+                              }}
                             />
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <svg
+                                width={15}
+                                onClick={clickhandlechange}
+                                height={15}
+                                viewBox="-2 -4 10 10"
+                                fill="none"
+                                stroke="#354d74"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  name="up"
+                                  d="M4.2506 0.333496C4.1256 0.166829 3.8756 0.166829 3.7506 0.333496L0.625604 4.50016C0.471095 4.70617 0.618089 5.00016 0.875603 5.00016L7.1256 5.00016C7.38312 5.00016 7.53011 4.70617 7.3756 4.50016L4.2506 0.333496Z"
+                                  fill="#f0b354"
+                                />
+                              </svg>
+                              <svg
+                                width={15}
+                                onClick={clickhandlechange2}
+                                height={15}
+                                viewBox="-2 9 10 10"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  name="down"
+                                  d="M3.74947 14.6668C3.87447 14.8335 4.12447 14.8335 4.24947 14.6668L7.37447 10.5002C7.52898 10.2942 7.38198 10.0002 7.12447 10.0002H0.874469C0.616954 10.0002 0.46996 10.2942 0.624469 10.5002L3.74947 14.6668Z"
+                                  fill="#f0b354"
+                                />
+                              </svg>
+                            </div>
                           </div>
                           <div className="fix-frame right">
                             <input
@@ -692,8 +870,46 @@ function Main() {
                               onChange={onChange2}
                               onBlur={onBlur2}
                               value={value2}
-                              style={{ margin: "0 !important", width: "70px" }}
+                              style={{
+                                margin: "0 !important",
+                                width: "40px",
+                                border: "none",
+                                background: "transparent",
+                              }}
                             />
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <svg
+                                width={15}
+                                height={15}
+                                viewBox="-2 -4 10 10"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M4.2506 0.333496C4.1256 0.166829 3.8756 0.166829 3.7506 0.333496L0.625604 4.50016C0.471095 4.70617 0.618089 5.00016 0.875603 5.00016L7.1256 5.00016C7.38312 5.00016 7.53011 4.70617 7.3756 4.50016L4.2506 0.333496Z"
+                                  fill="#f0b354"
+                                />
+                              </svg>
+                              <svg
+                                width={15}
+                                height={15}
+                                viewBox="-2 9 10 10"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M3.74947 14.6668C3.87447 14.8335 4.12447 14.8335 4.24947 14.6668L7.37447 10.5002C7.52898 10.2942 7.38198 10.0002 7.12447 10.0002H0.874469C0.616954 10.0002 0.46996 10.2942 0.624469 10.5002L3.74947 14.6668Z"
+                                  fill="#f0b354"
+                                />
+                              </svg>
+                            </div>
                           </div>
                         </div>
                         <div className="length-frame-box">

@@ -109,7 +109,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 0px;
+    padding-bottom: 8px;
     .xe{
       font-weight: bold;
       font-size: 26px;
@@ -161,14 +161,18 @@
     .icontrol{
       width: 75px;
       margin: 0 auto;
-      padding: 0px 0px 0px 12px;
-    background-color: whitesmoke;
     box-shadow: none;
+    padding: 0px 11px;
+    box-shadow: none;
+    border-radius: 30px;
+    background-color: #a9a9a954;
+    font-size: 18px;
+    font-weight: 600;
     }
     }
  
   }
-  .length-frame-box {
+.length-frame-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -229,7 +233,10 @@
   position: relative;
   .fix-frame {
     position: absolute;
+    border: 1px solid #c7c2c2;
+    border-radius: 5px;
     top: -62px;
+    display: flex;
     &.left {
       left: -84px;
     }
@@ -237,10 +244,15 @@
       right: -84px;
     }
     .icontrol{
-      padding: 0px 0px 0px 12px;
+      padding: 0px 0px 0px 7px;
     width: 100%;
     background-color:whitesmoke;
     box-shadow: none;
+    }
+    div{
+      svg{
+        stroke: #354d74;
+      }
     }
   }
 }
@@ -339,6 +351,18 @@
   padding: 0px 12px;
   font-size: 14px;
 }
+}
+.input-box{
+  position: relative;
+}
+.num-arrows{
+  position: absolute;
+  right: 0;
+}
+.num-arrows {
+  position: absolute;
+  right: 5px;
+  top: 0px;
 }
 // Media Query
 @media screen and (max-width: 1440px) {

@@ -132,9 +132,9 @@ section.range-slider input[type="range"] {
 }
 .noUi-horizontal .noUi-connect {
   /* border: 5px solid #354d74 !important; */
-  background: #ffffff45 !important;
+  background: #ffffff00 !important;
   overflow: hidden;
-  backdrop-filter: grayscale(1);
+  /* backdrop-filter: grayscale(1); */
 }
 .noUi-horizontal .noUi-handle {
   top: 0 !important;
@@ -221,3 +221,14 @@ section.range-slider input[type="range"] {
   z-index: 1;
 }
 /* video-frame */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield !important;
+}
