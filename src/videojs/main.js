@@ -431,6 +431,7 @@ function Main() {
   };
   function clickhandlechange(e) {
     input.current.focus();
+    onChange({ target: { value: input.current.value } });
     setValue((ert) => {
       let abc = getSecondsFromHHMMSS(ert) + 1;
       return toHHMMSS(abc);
@@ -438,11 +439,13 @@ function Main() {
   }
   function clickhandlechange2(e) {
     input.current.focus();
+    // onChange({ target: { value: input.current.value } });
     setValue((ert) => {
       let abc = getSecondsFromHHMMSS(ert) - 1;
       return toHHMMSS(abc);
     });
   }
+
   return (
     ready && (
       <div className="video-main-box">
