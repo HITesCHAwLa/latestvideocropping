@@ -352,6 +352,29 @@
   padding: 0px 12px;
   font-size: 14px;
 }
+
+}
+.noUi-connect.noUi-draggable:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  // background-color: black;
+  display: inline-block;
+}
+.input-box{
+  position: relative;
+}
+.num-arrows{
+  position: absolute;
+  right: 0;
+}
+.num-arrows {
+  position: absolute;
+  right: 5px;
+  top: 0px;
 }
 // Media Query
 @media screen and (max-width: 1440px) {
