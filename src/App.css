@@ -28,6 +28,8 @@ img {
 }
 .ReactCrop .ord-n::after {
   border-left: none !important;
+  position: relative;
+  left: -16px;
 }
 .ReactCrop .ord-ne::after {
   border-left: none !important;
@@ -52,6 +54,7 @@ img {
 .ReactCrop .ord-s::after {
   border: none !important;
   border-bottom: 13px solid #f0b354 !important;
+  left: -16px;
 }
 .ReactCrop__crop-selection {
   /* backdrop-filter: grayscale(1); */

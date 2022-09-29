@@ -70,6 +70,7 @@
     }
     .modal-footer {
       border: none;
+      padding: 0px 20px 30px;
       button {
         background-color: #354d74;
         border: none;
@@ -351,18 +352,6 @@
   padding: 0px 12px;
   font-size: 14px;
 }
-}
-.input-box{
-  position: relative;
-}
-.num-arrows{
-  position: absolute;
-  right: 0;
-}
-.num-arrows {
-  position: absolute;
-  right: 5px;
-  top: 0px;
 }
 // Media Query
 @media screen and (max-width: 1440px) {
