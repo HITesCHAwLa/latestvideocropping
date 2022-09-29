@@ -259,12 +259,82 @@ function Main() {
   }, [timings?.[0]?.end]);
   const onChange = (event) => {
     setValue((e) => {
+      if (event.target.value > metadata.duration - 1) {
+        setPrevValue(event.target.value);
+        return e;
+      }
       setPrevValue(e);
 
       return event.target.value;
     });
   };
 
+  //#region
+  function onwidth(valueofwidth) {
+    if (valueofwidth >= metadata.width) {
+      setvideoresolution((e) => {
+        return {
+          ...e,
+          width: Number(metadata.width),
+        };
+      });
+      setCrop((e) => {
+        return {
+          ...e,
+          width: Number(
+            ((Number(metadata.width) * 100) / metadata.width).toFixed(2)
+          ),
+        };
+      });
+      return false;
+    }
+    setvideoresolution((e) => {
+      return {
+        ...e,
+        width: Number(valueofwidth),
+      };
+    });
+    setCrop((e) => {
+      return {
+        ...e,
+        width: Number(
+          ((Number(valueofwidth) * 100) / metadata.width).toFixed(2)
+        ),
+      };
+    });
+  }
+  function onheight(value) {
+    if (value > metadata.height) {
+      setvideoresolution((e) => {
+        return {
+          ...e,
+          height: Number(metadata.height),
+        };
+      });
+      setCrop((e) => {
+        return {
+          ...e,
+          height: Number(
+            ((Number(metadata.height) * 100) / metadata.height).toFixed(2)
+          ),
+        };
+      });
+      return false;
+    }
+    setvideoresolution((e) => {
+      return {
+        ...e,
+        height: Number(value),
+      };
+    });
+    setCrop((e) => {
+      return {
+        ...e,
+        height: Number(((Number(value) * 100) / metadata.height).toFixed(2)),
+      };
+    });
+  }
+  //#endregion
   const onBlur = (event) => {
     const value = event.target.value;
     const seconds = Math.max(0, getSecondsFromHHMMSS(value));
@@ -530,43 +600,7 @@ function Main() {
                               }
                               ref={firstinput}
                               onChange={(ert) => {
-                                if (ert.target.value >= metadata.width) {
-                                  setvideoresolution((e) => {
-                                    return {
-                                      ...e,
-                                      width: Number(metadata.width),
-                                    };
-                                  });
-                                  setCrop((e) => {
-                                    return {
-                                      ...e,
-                                      width: Number(
-                                        (
-                                          (Number(metadata.width) * 100) /
-                                          metadata.width
-                                        ).toFixed(2)
-                                      ),
-                                    };
-                                  });
-                                  return false;
-                                }
-                                setvideoresolution((e) => {
-                                  return {
-                                    ...e,
-                                    width: Number(ert.target.value),
-                                  };
-                                });
-                                setCrop((e) => {
-                                  return {
-                                    ...e,
-                                    width: Number(
-                                      (
-                                        (Number(ert.target.value) * 100) /
-                                        metadata.width
-                                      ).toFixed(2)
-                                    ),
-                                  };
-                                });
+                                onwidth(ert.target.value);
                               }}
                             />
                             <div
@@ -580,7 +614,11 @@ function Main() {
                             >
                               <svg
                                 width={15}
-                                onClick={() => firstinput.current.stepUp()}
+                                onClick={(e) => {
+                                  firstinput.current.stepUp();
+                                  firstinput.current.focus();
+                                  onwidth(firstinput.current.value);
+                                }}
                                 height={15}
                                 viewBox="-2 -4 10 10"
                                 fill="none"
@@ -593,9 +631,17 @@ function Main() {
                                   fill="#f0b354"
                                 />
                               </svg>
+
                               <svg
                                 width={15}
-                                onClick={() => firstinput.current.stepDown()}
+                                onClick={() => {
+                                  firstinput.current.stepDown();
+                                  firstinput.current.focus();
+                                  onwidth(firstinput.current.value);
+                                  // firstinput.current.dispatchEvent(
+                                  //   new Event("change")
+                                  // );
+                                }}
                                 height={15}
                                 viewBox="-2 9 10 10"
                                 fill="none"
@@ -628,43 +674,7 @@ function Main() {
                                 (metadata?.height * crop.y) / 100
                               }
                               onChange={(ert) => {
-                                if (ert.target.value > metadata.height) {
-                                  setvideoresolution((e) => {
-                                    return {
-                                      ...e,
-                                      height: Number(metadata.height),
-                                    };
-                                  });
-                                  setCrop((e) => {
-                                    return {
-                                      ...e,
-                                      height: Number(
-                                        (
-                                          (Number(metadata.height) * 100) /
-                                          metadata.height
-                                        ).toFixed(2)
-                                      ),
-                                    };
-                                  });
-                                  return false;
-                                }
-                                setvideoresolution((e) => {
-                                  return {
-                                    ...e,
-                                    height: Number(ert.target.value),
-                                  };
-                                });
-                                setCrop((e) => {
-                                  return {
-                                    ...e,
-                                    height: Number(
-                                      (
-                                        (Number(ert.target.value) * 100) /
-                                        metadata.height
-                                      ).toFixed(2)
-                                    ),
-                                  };
-                                });
+                                onheight(ert.target.value);
                               }}
                               min={100}
                               className="form-control icontrol"
@@ -681,7 +691,11 @@ function Main() {
                               <svg
                                 stroke="#354d74"
                                 width={15}
-                                onClick={() => secondinput.current.stepUp()}
+                                onClick={() => {
+                                  secondinput.current.stepUp();
+                                  secondinput.current.focus();
+                                  onheight(secondinput.current.value);
+                                }}
                                 height={15}
                                 viewBox="-2 -4 10 10"
                                 fill="none"
@@ -696,7 +710,11 @@ function Main() {
                               <svg
                                 stroke="#354d74"
                                 width={15}
-                                onClick={() => secondinput.current.stepDown()}
+                                onClick={() => {
+                                  secondinput.current.stepDown();
+                                  secondinput.current.focus();
+                                  onheight(secondinput.current.value);
+                                }}
                                 height={15}
                                 viewBox="-2 9 10 10"
                                 fill="none"
