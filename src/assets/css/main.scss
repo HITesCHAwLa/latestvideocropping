@@ -70,6 +70,7 @@
     }
     .modal-footer {
       border: none;
+      padding: 0px 20px 30px;
       button {
         background-color: #354d74;
         border: none;
@@ -339,7 +340,40 @@
   padding: 0px 12px;
   font-size: 14px;
 }
+
 }
+.noUi-connect.noUi-draggable:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  // background-color: black;
+  display: inline-block;
+}
+.noUi-base .noUi-connects:not(.noUi-draggable) {
+  position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    backdrop-filter: grayscale(1);
+    background: transparent !important;
+}
+.noUi-base .noUi-horizontal .noUi-connect{
+  background: #2d3041 !important;
+}
+
+// .noUi-draggable:not(.noUi-connects) {
+//   content: "";
+//   position: absolute;
+//     left: 0;
+//     right: 0;
+//     top: 0;
+//     bottom: 0;
+//     backdrop-filter: grayscale(0);
+// }
 // Media Query
 @media screen and (max-width: 1440px) {
   .modal-dialog.modal-xl{
