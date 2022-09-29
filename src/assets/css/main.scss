@@ -165,7 +165,7 @@
     box-shadow: none;
     padding: 0px 11px;
     box-shadow: none;
-    border-radius: 30px;
+    border-radius: 10px;
     background-color: #a9a9a954;
     font-size: 18px;
     font-weight: 600;
@@ -238,6 +238,8 @@
     border-radius: 5px;
     top: -62px;
     display: flex;
+    width: 74px;
+    background-color: whitesmoke;
     &.left {
       left: -84px;
     }
@@ -361,8 +363,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  // background-color: black;
   display: inline-block;
+    background-color: #f0b354;
+    opacity: .2;
 }
 .input-box{
   position: relative;
@@ -375,7 +378,15 @@
   position: absolute;
   right: 5px;
   top: 0px;
+  cursor: pointer;
 }
+.fix-frame-box .fix-frame > div {
+  position: absolute;
+  right: 8px;
+  top: -3px;
+  cursor: pointer;
+}
+
 // Media Query
 @media screen and (max-width: 1440px) {
   .modal-dialog.modal-xl{
