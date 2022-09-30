@@ -356,17 +356,7 @@
 }
 
 }
-.noUi-connect.noUi-draggable:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: inline-block;
-    background-color: #f0b354;
-    opacity: .2;
-}
+
 .input-box{
   position: relative;
 }
@@ -386,7 +376,28 @@
   top: -3px;
   cursor: pointer;
 }
-
+// jignesh sir
+.noUi-target .noUi-connect.noUi-draggable:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 100%;
+  bottom: 0;
+  min-width: 8000px;
+  width: 8000px;
+  backdrop-filter: grayscale(1);
+}
+.noUi-target .noUi-connect.noUi-draggable:after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 100% !important;
+  bottom: 0 !important;
+  min-width: 8000px !important;
+  width: 8000px !important;
+  -webkit-backdrop-filter: grayscale(1) !important;
+  backdrop-filter: grayscale(1) !important;
+}
 // Media Query
 @media screen and (max-width: 1440px) {
   .modal-dialog.modal-xl{

@@ -133,7 +133,7 @@ section.range-slider input[type="range"] {
 .noUi-horizontal .noUi-connect {
   /* border: 5px solid #354d74 !important; */
   background: #ffffff00 !important;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* backdrop-filter: grayscale(1); */
 }
 .noUi-horizontal .noUi-handle {

@@ -46,6 +46,7 @@ function Main() {
   const [check, setcheck] = useState(false);
   const [ready, setReady] = React.useState(false);
   const ref = React.useRef("");
+  const input2 = useRef("");
   const [filevalue, setfilevalue] = useState("");
   const [urldata, seturldata] = useState("");
   const [isPlaying, setisPlaying] = useState(false);
@@ -367,11 +368,21 @@ function Main() {
   };
 
   const onChange2 = (event) => {
+    console.log(event.target.value, "---------");
     setValue2((e) => {
+      if (event.target.value > metadata.duration - 1) {
+        setPrevValue2(event.target.value);
+        return e;
+      }
       setPrevValue2(e);
 
       return event.target.value;
     });
+    // setValue2((e) => {
+    //   setPrevValue2(e);
+
+    //   return event.target.value;
+    // });
   };
 
   const onBlur2 = (event) => {
@@ -432,6 +443,7 @@ function Main() {
   function clickhandlechange(e) {
     input.current.focus();
     onChange({ target: { value: input.current.value } });
+
     setValue((ert) => {
       let abc = getSecondsFromHHMMSS(ert) + 1;
       return toHHMMSS(abc);
@@ -441,11 +453,30 @@ function Main() {
     input.current.focus();
     // onChange({ target: { value: input.current.value } });
     setValue((ert) => {
-      let abc = getSecondsFromHHMMSS(ert) - 1;
-      return toHHMMSS(abc);
+      if (getSecondsFromHHMMSS(ert) === 0) {
+        return toHHMMSS(getSecondsFromHHMMSS(ert));
+      } else {
+        let abc = getSecondsFromHHMMSS(ert) - 1;
+
+        return toHHMMSS(abc);
+      }
     });
   }
 
+  function clickhandlechangeright() {
+    // input2.current.focus();
+    // onChange2({ target: { value: input.current.value } });
+    // onChange2({ target: { value: input2.current.value } });
+    // setValue2((ert) => {
+    //   if (getSecondsFromHHMMSS(ert) >= parseInt(metadata.duration)) {
+    //     return toHHMMSS(getSecondsFromHHMMSS(ert));
+    //   } else {
+    //     let abc = getSecondsFromHHMMSS(ert) + 1;
+    //     return toHHMMSS(abc);
+    //   }
+    // });
+  }
+  function clickhandlechangeright2() {}
   return (
     ready && (
       <div className="video-main-box">
@@ -891,6 +922,7 @@ function Main() {
                               onChange={onChange2}
                               onBlur={onBlur2}
                               value={value2}
+                              ref={input2}
                               style={{
                                 margin: "0 !important",
                                 width: "40px",
@@ -907,6 +939,7 @@ function Main() {
                               }}
                             >
                               <svg
+                                onClick={clickhandlechangeright}
                                 width={15}
                                 height={15}
                                 viewBox="-2 -4 10 10"
@@ -919,6 +952,7 @@ function Main() {
                                 />
                               </svg>
                               <svg
+                                onClick={clickhandlechangeright2}
                                 width={15}
                                 height={15}
                                 viewBox="-2 9 10 10"
