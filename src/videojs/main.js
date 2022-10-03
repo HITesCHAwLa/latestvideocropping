@@ -39,6 +39,14 @@ function Main() {
   const S_end = useRef("");
   const E_start = useRef("");
   const E_end = useRef("");
+  const [endtime, setendtime] = useState({
+    start: timeformate.endtime.split(":")[0],
+    end: timeformate.endtime.split(":")[1],
+  });
+
+  //Maximum 100MB Video Available For Upload
+  const VideoMaxSize = 100000000;
+
   const [metadata, setMetadata] = useState();
   const [imagedata, setimagedata] = useState([]);
   const [slider, setslider] = useState(false);
@@ -114,29 +122,44 @@ function Main() {
       return false;
     }
     // if (data.size > 4000000) {
-    //   setErrordata({
-    //     title: "Size Limit Reached",
-    //     body: `The Maximum video size allowed is 4 MB, your file is ${formatSizeUnits(
-    //       data.size
-    //     )} . Please try using a smaller sized video`,
-    //   });
-    //   setShow(true);
-    //   setFlag(false);
-    //   setcheck(true);
-    //   seturldata("");
-    //   return false;
-    // }
-    // if (Number(data.duration * 1000) > 20000) {
-    //   setErrordata({
-    //     title: "Unable To Create Animation",
-    //     body: `video Length is  ${data.duration}s. Maximum allow 20s`,
-    //   });
-    //   setShow(true);
-    //   setcheck(true);
-    //   setFlag(false);
-    //   seturldata("");
-    //   return false;
-    // }
+    if (data.size > 100000000) {
+      setErrordata({
+        title: "Size Limit Reached",
+        // body: `The Maximum video size allowed is 4 MB, your file is ${formatSizeUnits(
+        body: `The Maximum video size allowed is 100 MB, your file is ${formatSizeUnits(
+          data.size
+        )} . Please try using a smaller sized video`,
+      });
+      setShow(true);
+      setFlag(false);
+      setcheck(true);
+      seturldata("");
+      return false;
+    }
+    if (Number(data.duration * 1000) > 20000) {
+      setErrordata({
+        title: "Unable To Create Animation",
+        body: `video Length is  ${data.duration}s. Maximum allow 20s`,
+      });
+      setShow(true);
+      setcheck(true);
+      setFlag(false);
+      seturldata("");
+      return false;
+    }
+    if (Number(data.duration * 1000) < 1000) {
+      setErrordata({
+        title: "Unable To Create Animation",
+        body: `video Length is  ${(data.duration / 1000).toFixed(
+          3
+        )} second. Minimum allow 1s`,
+      });
+      setShow(true);
+      setcheck(true);
+      setFlag(false);
+      seturldata("");
+      return false;
+    }
     let imagedatas = await generateVideoThumbnails(file[0], 9);
     setimagedata(imagedatas);
     setvideoresolution({ width: data.width, height: data.height });
@@ -688,7 +711,7 @@ function Main() {
                         progressInterval={30}
                         width={"100%"}
                         height={"100%"}
-                        controls={true}
+                        controls={false}
                         onDuration={(e) => {}}
                         onClickPreview={(ok) => {
                           // console.log(ok, "onClickPreview");
