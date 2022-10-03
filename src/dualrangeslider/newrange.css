@@ -34,7 +34,7 @@ section.range-slider input[type="range"]::-webkit-slider-thumb {
   border: none;
   border-radius: 0px;
   /* background-color: #562edb; */
-  background-color: #454c6f;
+  background-color: #354d74;
 }
 
 section.range-slider input {
@@ -75,8 +75,12 @@ section.range-slider input[type="range"] {
 }
 
 .noUi-horizontal .noUi-handle {
-  width: 19px !important;
-  height: 72px !important;
+  width: 25px !important;
+  height: 65px !important;
+  background-color: #354d74;
+  background: #354d74;
+  box-shadow: 0px 0px 4px 1px #ffffff0d;
+  cursor: pointer;
 }
 
 .noUi-target {
@@ -85,4 +89,146 @@ section.range-slider input[type="range"] {
 
 .noUi-connect {
   background: #3fb8af29 !important;
+}
+/* .noUi-horizontal .noUi-handle:before,
+.noUi-horizontal .noUi-handle:after {
+  display: none;
+} */
+/* .noUi-horizontal .noUi-handle.noUi-handle-lower {
+  content: url("/public/left-chevron.png");
+}
+.noUi-horizontal .noUi-handle.noUi-handle-upper {
+  content: url("/public/next.png");
+} */
+.noUi-handle {
+  position: relative;
+  display: inline-block;
+  display: block;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-lower:after {
+  content: url("/public/left.svg");
+  position: absolute;
+  top: 20%;
+  left: -27%;
+  display: block;
+  transform: scale(0.8);
+  display: block;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-upper::after {
+  content: url("/public/right.svg");
+  position: absolute;
+  top: 20%;
+  left: -60%;
+  display: block;
+  transform: scale(0.8);
+  padding-left: 10px;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-lower,
+.noUi-horizontal .noUi-handle.noUi-handle-upper {
+  position: relative;
+}
+.noUi-horizontal .noUi-handle:before {
+  display: none;
+}
+.noUi-horizontal .noUi-connect {
+  /* border: 5px solid #354d74 !important; */
+  background: #ffffff00 !important;
+  /* overflow: hidden; */
+  /* backdrop-filter: grayscale(1); */
+}
+.noUi-horizontal .noUi-handle {
+  top: 0 !important;
+  border: none;
+}
+.noUi-horizontal .noUi-tooltip {
+  transform: translate(-50%, 0);
+  left: 50%;
+  bottom: 120%;
+  border: 1px solid black;
+  border-radius: 30px;
+  background-color: #000000c4;
+  color: white;
+  font-size: 12px;
+  padding: 3px 8px;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-lower {
+  position: absolute;
+  left: 42px;
+}
+.noUi-horizontal .noUi-handle.noUi-handle-upper {
+  position: absolute;
+  right: -24px;
+}
+.noUi-target.noUi-horizontal {
+  border: none;
+  box-shadow: none;
+  position: relative;
+}
+.noUi-horizontal .noUi-tooltip {
+  margin-bottom: 4px;
+}
+.noUi-handle:before,
+.noUi-handle:after {
+  background: none !important;
+}
+
+/* video::-webkit-media-controls {
+  -webkit-backdrop-filter: grayscale(100%);
+  backdrop-filter: grayscale(100%);
+} */
+
+.ReactCrop__crop-selection:before {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: -500px;
+  bottom: -500px;
+  backdrop-filter: grayscale(1);
+  width: 600px;
+}
+
+.ReactCrop__crop-selection:after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: -500px;
+  bottom: -500px;
+  backdrop-filter: grayscale(1);
+  width: 600px;
+}
+
+.ReactCrop__drag-elements:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  right: 0;
+  backdrop-filter: grayscale(1);
+  height: 600px;
+}
+
+.ReactCrop__drag-elements:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 100%;
+  right: 0;
+  backdrop-filter: grayscale(1);
+  height: 600px;
+}
+
+.ReactCrop__drag-elements > div {
+  z-index: 1;
+}
+/* video-frame */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield !important;
 }

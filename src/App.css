@@ -1,8 +1,12 @@
 .react-player {
-  width: 854px !important;
-  height: auto !important;
-
   margin: 0 auto;
+  height: 360px !important;
+}
+.react-player video {
+  /* max-height: 100%; */
+  object-fit: contain;
+  /* max-width: 100%;
+  width: 100%; */
 }
 .Crop-Controls {
   margin-bottom: 10px;
@@ -16,47 +20,53 @@ img {
 }
 .ReactCrop__drag-handle::after {
   border: none !important;
-  border-left: 13px solid #dea32c !important;
-  border-top: 13px solid #dea32c !important;
+  border-left: 13px solid #f0b354 !important;
+  border-top: 13px solid #f0b354 !important;
   background-color: transparent !important;
   width: 35px !important;
   height: 35px !important;
 }
 .ReactCrop .ord-n::after {
   border-left: none !important;
+  position: relative;
+  left: -16px;
 }
 .ReactCrop .ord-ne::after {
   border-left: none !important;
-  border-right: 13px solid #dea32c !important;
+  border-right: 13px solid #f0b354 !important;
 }
 .ReactCrop .ord-w::after {
   border-top: none !important;
 }
 .ReactCrop .ord-sw::after {
   border-top: none !important;
-  border-bottom: 13px solid #dea32c !important;
+  border-bottom: 13px solid #f0b354 !important;
 }
 .ReactCrop .ord-se::after {
   border: none !important;
-  border-bottom: 13px solid #dea32c !important;
-  border-right: 13px solid #dea32c !important;
+  border-bottom: 13px solid #f0b354 !important;
+  border-right: 13px solid #f0b354 !important;
 }
 .ReactCrop .ord-e::after {
   border: none !important;
-  border-right: 13px solid #dea32c !important;
+  border-right: 13px solid #f0b354 !important;
 }
 .ReactCrop .ord-s::after {
   border: none !important;
-  border-bottom: 13px solid #dea32c !important;
+  border-bottom: 13px solid #f0b354 !important;
+  left: -16px;
 }
-
+.ReactCrop__crop-selection {
+  /* backdrop-filter: grayscale(1); */
+  box-shadow: none !important;
+}
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 669px !important;
     margin: 0 auto !important;
-    /* margin: 1.75rem auto; */
   }
 }
+
 .ReactModal__Overlay {
   opacity: 0;
   transition: opacity 1000ms ease-in-out;
@@ -75,11 +85,7 @@ img {
   margin: 3px;
 }
 .imagecrop {
-  background-color: #454c6f;
-}
-.react-player {
-  width: 640px !important;
-  height: 338px !important;
+  background-color: #354d74;
 }
 
 .irs--round .irs-bar {
@@ -129,13 +135,13 @@ input[type="range"] {
   width: 400px;
   margin: 0;
   padding: 0 2px;
-  /* Add some L/R padding to ensure box shadow of handle is shown */
+
   overflow: hidden;
   border: 0;
   border-radius: 1px;
   outline: none;
   background: linear-gradient(grey, grey) no-repeat center;
-  /* Use a linear gradient to generate only the 2px height background */
+
   background-size: 100% 2px;
   pointer-events: none;
 }
@@ -150,7 +156,6 @@ input[type="range"]::-webkit-slider-thumb {
   background-color: #fff;
   position: relative;
   margin: 5px 0;
-  /* Add some margin to ensure box shadow is shown */
   cursor: pointer;
   -webkit-appearance: none;
   appearance: none;
@@ -174,7 +179,7 @@ input[type="range"]::-webkit-slider-thumb::before {
   position: absolute;
 }
 .multi-range input[type="range"]:nth-child(1)::-webkit-slider-thumb::before {
-  background-color: #454c6f;
+  background-color: #354d74;
 }
 .multi-range input[type="range"]:nth-child(2) {
   background: none;
@@ -183,30 +188,13 @@ input[type="range"]::-webkit-slider-thumb::before {
   background-color: grey;
 }
 
-
-/* new change  */
-
 /* video css */
-.videoframe-slider-box {
-  position: relative;
-}
-.video-frame {
-  position: relative;
-  width: 100%;
-  display: flex;
-  max-width: 100%;
-}
-.video-frame img {
-  width: 100%;
-  max-width: 100%;
-  height: 65px;
-}
-.video-slider {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  transform: translate(0%, -50%);
-  color: #454c6f;
-}
 
 /* Styling Nemi */
+
+/* hitesh */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}

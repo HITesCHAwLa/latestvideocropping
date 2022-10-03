@@ -2,16 +2,39 @@ import Nouislider from "nouislider-react";
 import React, { useEffect, useState } from "react";
 import "./newrange.css";
 import "nouislider/distribute/nouislider.css";
-import { millisToMinutesAndSeconds } from "./timmer";
+import { fordualrangeslider, millisToMinutesAndSeconds } from "./timmer";
 import { timechange } from "../timetomilisecond";
-function Newrange({ start, end, setTimings, newchangeslide }) {
+function Newrange({
+  start,
+  end,
+  setTimings,
+  newchangeslide,
+  refdata,
+  timings,
+  dynamicdata,
+  videoduration,
+  setslider,
+  slider,
+  dynamicdataforrightslide,
+  setslidenew,
+  setsliderpoints,
+  sliderpoints,
+  settimeformate,
+  toHHMMSS,
+}) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
 
-  useEffect(() => {
-    settimeduration({ start: start, end: end });
-  }, []);
-
+  // useEffect(() => {
+  //   console.log(start, end, "_++++++++++++++++++++++++++++++++HI");
+  //   settimeduration({ start: start, end: end });
+  // }, []);
+  // useEffect(() => {
+  //   document.getElementsByClassName("noUi-tooltip")[0].innerHTML =
+  //     millisToMinutesAndSeconds(timings[0].start * 1000);
+  //   document.getElementsByClassName("noUi-tooltip")[1].innerHTML =
+  //     millisToMinutesAndSeconds(timings[0].end * 1000);
+  // }, []);
   function getVals() {
     // Get slider values
     var parent = this.parentNode;
@@ -45,17 +68,17 @@ function Newrange({ start, end, setTimings, newchangeslide }) {
   function changehandle(e) {
     if (e.target.name == "start") {
       const val = Math.min(Number(e.target.value), timeduration.end - 1000);
-      settimeduration({
-        ...timeduration,
-        [e.target.name]: val,
-      });
+      // settimeduration({
+      //   ...timeduration,
+      //   [e.target.name]: val,
+      // });
     }
     if (e.target.name == "end") {
       const val2 = Math.max(Number(e.target.value), timeduration.start + 1000);
-      settimeduration({
-        ...timeduration,
-        [e.target.name]: val2,
-      });
+      // settimeduration({
+      //   ...timeduration,
+      //   [e.target.name]: val2,
+      // });
     }
     // settimeduration({
     //   ...timeduration,
@@ -105,31 +128,51 @@ function Newrange({ start, end, setTimings, newchangeslide }) {
   ) : (
     <Nouislider
       range={{ min: timeduration.start, max: timeduration.end }}
-      start={[Number(timeduration.start), Number(timeduration.end)]}
+      start={[sliderpoints.start, sliderpoints.end]}
       connect
-      step={500}
+      step={100}
       format={{
         from: Number,
         to: function (value) {
-          return millisToMinutesAndSeconds(value);
+          return fordualrangeslider(value);
         },
       }}
+      onEnd={() => {
+        setslider(false);
+        setslidenew(false);
+      }}
+      behaviour="drag"
       animate={true}
-      tooltips={true}
+      tooltips={false}
       margin={1000}
       onChange={(e) => {
+        refdata.current.seekTo(Number(e[0]), "seconds");
         setTimings([
           {
-            start: timechange(e[0]),
-            end: timechange(e[1]),
+            start: Number(e[0]),
+            end: Number(e[1]),
           },
         ]);
-      }}
-      onSlide={(e) => {
-        console.log({
-          start: timechange(e[0]),
-          end: timechange(e[1]),
+        settimeformate({
+          starttime: toHHMMSS(Number(e[0])),
+          endtime: toHHMMSS(Number(e[1])),
         });
+      }}
+      onSlide={(e, handle) => {
+        if (handle === 0) {
+          dynamicdata(Number(e[0]), Number(videoduration));
+        }
+        if (handle === 1) {
+          dynamicdataforrightslide(Number(e[1]));
+        }
+        // if (e[0] !== timeduration.start) {
+        //   console.log("hello");
+        // }
+
+        // document.getElementsByClassName("noUi-tooltip")[0].innerHTML =
+        //   millisToMinutesAndSeconds(e[0] * 1000);
+        // document.getElementsByClassName("noUi-tooltip")[1].innerHTML =
+        //   millisToMinutesAndSeconds(e[1] * 1000);
       }}
     />
   );
