@@ -36,6 +36,11 @@ function Main() {
     end: timeformate.endtime.split(":")[1],
   });
 
+
+//Maximum 100MB Video Available For Upload
+  const VideoMaxSize=100000000;
+
+
   const [metadata, setMetadata] = useState();
   const [imagedata, setimagedata] = useState([]);
   const [slider, setslider] = useState(false);
@@ -88,6 +93,7 @@ function Main() {
     }
   }, [check]);
   async function uploadFile(file, e) {
+
     let urlfile = URL.createObjectURL(file[0]);
     if (e) {
       setfilevalue(e);
@@ -105,23 +111,36 @@ function Main() {
       seturldata("");
       return false;
     }
-    if (data.size > 4000000) {
+    // if (data.size > 4000000) {
+      if(data.size> 100000000){
       setErrordata({
         title: "Size Limit Reached",
-        body: `The Maximum video size allowed is 4 MB, your file is ${formatSizeUnits(
+        // body: `The Maximum video size allowed is 4 MB, your file is ${formatSizeUnits(
+          body: `The Maximum video size allowed is 100 MB, your file is ${formatSizeUnits(
           data.size
         )} . Please try using a smaller sized video`,
       });
       setShow(true);
-      setFlag(false);
+      setFlag(false); 
       setcheck(true);
       seturldata("");
       return false;
     }
-    if (Number(data.duration * 1000) > 20000) {
+    //  if (Number(data.duration * 1000) > 20000) { 
+    //   setErrordata({
+    //     title: "Unable To Create Animation",
+    //     body: `video Length is  ${data.duration}s. Maximum allow 20s`,
+    //   });
+    //   setShow(true);
+    //   setcheck(true);
+    //   setFlag(false);
+    //   seturldata("");
+    //   return false;
+    // }
+      if (Number(data.duration * 1000) < 10000) { 
       setErrordata({
         title: "Unable To Create Animation",
-        body: `video Length is  ${data.duration}s. Maximum allow 20s`,
+        body: `video Length is  ${(data.duration/1000).toFixed(3)} second. Minimum allow 1s`,
       });
       setShow(true);
       setcheck(true);
@@ -569,7 +588,7 @@ function Main() {
                         progressInterval={30}
                         width={"100%"}
                         height={"100%"}
-                        controls={true}
+                        controls={false}
                         onDuration={(e) => {}}
                         onClickPreview={(ok) => {
                           // console.log(ok, "onClickPreview");
@@ -604,7 +623,7 @@ function Main() {
                       />
                     </ReactCrop>
                     {/* starttime endtime */}
-
+                   
                     <div className="videoframe-slider-box">
                       <div className="frame-content">
                         <div className="max-width frame">
