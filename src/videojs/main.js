@@ -28,14 +28,17 @@ function Main() {
     endtime: "",
   });
   const [starttime, setstarttime] = useState({
-    start: timeformate.starttime.split(":")[0],
-    end: timeformate.starttime.split(":")[1],
+    S_start: 0,
+    S_end: 0,
+    E_start: 0,
+    E_end: 0,
   });
-  const [endtime, setendtime] = useState({
-    start: timeformate.endtime.split(":")[0],
-    end: timeformate.endtime.split(":")[1],
-  });
-
+  const [selectedfield, setselectedfield] = useState("S_start");
+  const [selectedfield2, setselectedfield2] = useState("E_start");
+  const S_start = useRef("");
+  const S_end = useRef("");
+  const E_start = useRef("");
+  const E_end = useRef("");
   const [metadata, setMetadata] = useState();
   const [imagedata, setimagedata] = useState([]);
   const [slider, setslider] = useState(false);
@@ -75,18 +78,23 @@ function Main() {
     x: 0,
     y: 0,
   });
+
   useEffect(() => {
-    if (check) {
-      setstarttime({
-        start: timeformate.starttime.split(":")[0],
-        end: timeformate.starttime.split(":")[1],
-      });
-      setendtime({
-        start: timeformate.endtime.split(":")[0],
-        end: timeformate.endtime.split(":")[1],
-      });
-    }
-  }, [check]);
+    console.log(timeformate, "HItesh chawla");
+
+    // if (check) {
+    console.count("hello");
+    setstarttime({
+      S_start: Number(timeformate.starttime.split(":")[0]),
+
+      S_end: Number(timeformate.starttime.split(":")[1]),
+      E_start: Number(timeformate.endtime.split(":")[0]),
+
+      E_end: Number(timeformate.endtime.split(":")[1]),
+    });
+    // }
+  }, [timeformate.starttime, timeformate.endtime]);
+  console.log(timings, "========Hitesh=======");
   async function uploadFile(file, e) {
     let urlfile = URL.createObjectURL(file[0]);
     if (e) {
@@ -105,30 +113,30 @@ function Main() {
       seturldata("");
       return false;
     }
-    if (data.size > 4000000) {
-      setErrordata({
-        title: "Size Limit Reached",
-        body: `The Maximum video size allowed is 4 MB, your file is ${formatSizeUnits(
-          data.size
-        )} . Please try using a smaller sized video`,
-      });
-      setShow(true);
-      setFlag(false);
-      setcheck(true);
-      seturldata("");
-      return false;
-    }
-    if (Number(data.duration * 1000) > 20000) {
-      setErrordata({
-        title: "Unable To Create Animation",
-        body: `video Length is  ${data.duration}s. Maximum allow 20s`,
-      });
-      setShow(true);
-      setcheck(true);
-      setFlag(false);
-      seturldata("");
-      return false;
-    }
+    // if (data.size > 4000000) {
+    //   setErrordata({
+    //     title: "Size Limit Reached",
+    //     body: `The Maximum video size allowed is 4 MB, your file is ${formatSizeUnits(
+    //       data.size
+    //     )} . Please try using a smaller sized video`,
+    //   });
+    //   setShow(true);
+    //   setFlag(false);
+    //   setcheck(true);
+    //   seturldata("");
+    //   return false;
+    // }
+    // if (Number(data.duration * 1000) > 20000) {
+    //   setErrordata({
+    //     title: "Unable To Create Animation",
+    //     body: `video Length is  ${data.duration}s. Maximum allow 20s`,
+    //   });
+    //   setShow(true);
+    //   setcheck(true);
+    //   setFlag(false);
+    //   seturldata("");
+    //   return false;
+    // }
     let imagedatas = await generateVideoThumbnails(file[0], 9);
     setimagedata(imagedatas);
     setvideoresolution({ width: data.width, height: data.height });
@@ -248,7 +256,7 @@ function Main() {
   const [value2, setValue2] = React.useState("0:00");
   const [preValue, setPrevValue] = React.useState("0:00");
   const [preValuev2, setPrevValue2] = React.useState("0:00");
-
+  console.log(timings[0], "______________________");
   useEffect(() => {
     const time = toHHMMSS(timings?.[0]?.start);
     setValue(time);
@@ -462,21 +470,132 @@ function Main() {
       }
     });
   }
-
+  console.log(toHHMMSS(timings[0].start), "><><><>timing convert<><><><<");
   function clickhandlechangeright() {
-    // input2.current.focus();
-    // onChange2({ target: { value: input.current.value } });
-    // onChange2({ target: { value: input2.current.value } });
-    // setValue2((ert) => {
-    //   if (getSecondsFromHHMMSS(ert) >= parseInt(metadata.duration)) {
-    //     return toHHMMSS(getSecondsFromHHMMSS(ert));
-    //   } else {
-    //     let abc = getSecondsFromHHMMSS(ert) + 1;
-    //     return toHHMMSS(abc);
-    //   }
+    if (selectedfield2 == "E_start") {
+      E_start.current.stepDown();
+      changearrowhandle({
+        target: {
+          value: E_start.current.value,
+          name: E_start.current.name,
+        },
+      });
+    }
+    if (selectedfield2 == "E_end") {
+      E_end.current.stepDown();
+      changearrowhandle({
+        target: {
+          value: E_end.current.value,
+          name: E_end.current.name,
+        },
+      });
+    }
+  }
+  console.log(timings[0], "Timings for trim");
+  function changearrowhandle(e) {
+    let abc =
+      Number(e.target.value) <= 9
+        ? `${Number(e.target.value)}`
+        : Number(e.target.value);
+
+    console.log(e.target.name.includes("S_"), "++++++++++++++++=");
+    if (e.target.name === "S_end") {
+      if (Number(e.target.value) > 59) {
+        setstarttime({
+          ...starttime,
+          S_end: 0,
+          S_start:
+            Number(starttime.S_start) <= 9
+              ? `${Number(starttime.S_start) + 1}`
+              : Number(starttime.S_start) + 1,
+        });
+        return false;
+      }
+      console.log(e.target.value, "------------------");
+    }
+    setstarttime({ ...starttime, [e.target.name]: abc });
+    if (e.target.name.includes("S_")) {
+      if (e.target.name === "S_start") {
+        dynamicdata(
+          Number(e.target.value) * 60 + Number(starttime.S_end),
+          metadata.duration
+        );
+        if (Number(e.target.value) > Number(starttime.E_start)) {
+          setstarttime({ ...starttime, S_start: 0 });
+          setsliderpoints({
+            ...sliderpoints,
+            start: Number("0") * 60 * 1000 + Number(starttime.S_end),
+          });
+          return false;
+        }
+
+        setsliderpoints({
+          ...sliderpoints,
+          start: Number(e.target.value) * 60 * 1000 + Number(starttime.S_end),
+        });
+        setTimings([
+          {
+            ...timings[0],
+            start: Number(starttime.S_end) + Number(e.target.value) * 60,
+          },
+        ]);
+      }
+      if (e.target.name === "S_end") {
+        dynamicdata(
+          Number(e.target.value) + Number(starttime.S_start) * 60,
+          metadata.duration
+        );
+        setsliderpoints({
+          ...sliderpoints,
+          start:
+            Number(e.target.value) * 1000 +
+            Number(starttime.S_start) * 60 * 1000,
+        });
+        setTimings([
+          {
+            ...timings[0],
+            start: Number(starttime.S_start) * 60 + Number(e.target.value),
+          },
+        ]);
+      }
+    }
+    if (e.target.name.includes("E_")) {
+      if (e.target.name === "E_start") {
+        setsliderpoints({
+          ...sliderpoints,
+          end: Number(e.target.value) * 60 * 1000 + Number(starttime.E_end),
+        });
+        setTimings([
+          {
+            ...timings[0],
+            end: Number(starttime.E_end) + Number(e.target.value) * 60,
+          },
+        ]);
+      }
+      if (e.target.name === "E_end") {
+        setsliderpoints({
+          ...sliderpoints,
+          end:
+            Number(e.target.value) * 1000 +
+            Number(starttime.E_start) * 60 * 1000,
+        });
+        setTimings([
+          {
+            ...timings[0],
+            end: Number(starttime.E_start) * 60 + Number(e.target.value),
+          },
+        ]);
+      }
+      // setsliderpoints({
+      //   ...sliderpoints,
+      //   end: Number() + Number(e.target.value) * 1000,
+      // });
+    }
+    // setsliderpoints({
+    //   ...sliderpoints,
+    //   start: Number() + Number(e.target.value) * 1000,
     // });
   }
-  function clickhandlechangeright2() {}
   return (
     ready && (
       <div className="video-main-box">
@@ -805,6 +924,8 @@ function Main() {
                               dynamicdataforrightslide={
                                 dynamicdataforrightslide
                               }
+                              settimeformate={settimeformate}
+                              toHHMMSS={toHHMMSS}
                               setslidenew={setslidenew}
                               sliderpoints={sliderpoints}
                               setsliderpoints={setsliderpoints}
@@ -860,7 +981,7 @@ function Main() {
                         </div>
                         <div className="fix-frame-box">
                           <div className="fix-frame left">
-                            <input
+                            {/* <input
                               type="text"
                               ref={input}
                               pattern="[0-9]"
@@ -874,6 +995,62 @@ function Main() {
                                 border: "none",
                                 background: "transparent",
                               }}
+                            /> */}
+                            <input
+                              type="number"
+                              style={{
+                                width: "25px",
+                                border: "none",
+                                background: "none",
+                              }}
+                              max={Number(starttime.E_start)}
+                              min={0}
+                              onChange={changearrowhandle}
+                              name="S_start"
+                              ref={S_start}
+                              onClick={() => {
+                                setselectedfield("S_start");
+                              }}
+                              value={
+                                Number(starttime.S_start) <= 9
+                                  ? `0${starttime.S_start}`
+                                  : starttime.S_start
+                              }
+                            />
+                            <span
+                              style={{
+                                fontSize: "18px",
+                                fontWeight: "bold",
+                                display: "block",
+                              }}
+                            >
+                              :
+                            </span>
+                            <input
+                              type="number"
+                              style={{
+                                width: "25px",
+                                border: "none",
+                                background: "none",
+                              }}
+                              onClick={() => {
+                                setselectedfield("S_end");
+                              }}
+                              min={0}
+                              max={
+                                Number(starttime.E_start) * 60 -
+                                Number(starttime.S_start) * 60 +
+                                Number(starttime.E_end) -
+                                1
+                              }
+                              onChange={changearrowhandle}
+                              name="S_end"
+                              ref={S_end}
+                              value={
+                                Number(starttime.S_end) <= 9
+                                  ? `0${starttime.S_end}`
+                                  : starttime.S_end
+                              }
                             />
                             <div
                               style={{
@@ -885,7 +1062,27 @@ function Main() {
                             >
                               <svg
                                 width={15}
-                                onClick={clickhandlechange}
+                                onClick={() => {
+                                  // selectedfield=="S_start"
+                                  if (selectedfield == "S_start") {
+                                    S_start.current.stepUp();
+                                    changearrowhandle({
+                                      target: {
+                                        value: S_start.current.value,
+                                        name: S_start.current.name,
+                                      },
+                                    });
+                                  }
+                                  if (selectedfield == "S_end") {
+                                    S_end.current.stepUp();
+                                    changearrowhandle({
+                                      target: {
+                                        value: S_end.current.value,
+                                        name: S_end.current.name,
+                                      },
+                                    });
+                                  }
+                                }}
                                 height={15}
                                 viewBox="-2 -4 10 10"
                                 fill="none"
@@ -900,7 +1097,26 @@ function Main() {
                               </svg>
                               <svg
                                 width={15}
-                                onClick={clickhandlechange2}
+                                onClick={() => {
+                                  if (selectedfield == "S_start") {
+                                    S_start.current.stepDown();
+                                    changearrowhandle({
+                                      target: {
+                                        value: S_start.current.value,
+                                        name: S_start.current.name,
+                                      },
+                                    });
+                                  }
+                                  if (selectedfield == "S_end") {
+                                    S_end.current.stepDown();
+                                    changearrowhandle({
+                                      target: {
+                                        value: S_end.current.value,
+                                        name: S_end.current.name,
+                                      },
+                                    });
+                                  }
+                                }}
                                 height={15}
                                 viewBox="-2 9 10 10"
                                 fill="none"
@@ -915,7 +1131,7 @@ function Main() {
                             </div>
                           </div>
                           <div className="fix-frame right">
-                            <input
+                            {/* <input
                               type="text"
                               pattern="[0-9]"
                               className="form-control icontrol"
@@ -929,6 +1145,54 @@ function Main() {
                                 border: "none",
                                 background: "transparent",
                               }}
+                            /> */}
+                            <input
+                              type="number"
+                              // min={Number(starttime.S_start) + 1}
+                              // max={Number(timeformate.endtime.split(":")[0])}
+                              style={{
+                                width: "25px",
+                                border: "none",
+                                background: "none",
+                              }}
+                              onClick={() => {
+                                setselectedfield2("E_start");
+                              }}
+                              onChange={changearrowhandle}
+                              name="E_start"
+                              ref={E_start}
+                              value={
+                                Number(starttime.E_start) <= 9
+                                  ? `0${starttime.E_start}`
+                                  : starttime.E_start
+                              }
+                            />
+                            <span
+                              style={{ fontSize: "18px", fontWeight: "bold" }}
+                            >
+                              :
+                            </span>
+                            <input
+                              type="number"
+                              style={{
+                                width: "25px",
+                                border: "none",
+                                background: "none",
+                              }}
+                              onClick={() => {
+                                setselectedfield2("E_end");
+                              }}
+                              ref={E_end}
+                              // min={Number(starttime.S_end) + 1}
+                              // min={0}
+                              // max={Number(timeformate.endtime.split(":")[1])}
+                              onChange={changearrowhandle}
+                              name="E_end"
+                              value={
+                                Number(starttime.E_end) <= 9
+                                  ? `0${starttime.E_end}`
+                                  : starttime.E_end
+                              }
                             />
                             <div
                               style={{
@@ -939,7 +1203,26 @@ function Main() {
                               }}
                             >
                               <svg
-                                onClick={clickhandlechangeright}
+                                onClick={() => {
+                                  if (selectedfield2 == "E_start") {
+                                    E_start.current.stepUp();
+                                    changearrowhandle({
+                                      target: {
+                                        value: E_start.current.value,
+                                        name: E_start.current.name,
+                                      },
+                                    });
+                                  }
+                                  if (selectedfield2 == "E_end") {
+                                    E_end.current.stepUp();
+                                    changearrowhandle({
+                                      target: {
+                                        value: E_end.current.value,
+                                        name: E_end.current.name,
+                                      },
+                                    });
+                                  }
+                                }}
                                 width={15}
                                 height={15}
                                 viewBox="-2 -4 10 10"
@@ -952,7 +1235,26 @@ function Main() {
                                 />
                               </svg>
                               <svg
-                                onClick={clickhandlechangeright2}
+                                onClick={() => {
+                                  if (selectedfield2 == "E_start") {
+                                    E_start.current.stepDown();
+                                    changearrowhandle({
+                                      target: {
+                                        value: E_start.current.value,
+                                        name: E_start.current.name,
+                                      },
+                                    });
+                                  }
+                                  if (selectedfield2 == "E_end") {
+                                    E_end.current.stepDown();
+                                    changearrowhandle({
+                                      target: {
+                                        value: E_end.current.value,
+                                        name: E_end.current.name,
+                                      },
+                                    });
+                                  }
+                                }}
                                 width={15}
                                 height={15}
                                 viewBox="-2 9 10 10"

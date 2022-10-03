@@ -19,6 +19,8 @@ function Newrange({
   setslidenew,
   setsliderpoints,
   sliderpoints,
+  settimeformate,
+  toHHMMSS,
 }) {
   const [timeduration, settimeduration] = useState({ start: start, end: end });
   const [changetime, setchangetime] = useState({ start: 0, end: 0 });
@@ -151,6 +153,10 @@ function Newrange({
             end: Number(e[1]),
           },
         ]);
+        settimeformate({
+          starttime: toHHMMSS(Number(e[0])),
+          endtime: toHHMMSS(Number(e[1])),
+        });
       }}
       onSlide={(e, handle) => {
         if (handle === 0) {

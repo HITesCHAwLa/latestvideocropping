@@ -372,9 +372,14 @@
 }
 .fix-frame-box .fix-frame > div {
   position: absolute;
-  right: 8px;
-  top: -3px;
+  right: 4px;
+  top: -1px;
   cursor: pointer;
+}
+.fix-frame input:focus {
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
 // jignesh sir
 .noUi-target .noUi-connect.noUi-draggable:before {
