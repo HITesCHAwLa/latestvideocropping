@@ -91,12 +91,24 @@ function Main() {
     // if (check) {
 
     setstarttime({
-      S_start: Number(timeformate.starttime.split(":")[0]),
+      S_start:
+        Number(timeformate.starttime.split(":")[0]) < 10
+          ? `0${Number(timeformate.starttime.split(":")[0])}`
+          : Number(timeformate.starttime.split(":")[0]),
 
-      S_end: Number(timeformate.starttime.split(":")[1]),
-      E_start: Number(timeformate.endtime.split(":")[0]),
+      S_end:
+        Number(timeformate.starttime.split(":")[1]) < 10
+          ? `0${Number(timeformate.starttime.split(":")[1])}`
+          : Number(timeformate.starttime.split(":")[1]),
+      E_start:
+        Number(timeformate.endtime.split(":")[0]) < 10
+          ? `0${Number(timeformate.endtime.split(":")[0])}`
+          : Number(timeformate.endtime.split(":")[0]),
 
-      E_end: Number(timeformate.endtime.split(":")[1]),
+      E_end:
+        Number(timeformate.endtime.split(":")[1]) < 10
+          ? `0${Number(timeformate.endtime.split(":")[1])}`
+          : Number(timeformate.endtime.split(":")[1]),
     });
     // }
   }, [timeformate.starttime, timeformate.endtime]);
@@ -134,17 +146,17 @@ function Main() {
       seturldata("");
       return false;
     }
-    if (Number(data.duration * 1000) > 20000) {
-      setErrordata({
-        title: "Unable To Create Animation",
-        body: `video Length is  ${data.duration}s. Maximum allow 20s`,
-      });
-      setShow(true);
-      setcheck(true);
-      setFlag(false);
-      seturldata("");
-      return false;
-    }
+    // if (Number(data.duration * 1000) > 20000) {
+    //   setErrordata({
+    //     title: "Unable To Create Animation",
+    //     body: `video Length is  ${data.duration}s. Maximum allow 20s`,
+    //   });
+    //   setShow(true);
+    //   setcheck(true);
+    //   setFlag(false);
+    //   seturldata("");
+    //   return false;
+    // }
     if (Number(data.duration * 1000) < 1000) {
       setErrordata({
         title: "Unable To Create Animation",
@@ -510,108 +522,526 @@ function Main() {
       });
     }
   }
-
   function changearrowhandle(e) {
-    let abc =
-      Number(e.target.value) <= 9
-        ? `${Number(e.target.value)}`
-        : Number(e.target.value);
+    // for starting seconds --> check minute value
+    // if start_minutes < than end_minutes
+    // if start_minutes >= end_minutes
 
-    if (e.target.name === "S_end") {
-      if (Number(e.target.value) > 59) {
-        setstarttime({
-          ...starttime,
-          S_end: 0,
-          S_start:
-            Number(starttime.S_start) <= 9
-              ? `${Number(starttime.S_start) + 1}`
-              : Number(starttime.S_start) + 1,
-        });
-        return false;
-      }
-    }
-    setstarttime({ ...starttime, [e.target.name]: abc });
-    if (e.target.name.includes("S_")) {
-      if (e.target.name === "S_start") {
-        dynamicdata(
-          Number(e.target.value) * 60 + Number(starttime.S_end),
-          metadata.duration
-        );
-        if (Number(e.target.value) > Number(starttime.E_start)) {
-          setstarttime({ ...starttime, S_start: 0 });
-          setsliderpoints({
-            ...sliderpoints,
-            start: Number("0") * 60 * 1000 + Number(starttime.S_end),
-          });
-          return false;
-        }
+    // let abc =
+    //   Number(e.target.value) <= 9
+    //     ? `${Number(e.target.value)}`
+    //     : Number(e.target.value);
 
-        setsliderpoints({
-          ...sliderpoints,
-          start: Number(e.target.value) * 60 * 1000 + Number(starttime.S_end),
-        });
-        setTimings([
-          {
-            ...timings[0],
-            start: Number(starttime.S_end) + Number(e.target.value) * 60,
-          },
-        ]);
-      }
-      if (e.target.name === "S_end") {
-        dynamicdata(
-          Number(e.target.value) + Number(starttime.S_start) * 60,
-          metadata.duration
-        );
-        setsliderpoints({
-          ...sliderpoints,
-          start:
-            Number(e.target.value) * 1000 +
-            Number(starttime.S_start) * 60 * 1000,
-        });
-        setTimings([
-          {
-            ...timings[0],
-            start: Number(starttime.S_start) * 60 + Number(e.target.value),
-          },
-        ]);
-      }
-    }
-    if (e.target.name.includes("E_")) {
-      if (e.target.name === "E_start") {
-        setsliderpoints({
-          ...sliderpoints,
-          end: Number(e.target.value) * 60 * 1000 + Number(starttime.E_end),
-        });
-        setTimings([
-          {
-            ...timings[0],
-            end: Number(starttime.E_end) + Number(e.target.value) * 60,
-          },
-        ]);
-      }
-      if (e.target.name === "E_end") {
-        setsliderpoints({
-          ...sliderpoints,
-          end:
-            Number(e.target.value) * 1000 +
-            Number(starttime.E_start) * 60 * 1000,
-        });
-        setTimings([
-          {
-            ...timings[0],
-            end: Number(starttime.E_start) * 60 + Number(e.target.value),
-          },
-        ]);
-      }
-      // setsliderpoints({
-      //   ...sliderpoints,
-      //   end: Number() + Number(e.target.value) * 1000,
-      // });
-    }
+    // if (e.target.name === "S_end") {
+    //   if (Number(e.target.value) > 59) {
+    //     setstarttime({
+    //       ...starttime,
+    //       S_end: 0,
+    //       S_start:
+    //         Number(starttime.S_start) <= 9
+    //           ? `${Number(starttime.S_start) + 1}`
+    //           : Number(starttime.S_start) + 1,
+    //     });
+    //     return false;
+    //   }
+    // }
+    // setstarttime({ ...starttime, [e.target.name]: abc });
+    // if (e.target.name.includes("S_")) {
+    //   if (e.target.name === "S_start") {
+    //     dynamicdata(
+    //       Number(e.target.value) * 60 + Number(starttime.S_end),
+    //       metadata.duration
+    //     );
+    //     if (Number(e.target.value) > Number(starttime.E_start)) {
+    //       setstarttime({ ...starttime, S_start: 0 });
+    //       setsliderpoints({
+    //         ...sliderpoints,
+    //         start: Number("0") * 60 * 1000 + Number(starttime.S_end),
+    //       });
+    //       return false;
+    //     }
+
+    //     setsliderpoints({
+    //       ...sliderpoints,
+    //       start: Number(e.target.value) * 60 * 1000 + Number(starttime.S_end),
+    //     });
+    //     setTimings([
+    //       {
+    //         ...timings[0],
+    //         start: Number(starttime.S_end) + Number(e.target.value) * 60,
+    //       },
+    //     ]);
+    //   }
+    //   if (e.target.name === "S_end") {
+    //     dynamicdata(
+    //       Number(e.target.value) + Number(starttime.S_start) * 60,
+    //       metadata.duration
+    //     );
+    //     setsliderpoints({
+    //       ...sliderpoints,
+    //       start:
+    //         Number(e.target.value) * 1000 +
+    //         Number(starttime.S_start) * 60 * 1000,
+    //     });
+    //     setTimings([
+    //       {
+    //         ...timings[0],
+    //         start: Number(starttime.S_start) * 60 + Number(e.target.value),
+    //       },
+    //     ]);
+    //   }
+    // }
+    // if (e.target.name.includes("E_")) {
+    //   if (e.target.name === "E_start") {
+    //     setsliderpoints({
+    //       ...sliderpoints,
+    //       end: Number(e.target.value) * 60 * 1000 + Number(starttime.E_end),
+    //     });
+    //     setTimings([
+    //       {
+    //         ...timings[0],
+    //         end: Number(starttime.E_end) + Number(e.target.value) * 60,
+    //       },
+    //     ]);
+    //   }
+    //   if (e.target.name === "E_end") {
+    //     setsliderpoints({
+    //       ...sliderpoints,
+    //       end:
+    //         Number(e.target.value) * 1000 +
+    //         Number(starttime.E_start) * 60 * 1000,
+    //     });
+    //     setTimings([
+    //       {
+    //         ...timings[0],
+    //         end: Number(starttime.E_start) * 60 + Number(e.target.value),
+    //       },
+    //     ]);
+    //   }
+    //   // setsliderpoints({
+    //   //   ...sliderpoints,
+    //   //   end: Number() + Number(e.target.value) * 1000,
+    //   // });
+    // }
     // setsliderpoints({
     //   ...sliderpoints,
     //   start: Number() + Number(e.target.value) * 1000,
     // });
+
+    switch (e.target.name) {
+      case "S_start":
+        if (Number(e.target.value) <= Number(starttime.E_start)) {
+          if (Number(e.target.value) === Number(starttime.E_start)) {
+            setstarttime({
+              ...starttime,
+              S_end:
+                Number(starttime.S_end) < Number(starttime.E_end)
+                  ? Number(starttime.S_end) < 10
+                    ? `0${Number(starttime.E_end - 1)}`
+                    : Number(starttime.E_end - 1)
+                  : Number(starttime.E_end - 1) < 10
+                  ? `0${Number(starttime.E_end - 1)}`
+                  : Number(starttime.E_end - 1) < 10
+                  ? `0${Number(starttime.E_end - 1)}`
+                  : Number(starttime.E_end - 1),
+              S_start:
+                Number(e.target.value) < 10
+                  ? `0${Number(e.target.value)}`
+                  : `${Number(e.target.value)}`,
+            });
+            //#region for slider change
+            dynamicdata(
+              Number(e.target.value) * 60 +
+                Number(
+                  Number(starttime.S_end) < Number(starttime.E_end)
+                    ? Number(starttime.S_end)
+                    : Number(starttime.E_end - 1) < 10
+                    ? `0${Number(starttime.E_end - 1)}`
+                    : Number(starttime.E_end - 1)
+                ),
+              metadata.duration
+            );
+            setsliderpoints({
+              ...sliderpoints,
+              start:
+                Number(e.target.value) * 60 * 1000 +
+                Number(
+                  Number(starttime.S_end) < Number(starttime.E_end)
+                    ? Number(starttime.S_end)
+                    : Number(starttime.E_end - 1) < 10
+                    ? `0${Number(starttime.E_end - 1)}`
+                    : Number(starttime.E_end - 1)
+                ),
+            });
+            setTimings([
+              {
+                ...timings[0],
+                start:
+                  Number(
+                    Number(starttime.S_end) < Number(starttime.E_end)
+                      ? Number(starttime.S_end)
+                      : Number(starttime.E_end - 1) < 10
+                      ? `0${Number(starttime.E_end - 1)}`
+                      : Number(starttime.E_end - 1)
+                  ) +
+                  Number(e.target.value) * 60,
+              },
+            ]);
+            //#endregion
+          } else {
+            setstarttime({
+              ...starttime,
+              S_start:
+                Number(e.target.value) < 10
+                  ? `0${Number(e.target.value)}`
+                  : `${Number(e.target.value)}`,
+            });
+            //#region for slider change
+            dynamicdata(
+              Number(e.target.value) * 60 + Number(starttime.S_end),
+              metadata.duration
+            );
+            setsliderpoints({
+              ...sliderpoints,
+              start:
+                Number(e.target.value) * 60 * 1000 + Number(starttime.S_end),
+            });
+            setTimings([
+              {
+                ...timings[0],
+                start: Number(starttime.S_end) + Number(e.target.value) * 60,
+              },
+            ]);
+            //#endregion
+          }
+
+          //#region for slider change
+          dynamicdata(
+            Number(e.target.value) * 60 + Number(starttime.S_end),
+            metadata.duration
+          );
+          setsliderpoints({
+            ...sliderpoints,
+            start: Number(e.target.value) * 60 * 1000 + Number(starttime.S_end),
+          });
+          setTimings([
+            {
+              ...timings[0],
+              start: Number(starttime.S_end) + Number(e.target.value) * 60,
+            },
+          ]);
+          //#endregion
+        } else {
+          setstarttime({
+            ...starttime,
+            S_start:
+              Number(starttime.E_start) < 10
+                ? `0${Number(starttime.E_start)}`
+                : `${Number(starttime.E_start)}`,
+          });
+          //#region for slider change
+          dynamicdata(
+            Number(starttime.E_start) * 60 + Number(starttime.S_end),
+            metadata.duration
+          );
+          setsliderpoints({
+            ...sliderpoints,
+            start:
+              Number(starttime.E_start) * 60 * 1000 + Number(starttime.S_end),
+          });
+          setTimings([
+            {
+              ...timings[0],
+              start: Number(starttime.S_end) + Number(starttime.E_start) * 60,
+            },
+          ]);
+          //#endregion
+        }
+
+        return 1;
+
+      case "S_end":
+        if (starttime.S_start < starttime.E_start) {
+          if (Number(e.target.value <= 59)) {
+            setstarttime({
+              ...starttime,
+              S_end:
+                Number(e.target.value) < 10
+                  ? `0${Number(e.target.value)}`
+                  : `${Number(e.target.value)}`,
+            });
+
+            //#region for slider change
+            dynamicdata(
+              Number(e.target.value) + Number(starttime.S_start) * 60,
+              metadata.duration
+            );
+            setsliderpoints({
+              ...sliderpoints,
+              start:
+                Number(e.target.value) * 1000 +
+                Number(starttime.S_start) * 60 * 1000,
+            });
+            setTimings([
+              {
+                ...timings[0],
+                start: Number(starttime.S_start) * 60 + Number(e.target.value),
+              },
+            ]);
+            //#endregion
+          } else {
+          }
+        } else {
+          if (Number(e.target.value <= starttime.E_end - 1)) {
+            setstarttime({
+              ...starttime,
+              S_end:
+                Number(e.target.value) < 10
+                  ? `0${Number(e.target.value)}`
+                  : `${Number(e.target.value)}`,
+            });
+            //#region for slider change
+            dynamicdata(
+              Number(e.target.value) + Number(starttime.S_start) * 60,
+              metadata.duration
+            );
+            setsliderpoints({
+              ...sliderpoints,
+              start:
+                Number(e.target.value) * 1000 +
+                Number(starttime.S_start) * 60 * 1000,
+            });
+            setTimings([
+              {
+                ...timings[0],
+                start: Number(starttime.S_start) * 60 + Number(e.target.value),
+              },
+            ]);
+            //#endregion
+          } else {
+            setstarttime({
+              ...starttime,
+              S_end:
+                Number(starttime.E_end) < 10
+                  ? `0${Number(starttime.E_end)}`
+                  : `${Number(starttime.E_end)}`,
+            });
+            //#region for slider change
+            dynamicdata(
+              Number(starttime.E_end) + Number(starttime.S_start) * 60,
+              metadata.duration
+            );
+            setsliderpoints({
+              ...sliderpoints,
+              start:
+                Number(starttime.E_end) * 1000 +
+                Number(starttime.S_start) * 60 * 1000,
+            });
+            setTimings([
+              {
+                ...timings[0],
+                start: Number(starttime.S_start) * 60 + Number(starttime.E_end),
+              },
+            ]);
+            //#endregion
+          }
+        }
+        return true;
+
+      case "E_start":
+        if (e.target.value <= Math.floor(metadata?.duration / 60)) {
+          if (Number(e.target.value) === Math.floor(metadata?.duration / 60)) {
+            setstarttime({
+              ...starttime,
+              E_end:
+                Number(starttime?.E_end) >
+                Number(timeformate.endtime.split(":")[1])
+                  ? Number(timeformate.endtime.split(":")[1]) < 10
+                    ? `0${Number(timeformate.endtime.split(":")[1])}`
+                    : Number(timeformate.endtime.split(":")[1])
+                  : Number(starttime?.E_end) < 10
+                  ? `0${Number(starttime?.E_end)}`
+                  : Number(starttime?.E_end),
+              E_start:
+                Number(e.target.value) < 10
+                  ? `0${Number(e.target.value)}`
+                  : `${Number(e.target.value)}`,
+            });
+          } else {
+            if (Number(e.target.value) >= Number(starttime.S_start)) {
+              setstarttime({
+                ...starttime,
+                E_start:
+                  Number(e.target.value) < 10
+                    ? `0${Number(e.target.value)}`
+                    : `${Number(e.target.value)}`,
+              });
+              setsliderpoints({
+                ...sliderpoints,
+                end:
+                  Number(e.target.value) * 60 * 1000 + Number(starttime.E_end),
+              });
+              setTimings([
+                {
+                  ...timings[0],
+                  end: Number(starttime.E_end) + Number(e.target.value) * 60,
+                },
+              ]);
+            } else {
+              setstarttime({
+                ...starttime,
+                E_end:
+                  Number(Number(starttime.S_start) + 1) < 10
+                    ? `0${Number(Number(starttime.S_start)) + 1}`
+                    : `${Number(Number(starttime.S_start)) + 1}`,
+                E_start:
+                  Number(starttime.S_start) < 10
+                    ? `0${Number(starttime.S_start)}`
+                    : `${Number(starttime.S_start)}`,
+              });
+              //#region
+              setsliderpoints({
+                ...sliderpoints,
+                end:
+                  Number(starttime.S_start) * 60 * 1000 +
+                  Number(starttime.E_end),
+              });
+              setTimings([
+                {
+                  ...timings[0],
+                  end: Number(starttime.E_end) + Number(starttime.S_start) * 60,
+                },
+              ]);
+              //#endregion
+            }
+          }
+        }
+        return true;
+
+      case "E_end":
+        if (Number(starttime.E_start) === Math.floor(metadata.duration / 60)) {
+          if (
+            Number(e.target.value) <= Number(timeformate.endtime.split(":")[1])
+          ) {
+            setstarttime({
+              ...starttime,
+              E_end:
+                Number(e.target.value) < 10
+                  ? `0${Number(e.target.value)}`
+                  : `${Number(e.target.value)}`,
+            });
+            setsliderpoints({
+              ...sliderpoints,
+              end:
+                Number(e.target.value) * 1000 +
+                Number(starttime.E_start) * 60 * 1000,
+            });
+            setTimings([
+              {
+                ...timings[0],
+                end: Number(starttime.E_start) * 60 + Number(e.target.value),
+              },
+            ]);
+          } else {
+            setstarttime({
+              ...starttime,
+              E_end:
+                Number(timeformate.endtime.split(":")[1]) < 10
+                  ? `0${Number(timeformate.endtime.split(":")[1])}`
+                  : `${Number(timeformate.endtime.split(":")[1])}`,
+            });
+            setsliderpoints({
+              ...sliderpoints,
+              end:
+                Number(timeformate.endtime.split(":")[1]) * 1000 +
+                Number(starttime.E_start) * 60 * 1000,
+            });
+            setTimings([
+              {
+                ...timings[0],
+                end:
+                  Number(starttime.E_start) * 60 +
+                  Number(timeformate.endtime.split(":")[1]),
+              },
+            ]);
+          }
+        }
+        // minimum minutes -- starttime.minute and minimum sec--- startime.sec + 1
+        // if (starttime?.S_start === starttime.E_start) {
+        //   if (Number(e.target.value <= starttime?.E_end + 1)) {
+        //     setstarttime({
+        //       ...starttime,
+        //       E_end:
+        //         Number(e.target.value) < 10
+        //           ? `0${Number(e.target.value)}`
+        //           : `${Number(e.target.value)}`,
+        //     });
+        //   } else {
+        //     setstarttime({
+        //       ...starttime,
+        //       E_end:
+        //         Number(starttime?.E_end + 1) < 10
+        //           ? `0${Number(starttime?.E_end + 1)}`
+        //           : `${Number(starttime?.E_end + 1)}`,
+        //     });
+        //   }
+        // }
+        //
+        if (starttime.E_start < Math.floor(metadata.duration / 60)) {
+          if (starttime.E_start === starttime.S_start) {
+            if (
+              Number(e.target.value) > Number(starttime.S_end) &&
+              Number(e.target.value) <= 59
+            ) {
+              setstarttime({
+                ...starttime,
+                E_end:
+                  Number(e.target.value) < 10
+                    ? `0${Number(e.target.value)}`
+                    : `${Number(e.target.value)}`,
+              });
+              setsliderpoints({
+                ...sliderpoints,
+                end:
+                  Number(e.target.value) * 1000 +
+                  Number(starttime.E_start) * 60 * 1000,
+              });
+              setTimings([
+                {
+                  ...timings[0],
+                  end: Number(starttime.E_start) * 60 + Number(e.target.value),
+                },
+              ]);
+            }
+          }
+          if (Number(e.target.value) <= 59) {
+            setstarttime({
+              ...starttime,
+              E_end:
+                Number(e.target.value) < 10
+                  ? `0${Number(e.target.value)}`
+                  : `${Number(e.target.value)}`,
+            });
+            setsliderpoints({
+              ...sliderpoints,
+              end:
+                Number(e.target.value) * 1000 +
+                Number(starttime.E_start) * 60 * 1000,
+            });
+            setTimings([
+              {
+                ...timings[0],
+                end: Number(starttime.E_start) * 60 + Number(e.target.value),
+              },
+            ]);
+          } else {
+          }
+        }
+        return true;
+
+      default:
+        return true;
+    }
   }
   return (
     ready && (
@@ -1028,7 +1458,7 @@ function Main() {
                               }}
                               value={
                                 Number(starttime.S_start) <= 9
-                                  ? `0${starttime.S_start}`
+                                  ? `${starttime.S_start}`
                                   : starttime.S_start
                               }
                             />
@@ -1063,7 +1493,7 @@ function Main() {
                               ref={S_end}
                               value={
                                 Number(starttime.S_end) <= 9
-                                  ? `0${starttime.S_end}`
+                                  ? `${starttime.S_end}`
                                   : starttime.S_end
                               }
                             />
@@ -1081,6 +1511,7 @@ function Main() {
                                   // selectedfield=="S_start"
                                   if (selectedfield == "S_start") {
                                     S_start.current.stepUp();
+
                                     changearrowhandle({
                                       target: {
                                         value: S_start.current.value,
@@ -1090,12 +1521,23 @@ function Main() {
                                   }
                                   if (selectedfield == "S_end") {
                                     S_end.current.stepUp();
-                                    changearrowhandle({
-                                      target: {
-                                        value: S_end.current.value,
-                                        name: S_end.current.name,
-                                      },
-                                    });
+                                    if (starttime.S_start < starttime.E_start) {
+                                      if (Number(S_end.current.value <= 59)) {
+                                        changearrowhandle({
+                                          target: {
+                                            value: S_end.current.value,
+                                            name: S_end.current.name,
+                                          },
+                                        });
+                                      } else {
+                                        changearrowhandle({
+                                          target: {
+                                            value: starttime.S_end,
+                                            name: S_end.current.name,
+                                          },
+                                        });
+                                      }
+                                    }
                                   }
                                 }}
                                 height={15}
@@ -1164,7 +1606,7 @@ function Main() {
                             <input
                               type="number"
                               // min={Number(starttime.S_start) + 1}
-                              // max={Number(timeformate.endtime.split(":")[0])}
+                              max={Number(timeformate.endtime.split(":")[0])}
                               style={{
                                 width: "25px",
                                 border: "none",
@@ -1178,7 +1620,7 @@ function Main() {
                               ref={E_start}
                               value={
                                 Number(starttime.E_start) <= 9
-                                  ? `0${starttime.E_start}`
+                                  ? `${starttime.E_start}`
                                   : starttime.E_start
                               }
                             />
@@ -1187,6 +1629,7 @@ function Main() {
                             >
                               :
                             </span>
+
                             <input
                               type="number"
                               style={{
@@ -1199,13 +1642,24 @@ function Main() {
                               }}
                               ref={E_end}
                               // min={Number(starttime.S_end) + 1}
+                              min={
+                                Number(starttime.E_start) ===
+                                Number(starttime.S_start)
+                                  ? Number(starttime.S_end) + 1
+                                  : 0
+                              }
                               // min={0}
-                              // max={Number(timeformate.endtime.split(":")[1])}
+                              // max={
+                              //   Number(starttime.E_start) * 60 +
+                              //   Number(starttime.E_end) -
+                              //   Number(starttime.S_start) * 60 +
+                              //   Number(starttime.S_end)
+                              // }
                               onChange={changearrowhandle}
                               name="E_end"
                               value={
                                 Number(starttime.E_end) <= 9
-                                  ? `0${starttime.E_end}`
+                                  ? `${starttime.E_end}`
                                   : starttime.E_end
                               }
                             />
@@ -1221,12 +1675,19 @@ function Main() {
                                 onClick={() => {
                                   if (selectedfield2 == "E_start") {
                                     E_start.current.stepUp();
-                                    changearrowhandle({
-                                      target: {
-                                        value: E_start.current.value,
-                                        name: E_start.current.name,
-                                      },
-                                    });
+                                    if (
+                                      starttime.E_start <
+                                      Math.floor(metadata.duration / 60)
+                                    ) {
+                                      if (Number(E_start.current.value) <= 59) {
+                                        changearrowhandle({
+                                          target: {
+                                            value: E_start.current.value,
+                                            name: E_start.current.name,
+                                          },
+                                        });
+                                      }
+                                    }
                                   }
                                   if (selectedfield2 == "E_end") {
                                     E_end.current.stepUp();
