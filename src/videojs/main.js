@@ -146,17 +146,17 @@ function Main() {
       seturldata("");
       return false;
     }
-    // if (Number(data.duration * 1000) > 20000) {
-    //   setErrordata({
-    //     title: "Unable To Create Animation",
-    //     body: `video Length is  ${data.duration}s. Maximum allow 20s`,
-    //   });
-    //   setShow(true);
-    //   setcheck(true);
-    //   setFlag(false);
-    //   seturldata("");
-    //   return false;
-    // }
+    if (Number(data.duration * 1000) > 20000) {
+      setErrordata({
+        title: "Unable To Create Animation",
+        body: `video Length is  ${data.duration}s. Maximum allow 20s`,
+      });
+      setShow(true);
+      setcheck(true);
+      setFlag(false);
+      seturldata("");
+      return false;
+    }
     if (Number(data.duration * 1000) < 1000) {
       setErrordata({
         title: "Unable To Create Animation",
