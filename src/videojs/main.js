@@ -88,10 +88,8 @@ function Main() {
   });
 
   useEffect(() => {
-    console.log(timeformate, "HItesh chawla");
-
     // if (check) {
-    console.count("hello");
+
     setstarttime({
       S_start: Number(timeformate.starttime.split(":")[0]),
 
@@ -102,7 +100,7 @@ function Main() {
     });
     // }
   }, [timeformate.starttime, timeformate.endtime]);
-  console.log(timings, "========Hitesh=======");
+
   async function uploadFile(file, e) {
     let urlfile = URL.createObjectURL(file[0]);
     if (e) {
@@ -279,7 +277,7 @@ function Main() {
   const [value2, setValue2] = React.useState("0:00");
   const [preValue, setPrevValue] = React.useState("0:00");
   const [preValuev2, setPrevValue2] = React.useState("0:00");
-  console.log(timings[0], "______________________");
+
   useEffect(() => {
     const time = toHHMMSS(timings?.[0]?.start);
     setValue(time);
@@ -399,7 +397,6 @@ function Main() {
   };
 
   const onChange2 = (event) => {
-    console.log(event.target.value, "---------");
     setValue2((e) => {
       if (event.target.value > metadata.duration - 1) {
         setPrevValue2(event.target.value);
@@ -493,7 +490,6 @@ function Main() {
       }
     });
   }
-  console.log(toHHMMSS(timings[0].start), "><><><>timing convert<><><><<");
   function clickhandlechangeright() {
     if (selectedfield2 == "E_start") {
       E_start.current.stepDown();
@@ -514,14 +510,13 @@ function Main() {
       });
     }
   }
-  console.log(timings[0], "Timings for trim");
+
   function changearrowhandle(e) {
     let abc =
       Number(e.target.value) <= 9
         ? `${Number(e.target.value)}`
         : Number(e.target.value);
 
-    console.log(e.target.name.includes("S_"), "++++++++++++++++=");
     if (e.target.name === "S_end") {
       if (Number(e.target.value) > 59) {
         setstarttime({
@@ -534,7 +529,6 @@ function Main() {
         });
         return false;
       }
-      console.log(e.target.value, "------------------");
     }
     setstarttime({ ...starttime, [e.target.name]: abc });
     if (e.target.name.includes("S_")) {
@@ -713,9 +707,7 @@ function Main() {
                         height={"100%"}
                         controls={false}
                         onDuration={(e) => {}}
-                        onClickPreview={(ok) => {
-                          // console.log(ok, "onClickPreview");
-                        }}
+                        onClickPreview={(ok) => {}}
                         onProgress={(e) => {
                           if (e.playedSeconds === e.loadedSeconds) {
                             setisPlaying(false);
