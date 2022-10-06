@@ -388,8 +388,8 @@
   top: 0;
   right: 100%;
   bottom: 0;
-  min-width: 8000px;
-  width: 8000px;
+  min-width: 10000vw;
+  width: 10000vw;
   backdrop-filter: grayscale(1);
 }
 .noUi-target .noUi-connect.noUi-draggable:after {
@@ -398,8 +398,8 @@
   top: 0 !important;
   left: 100% !important;
   bottom: 0 !important;
-  min-width: 8000px !important;
-  width: 8000px !important;
+  min-width: 10000vw !important;
+  width: 10000vw !important;
   -webkit-backdrop-filter: grayscale(1) !important;
   backdrop-filter: grayscale(1) !important;
 }

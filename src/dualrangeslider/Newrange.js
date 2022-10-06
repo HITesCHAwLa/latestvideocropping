@@ -142,11 +142,15 @@ function Newrange({
         setslidenew(false);
       }}
       behaviour="drag"
-      animate={true}
+      animate={false}
       tooltips={false}
       margin={1000}
       onChange={(e) => {
         refdata.current.seekTo(Number(e[0]), "seconds");
+        setsliderpoints({
+          start: Number(e[0]) * 1000,
+          end: Number(e[1]) * 1000,
+        });
         setTimings([
           {
             start: Number(e[0]),

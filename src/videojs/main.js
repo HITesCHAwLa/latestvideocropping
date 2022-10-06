@@ -523,6 +523,15 @@ function Main() {
     }
   }
   function changearrowhandle(e) {
+    // console.log(
+    //   "max:",
+    //   e.target.max,
+    //   "name:",
+    //   e.target.name,
+    //   "value:",
+    //   e.target.value
+    // );
+    // dynamicdata(10 + e.target.value, metadata.duration);
     // for starting seconds --> check minute value
     // if start_minutes < than end_minutes
     // if start_minutes >= end_minutes
@@ -632,18 +641,24 @@ function Main() {
       case "S_start":
         if (Number(e.target.value) <= Number(starttime.E_start)) {
           if (Number(e.target.value) === Number(starttime.E_start)) {
+            let start_s_end;
+            if (Number(starttime.S_end) < Number(starttime.E_end)) {
+              if (Number(starttime.S_end) < 10) {
+                start_s_end = `0${Number(starttime.S_end)}`;
+              } else {
+                start_s_end = Number(starttime.S_end);
+              }
+            } else {
+              if (Number(starttime.S_end) < 10) {
+                start_s_end = `0${Number(starttime.E_end) - 1}`;
+              } else {
+                start_s_end = Number(starttime.E_end) - 1;
+              }
+            }
+
             setstarttime({
               ...starttime,
-              S_end:
-                Number(starttime.S_end) < Number(starttime.E_end)
-                  ? Number(starttime.S_end) < 10
-                    ? `0${Number(starttime.E_end - 1)}`
-                    : Number(starttime.E_end - 1)
-                  : Number(starttime.E_end - 1) < 10
-                  ? `0${Number(starttime.E_end - 1)}`
-                  : Number(starttime.E_end - 1) < 10
-                  ? `0${Number(starttime.E_end - 1)}`
-                  : Number(starttime.E_end - 1),
+              S_end: start_s_end,
               S_start:
                 Number(e.target.value) < 10
                   ? `0${Number(e.target.value)}`
@@ -651,40 +666,18 @@ function Main() {
             });
             //#region for slider change
             dynamicdata(
-              Number(e.target.value) * 60 +
-                Number(
-                  Number(starttime.S_end) < Number(starttime.E_end)
-                    ? Number(starttime.S_end)
-                    : Number(starttime.E_end - 1) < 10
-                    ? `0${Number(starttime.E_end - 1)}`
-                    : Number(starttime.E_end - 1)
-                ),
+              Number(e.target.value) * 60 + Number(start_s_end),
               metadata.duration
             );
             setsliderpoints({
               ...sliderpoints,
               start:
-                Number(e.target.value) * 60 * 1000 +
-                Number(
-                  Number(starttime.S_end) < Number(starttime.E_end)
-                    ? Number(starttime.S_end)
-                    : Number(starttime.E_end - 1) < 10
-                    ? `0${Number(starttime.E_end - 1)}`
-                    : Number(starttime.E_end - 1)
-                ),
+                Number(e.target.value) * 60 * 1000 + Number(start_s_end) * 1000,
             });
             setTimings([
               {
                 ...timings[0],
-                start:
-                  Number(
-                    Number(starttime.S_end) < Number(starttime.E_end)
-                      ? Number(starttime.S_end)
-                      : Number(starttime.E_end - 1) < 10
-                      ? `0${Number(starttime.E_end - 1)}`
-                      : Number(starttime.E_end - 1)
-                  ) +
-                  Number(e.target.value) * 60,
+                start: start_s_end + Number(e.target.value) * 60,
               },
             ]);
             //#endregion
@@ -697,14 +690,12 @@ function Main() {
                   : `${Number(e.target.value)}`,
             });
             //#region for slider change
-            dynamicdata(
-              Number(e.target.value) * 60 + Number(starttime.S_end),
-              metadata.duration
-            );
+
             setsliderpoints({
               ...sliderpoints,
               start:
-                Number(e.target.value) * 60 * 1000 + Number(starttime.S_end),
+                Number(e.target.value) * 60 * 1000 +
+                Number(starttime.S_end) * 1000,
             });
             setTimings([
               {
@@ -712,24 +703,28 @@ function Main() {
                 start: Number(starttime.S_end) + Number(e.target.value) * 60,
               },
             ]);
+            dynamicdata(
+              Number(e.target.value) * 60 + Number(starttime.S_end),
+              metadata.duration
+            );
             //#endregion
           }
 
           //#region for slider change
-          dynamicdata(
-            Number(e.target.value) * 60 + Number(starttime.S_end),
-            metadata.duration
-          );
-          setsliderpoints({
-            ...sliderpoints,
-            start: Number(e.target.value) * 60 * 1000 + Number(starttime.S_end),
-          });
-          setTimings([
-            {
-              ...timings[0],
-              start: Number(starttime.S_end) + Number(e.target.value) * 60,
-            },
-          ]);
+          // dynamicdata(
+          //   Number(e.target.value) * 60 + Number(starttime.S_end),
+          //   metadata.duration
+          // );
+          // setsliderpoints({
+          //   ...sliderpoints,
+          //   start: Number(e.target.value) * 60 * 1000 + Number(starttime.S_end),
+          // });
+          // setTimings([
+          //   {
+          //     ...timings[0],
+          //     start: Number(starttime.S_end) + Number(e.target.value) * 60,
+          //   },
+          // ]);
           //#endregion
         } else {
           setstarttime({
@@ -758,7 +753,7 @@ function Main() {
           //#endregion
         }
 
-        return 1;
+        return true;
 
       case "S_end":
         if (starttime.S_start < starttime.E_start) {
@@ -792,7 +787,7 @@ function Main() {
           } else {
           }
         } else {
-          if (Number(e.target.value <= starttime.E_end - 1)) {
+          if (Number(e.target.value) <= Number(starttime.E_end) - 1) {
             setstarttime({
               ...starttime,
               S_end:
@@ -805,6 +800,7 @@ function Main() {
               Number(e.target.value) + Number(starttime.S_start) * 60,
               metadata.duration
             );
+
             setsliderpoints({
               ...sliderpoints,
               start:
@@ -849,8 +845,64 @@ function Main() {
         return true;
 
       case "E_start":
+        // if (e.target.value < starttime.S_start) {
+        //   setstarttime({
+        //     ...starttime,
+        //     E_start:
+        //       Number(starttime.S_end) + 1 > 59
+        //         ? Number(starttime.S_start) + 1 < 10
+        //           ? `0${Number(starttime.S_start) + 1}`
+        //           : Number(starttime.S_start) + 1
+        //         : Number(starttime.S_start) < 10
+        //         ? `0${Number(starttime.S_start)}`
+        //         : Number(starttime.S_start),
+        //     E_end:
+        //       Number(starttime.S_end) + 1 > 59
+        //         ? "00"
+        //         : Number(starttime.S_end) + 1 < 10
+        //         ? `0${Number(starttime.S_end) + 1}`
+        //         : Number(starttime.S_end) + 1,
+        //   });
+        //   // return false;
+        // }
+        // if (
+        //   Number(e.target.value) === Number(starttime.S_start) &&
+        //   Number(starttime.S_end) === Number(starttime.E_end)
+        // ) {
+        //   alert("same");
+        //   setstarttime({
+        //     ...starttime,
+        //     E_end:
+        //       Number(starttime.S_end) + 1 < 10
+        //         ? `0${Number(starttime.S_end) + 1}`
+        //         : Number(starttime.S_end) + 1,
+        //   });
+        // }
         if (e.target.value <= Math.floor(metadata?.duration / 60)) {
           if (Number(e.target.value) === Math.floor(metadata?.duration / 60)) {
+            if (Number(e.target.value) > Number(starttime.S_start)) {
+              setstarttime({
+                ...starttime,
+                E_start:
+                  Number(e.target.value) < 10
+                    ? `0${Number(e.target.value)}`
+                    : `${Number(e.target.value)}`,
+              });
+              setsliderpoints({
+                ...sliderpoints,
+                end:
+                  Number(e.target.value) * 60 * 1000 +
+                  Number(starttime.E_end) * 1000,
+              });
+              setTimings([
+                {
+                  ...timings[0],
+                  end: Number(starttime.E_end) + Number(e.target.value) * 60,
+                },
+              ]);
+            } else {
+            }
+
             setstarttime({
               ...starttime,
               E_end:
@@ -869,6 +921,10 @@ function Main() {
             });
           } else {
             if (Number(e.target.value) >= Number(starttime.S_start)) {
+              if (Number(e.target.value) > Number(starttime.S_start)) {
+              } else if (Number(e.target.value) === Number(starttime.S_start)) {
+              } else {
+              }
               setstarttime({
                 ...starttime,
                 E_start:
@@ -879,7 +935,8 @@ function Main() {
               setsliderpoints({
                 ...sliderpoints,
                 end:
-                  Number(e.target.value) * 60 * 1000 + Number(starttime.E_end),
+                  Number(e.target.value) * 60 * 1000 +
+                  Number(starttime.E_end) * 1000,
               });
               setTimings([
                 {
@@ -891,9 +948,9 @@ function Main() {
               setstarttime({
                 ...starttime,
                 E_end:
-                  Number(Number(starttime.S_start) + 1) < 10
-                    ? `0${Number(Number(starttime.S_start)) + 1}`
-                    : `${Number(Number(starttime.S_start)) + 1}`,
+                  Number(Number(starttime.S_end) + 1) < 10
+                    ? `0${Number(starttime.S_end) + 1}`
+                    : `${Number(starttime.S_end) + 1}`,
                 E_start:
                   Number(starttime.S_start) < 10
                     ? `0${Number(starttime.S_start)}`
@@ -904,7 +961,7 @@ function Main() {
                 ...sliderpoints,
                 end:
                   Number(starttime.S_start) * 60 * 1000 +
-                  Number(starttime.E_end),
+                  Number(starttime.E_end) * 1000,
               });
               setTimings([
                 {
@@ -966,6 +1023,7 @@ function Main() {
             ]);
           }
         }
+
         // minimum minutes -- starttime.minute and minimum sec--- startime.sec + 1
         // if (starttime?.S_start === starttime.E_start) {
         //   if (Number(e.target.value <= starttime?.E_end + 1)) {
@@ -1043,6 +1101,7 @@ function Main() {
         return true;
     }
   }
+
   return (
     ready && (
       <div className="video-main-box">
@@ -1511,7 +1570,6 @@ function Main() {
                                   // selectedfield=="S_start"
                                   if (selectedfield == "S_start") {
                                     S_start.current.stepUp();
-
                                     changearrowhandle({
                                       target: {
                                         value: S_start.current.value,
@@ -1521,23 +1579,29 @@ function Main() {
                                   }
                                   if (selectedfield == "S_end") {
                                     S_end.current.stepUp();
-                                    if (starttime.S_start < starttime.E_start) {
-                                      if (Number(S_end.current.value <= 59)) {
-                                        changearrowhandle({
-                                          target: {
-                                            value: S_end.current.value,
-                                            name: S_end.current.name,
-                                          },
-                                        });
-                                      } else {
-                                        changearrowhandle({
-                                          target: {
-                                            value: starttime.S_end,
-                                            name: S_end.current.name,
-                                          },
-                                        });
-                                      }
-                                    }
+                                    changearrowhandle({
+                                      target: {
+                                        value: S_end.current.value,
+                                        name: S_end.current.name,
+                                      },
+                                    });
+                                    // if (starttime.S_start < starttime.E_start) {
+                                    //   if (Number(S_end.current.value <= 59)) {
+                                    //     changearrowhandle({
+                                    //       target: {
+                                    //         value: S_end.current.value,
+                                    //         name: S_end.current.name,
+                                    //       },
+                                    //     });
+                                    //   } else {
+                                    //     changearrowhandle({
+                                    //       target: {
+                                    //         value: starttime.S_end,
+                                    //         name: S_end.current.name,
+                                    //       },
+                                    //     });
+                                    //   }
+                                    // }
                                   }
                                 }}
                                 height={15}
@@ -1566,6 +1630,7 @@ function Main() {
                                   }
                                   if (selectedfield == "S_end") {
                                     S_end.current.stepDown();
+
                                     changearrowhandle({
                                       target: {
                                         value: S_end.current.value,
@@ -1649,12 +1714,7 @@ function Main() {
                                   : 0
                               }
                               // min={0}
-                              // max={
-                              //   Number(starttime.E_start) * 60 +
-                              //   Number(starttime.E_end) -
-                              //   Number(starttime.S_start) * 60 +
-                              //   Number(starttime.S_end)
-                              // }
+                              max={59}
                               onChange={changearrowhandle}
                               name="E_end"
                               value={
@@ -1691,6 +1751,7 @@ function Main() {
                                   }
                                   if (selectedfield2 == "E_end") {
                                     E_end.current.stepUp();
+
                                     changearrowhandle({
                                       target: {
                                         value: E_end.current.value,
