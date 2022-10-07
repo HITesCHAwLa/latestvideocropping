@@ -818,25 +818,26 @@ function Main() {
             setstarttime({
               ...starttime,
               S_end:
-                Number(starttime.E_end) < 10
-                  ? `0${Number(starttime.E_end)}`
-                  : `${Number(starttime.E_end)}`,
+                Number(starttime.E_end) - 1 < 10
+                  ? `0${Number(starttime.E_end) - 1}`
+                  : `${Number(starttime.E_end) - 1}`,
             });
             //#region for slider change
             dynamicdata(
-              Number(starttime.E_end) + Number(starttime.S_start) * 60,
+              Number(starttime.E_end) - 1 + Number(starttime.S_start) * 60,
               metadata.duration
             );
             setsliderpoints({
               ...sliderpoints,
               start:
-                Number(starttime.E_end) * 1000 +
+                (Number(starttime.E_end) - 1) * 1000 +
                 Number(starttime.S_start) * 60 * 1000,
             });
             setTimings([
               {
                 ...timings[0],
-                start: Number(starttime.S_start) * 60 + Number(starttime.E_end),
+                start:
+                  Number(starttime.S_start) * 60 + Number(starttime.E_end) - 1,
               },
             ]);
             //#endregion
@@ -976,6 +977,39 @@ function Main() {
         return true;
 
       case "E_end":
+        // #region  newADDED for S_end
+        // newADDED
+        // if (
+        //   Number(starttime.S_start) === Number(starttime.E_start) &&
+        //   Number(e.target.value) < Number(starttime.S_end) + 1
+        // ) {
+        //   setstarttime((old) => {
+        //     return {
+        //       ...old,
+        //       E_end:
+        //         Number(starttime.S_end) + 1 < 10
+        //           ? `0${Number(starttime.S_end) + 1}`
+        //           : Number(starttime.S_end) + 1,
+        //     };
+        //   });
+        //   setsliderpoints({
+        //     ...sliderpoints,
+        //     end:
+        //       Number(Number(starttime.S_end) + 1) * 1000 +
+        //       Number(starttime.E_start) * 60 * 1000,
+        //   });
+        //   setTimings([
+        //     {
+        //       ...timings[0],
+        //       end:
+        //         Number(starttime.E_start) * 60 +
+        //         Number(Number(starttime.S_end) + 1),
+        //     },
+        //   ]);
+        //   return false;
+        // }
+        //#endregion
+
         if (Number(starttime.E_start) === Math.floor(metadata.duration / 60)) {
           if (
             Number(e.target.value) <= Number(timeformate.endtime.split(":")[1])
@@ -1045,6 +1079,7 @@ function Main() {
         //   }
         // }
         //
+
         if (starttime.E_start < Math.floor(metadata.duration / 60)) {
           if (starttime.E_start === starttime.S_start) {
             if (
@@ -1070,9 +1105,12 @@ function Main() {
                   end: Number(starttime.E_start) * 60 + Number(e.target.value),
                 },
               ]);
+            } else {
             }
           }
           if (Number(e.target.value) <= 59) {
+            if (Number(e.target.value) <= Number(starttime.S_end)) {
+            }
             setstarttime({
               ...starttime,
               E_end:
