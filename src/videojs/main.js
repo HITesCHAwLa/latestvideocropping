@@ -378,34 +378,65 @@ function Main() {
   }
   //#endregion
   const onBlur = (event) => {
-    const value = event.target.value;
-    const seconds = Math.max(0, getSecondsFromHHMMSS(value));
-
     if (
-      seconds > metadata?.duration ||
-      seconds >= getSecondsFromHHMMSS(value2)
+      Number(starttime.S_start) === Number(starttime.E_start) &&
+      Number(starttime.S_end) === Number(starttime.E_end)
     ) {
-      setValue(preValue);
-      return false;
+      setstarttime({
+        ...starttime,
+        E_start:
+          Number(timeformate.endtime.split(":")[0]) < 10
+            ? `0${Number(timeformate.endtime.split(":")[0])}`
+            : Number(timeformate.endtime.split(":")[0]),
+        E_end:
+          Number(timeformate.endtime.split(":")[1]) < 10
+            ? `0${Number(timeformate.endtime.split(":")[1])}`
+            : Number(timeformate.endtime.split(":")[1]),
+      });
+
+      setsliderpoints({
+        ...sliderpoints,
+        end:
+          Number(timeformate.endtime.split(":")[1]) * 1000 +
+          Number(timeformate.endtime.split(":")[0]) * 60 * 1000,
+      });
+      setTimings([
+        {
+          ...timings[0],
+          end:
+            Number(timeformate.endtime.split(":")[0]) * 60 +
+            Number(timeformate.endtime.split(":")[1]),
+        },
+      ]);
     }
+    // const value = event.target.value;
+    // const seconds = Math.max(0, getSecondsFromHHMMSS(value));
 
-    setsliderpoints((ert) => {
-      return {
-        ...ert,
-        start: Number(seconds * 1000),
-      };
-    });
-    setTimings([
-      {
-        start: Number(seconds),
-        end: timings?.[0]?.end,
-      },
-    ]);
-    dynamicdata(Number(seconds), metadata.duration);
-    ref.current.seekTo(Number(seconds), "seconds");
+    // if (
+    //   seconds > metadata?.duration ||
+    //   seconds >= getSecondsFromHHMMSS(value2)
+    // ) {
+    //   setValue(preValue);
+    //   return false;
+    // }
 
-    const time = toHHMMSS(seconds);
-    setValue(time);
+    // setsliderpoints((ert) => {
+    //   return {
+    //     ...ert,
+    //     start: Number(seconds * 1000),
+    //   };
+    // });
+    // setTimings([
+    //   {
+    //     start: Number(seconds),
+    //     end: timings?.[0]?.end,
+    //   },
+    // ]);
+    // dynamicdata(Number(seconds), metadata.duration);
+    // ref.current.seekTo(Number(seconds), "seconds");
+
+    // const time = toHHMMSS(seconds);
+    // setValue(time);
   };
 
   const onChange2 = (event) => {
@@ -1558,6 +1589,7 @@ function Main() {
                                   ? `${starttime.S_start}`
                                   : starttime.S_start
                               }
+                              onBlur={onBlur}
                             />
                             <span
                               style={{
@@ -1578,6 +1610,7 @@ function Main() {
                               onClick={() => {
                                 setselectedfield("S_end");
                               }}
+                              onBlur={onBlur}
                               min={0}
                               max={
                                 Number(starttime.E_start) * 60 -
@@ -1707,6 +1740,7 @@ function Main() {
                               }}
                             /> */}
                             <input
+                              onBlur={onBlur}
                               type="number"
                               // min={Number(starttime.S_start) + 1}
                               max={Number(timeformate.endtime.split(":")[0])}
@@ -1754,6 +1788,7 @@ function Main() {
                               // min={0}
                               max={59}
                               onChange={changearrowhandle}
+                              onBlur={onBlur}
                               name="E_end"
                               value={
                                 Number(starttime.E_end) <= 9
