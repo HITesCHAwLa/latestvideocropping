@@ -379,8 +379,8 @@ function Main() {
   //#endregion
   const onBlur = (event) => {
     if (
-      Number(starttime.S_start) === Number(starttime.E_start) &&
-      Number(starttime.S_end) === Number(starttime.E_end)
+      Number(starttime.S_start) >= Number(starttime.E_start) &&
+      Number(starttime.S_end) >= Number(starttime.E_end)
     ) {
       setstarttime({
         ...starttime,
