@@ -382,7 +382,7 @@
   outline: none;
 }
 // jignesh sir
-.noUi-target .noUi-connect.noUi-draggable:before {
+.noUi-target .noUi-connect:before {
   content: "";
   position: absolute;
   top: 0;
@@ -392,7 +392,7 @@
   width: 10000vw;
   backdrop-filter: grayscale(1);
 }
-.noUi-target .noUi-connect.noUi-draggable:after {
+.noUi-target .noUi-connect:after {
   content: "" !important;
   position: absolute !important;
   top: 0 !important;

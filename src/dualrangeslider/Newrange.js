@@ -141,7 +141,7 @@ function Newrange({
         setslider(false);
         setslidenew(false);
       }}
-      behaviour="drag"
+      behaviour="tap"
       animate={false}
       tooltips={false}
       margin={1000}

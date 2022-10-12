@@ -20,6 +20,7 @@ import { formatSizeUnits, niceBytes } from "../bytetomb";
 import Modaldemo from "../Modaldemo";
 import { Alert, Button } from "react-bootstrap";
 import { timechange } from "../timetomilisecond";
+import ReactInputMask from "react-input-mask";
 
 const HeaderMemo = React.memo(Newrange);
 function Main() {
@@ -33,8 +34,8 @@ function Main() {
     E_start: 0,
     E_end: 0,
   });
-  const [selectedfield, setselectedfield] = useState("S_start");
-  const [selectedfield2, setselectedfield2] = useState("E_start");
+  const [selectedfield, setselectedfield] = useState("S_end");
+  const [selectedfield2, setselectedfield2] = useState("E_end");
   const S_start = useRef("");
   const S_end = useRef("");
   const E_start = useRef("");
@@ -1171,6 +1172,146 @@ function Main() {
     }
   }
 
+  function Blur() {
+    if (
+      Number(starttime.S_start) * 60 + Number(starttime.S_end) <
+      Number(timeformate.endtime.split(":")[0]) * 60 +
+        Number(timeformate.endtime.split(":")[1])
+    ) {
+      setstarttime({
+        ...starttime,
+        S_end: starttime.S_end,
+        S_start: starttime.S_start,
+      });
+      //#region for slider change
+      dynamicdata(
+        Number(starttime.S_start) * 60 + Number(starttime.S_end),
+        metadata.duration
+      );
+      setsliderpoints({
+        ...sliderpoints,
+        start:
+          Number(starttime.S_start) * 60 * 1000 +
+          Number(starttime.S_end) * 1000,
+      });
+      setTimings([
+        {
+          ...timings[0],
+          start: Number(starttime.S_end) + Number(starttime.S_start) * 60,
+        },
+      ]);
+    } else {
+      //     S_start:
+      //     Number(timeformate.starttime.split(":")[0]) < 10
+      //       ? `0${Number(timeformate.starttime.split(":")[0])}`
+      //       : Number(timeformate.starttime.split(":")[0]),
+
+      //   S_end:
+      //     Number(timeformate.starttime.split(":")[1]) < 10
+      //       ? `0${Number(timeformate.starttime.split(":")[1])}`
+      //       : Number(timeformate.starttime.split(":")[1]),
+      //   E_start:
+      //     Number(timeformate.endtime.split(":")[0]) < 10
+      //       ? `0${Number(timeformate.endtime.split(":")[0])}`
+      //       : Number(timeformate.endtime.split(":")[0]),
+
+      //   E_end:
+      //     Number(timeformate.endtime.split(":")[1]) < 10
+      //       ? `0${Number(timeformate.endtime.split(":")[1])}`
+      //       : Number(timeformate.endtime.split(":")[1]),
+      // });
+      setstarttime((pre) => {
+        return {
+          ...pre,
+          S_start:
+            Number(timeformate.starttime.split(":")[0]) < 10
+              ? `0${Number(timeformate.starttime.split(":")[0])}`
+              : Number(timeformate.starttime.split(":")[0]),
+
+          S_end:
+            Number(timeformate.starttime.split(":")[1]) < 10
+              ? `0${Number(timeformate.starttime.split(":")[1])}`
+              : Number(timeformate.starttime.split(":")[1]),
+        };
+      });
+      dynamicdata(
+        Number(timeformate.starttime.split(":")[0]) * 60 +
+          Number(timeformate.starttime.split(":")[1]),
+        metadata.duration
+      );
+      setsliderpoints({
+        ...sliderpoints,
+        start:
+          Number(timeformate.starttime.split(":")[0]) * 60 * 1000 +
+          Number(timeformate.starttime.split(":")[1]) * 1000,
+      });
+      setTimings([
+        {
+          ...timings[0],
+          start:
+            Number(timeformate.starttime.split(":")[1]) +
+            Number(timeformate.starttime.split(":")[0]) * 60,
+        },
+      ]);
+    }
+  }
+  function Blur2() {
+    if (
+      Number(starttime.E_start) * 60 + Number(starttime.E_end) <
+        Number(metadata.duration) &&
+      Number(starttime.E_start) * 60 + Number(starttime.E_end) >
+        Number(starttime.S_start) * 60 + Number(starttime.S_end)
+    ) {
+      setstarttime({
+        ...starttime,
+        E_end: starttime.E_end,
+        E_start: starttime.E_start,
+      });
+
+      setsliderpoints({
+        ...sliderpoints,
+        end:
+          Number(starttime.E_start) * 60 * 1000 +
+          Number(starttime.E_end) * 1000,
+      });
+      setTimings([
+        {
+          ...timings[0],
+          end: Number(starttime.E_end) + Number(starttime.E_start) * 60,
+        },
+      ]);
+    } else {
+      setstarttime((pre) => {
+        return {
+          ...pre,
+          E_start:
+            Number(timeformate.endtime.split(":")[0]) < 10
+              ? `0${Number(timeformate.endtime.split(":")[0])}`
+              : Number(timeformate.endtime.split(":")[0]),
+
+          E_end:
+            Number(timeformate.endtime.split(":")[1]) < 10
+              ? `0${Number(timeformate.endtime.split(":")[1])}`
+              : Number(timeformate.endtime.split(":")[1]),
+        };
+      });
+      setsliderpoints({
+        ...sliderpoints,
+        end:
+          Number(timeformate.endtime.split(":")[0]) * 60 * 1000 +
+          Number(timeformate.endtime.split(":")[1]) * 1000,
+      });
+      setTimings([
+        {
+          ...timings[0],
+          end:
+            Number(timeformate.endtime.split(":")[1]) +
+            Number(timeformate.endtime.split(":")[0]) * 60,
+        },
+      ]);
+    }
+  }
+
   return (
     ready && (
       <div className="video-main-box">
@@ -1569,63 +1710,32 @@ function Main() {
                                 background: "transparent",
                               }}
                             /> */}
-                            <input
-                              type="number"
+
+                            <ReactInputMask
+                              onBlur={Blur}
                               style={{
-                                width: "25px",
+                                margin: "0 !important",
+                                width: "50px",
                                 border: "none",
-                                background: "none",
+                                background: "transparent",
+                                textIndent: "4px",
                               }}
-                              max={Number(starttime.E_start)}
-                              min={0}
-                              onChange={changearrowhandle}
-                              name="S_start"
-                              ref={S_start}
-                              onClick={() => {
-                                setselectedfield("S_start");
+                              mask="12:34"
+                              alwaysShowMask={true}
+                              formatChars={{
+                                1: "[0-5]",
+                                2: "[0-9]",
+                                3: "[0-5]",
+                                4: "[0-9]",
                               }}
-                              value={
-                                Number(starttime.S_start) <= 9
-                                  ? `${starttime.S_start}`
-                                  : starttime.S_start
-                              }
-                              onBlur={onBlur}
-                            />
-                            <span
-                              style={{
-                                fontSize: "18px",
-                                fontWeight: "bold",
-                                display: "block",
+                              value={starttime.S_start + starttime.S_end}
+                              onChange={(e) => {
+                                let [start, end] = e.target.value.split(":");
+
+                                setstarttime((ert) => {
+                                  return { ...ert, S_start: start, S_end: end };
+                                });
                               }}
-                            >
-                              :
-                            </span>
-                            <input
-                              type="number"
-                              style={{
-                                width: "25px",
-                                border: "none",
-                                background: "none",
-                              }}
-                              onClick={() => {
-                                setselectedfield("S_end");
-                              }}
-                              onBlur={onBlur}
-                              min={0}
-                              max={
-                                Number(starttime.E_start) * 60 -
-                                Number(starttime.S_start) * 60 +
-                                Number(starttime.E_end) -
-                                1
-                              }
-                              onChange={changearrowhandle}
-                              name="S_end"
-                              ref={S_end}
-                              value={
-                                Number(starttime.S_end) <= 9
-                                  ? `${starttime.S_end}`
-                                  : starttime.S_end
-                              }
                             />
                             <div
                               style={{
@@ -1636,45 +1746,46 @@ function Main() {
                               }}
                             >
                               <svg
+                                disabled
                                 width={15}
-                                onClick={() => {
-                                  // selectedfield=="S_start"
-                                  if (selectedfield == "S_start") {
-                                    S_start.current.stepUp();
-                                    changearrowhandle({
-                                      target: {
-                                        value: S_start.current.value,
-                                        name: S_start.current.name,
-                                      },
-                                    });
-                                  }
-                                  if (selectedfield == "S_end") {
-                                    S_end.current.stepUp();
-                                    changearrowhandle({
-                                      target: {
-                                        value: S_end.current.value,
-                                        name: S_end.current.name,
-                                      },
-                                    });
-                                    // if (starttime.S_start < starttime.E_start) {
-                                    //   if (Number(S_end.current.value <= 59)) {
-                                    //     changearrowhandle({
-                                    //       target: {
-                                    //         value: S_end.current.value,
-                                    //         name: S_end.current.name,
-                                    //       },
-                                    //     });
-                                    //   } else {
-                                    //     changearrowhandle({
-                                    //       target: {
-                                    //         value: starttime.S_end,
-                                    //         name: S_end.current.name,
-                                    //       },
-                                    //     });
-                                    //   }
-                                    // }
-                                  }
-                                }}
+                                // onClick={() => {
+                                //   // selectedfield=="S_start"
+                                //   if (selectedfield == "S_start") {
+                                //     S_start.current.stepUp();
+                                //     changearrowhandle({
+                                //       target: {
+                                //         value: S_start.current.value,
+                                //         name: S_start.current.name,
+                                //       },
+                                //     });
+                                //   }
+                                //   if (selectedfield == "S_end") {
+                                //     S_end.current.stepUp();
+                                //     changearrowhandle({
+                                //       target: {
+                                //         value: S_end.current.value,
+                                //         name: S_end.current.name,
+                                //       },
+                                //     });
+                                //     // if (starttime.S_start < starttime.E_start) {
+                                //     //   if (Number(S_end.current.value <= 59)) {
+                                //     //     changearrowhandle({
+                                //     //       target: {
+                                //     //         value: S_end.current.value,
+                                //     //         name: S_end.current.name,
+                                //     //       },
+                                //     //     });
+                                //     //   } else {
+                                //     //     changearrowhandle({
+                                //     //       target: {
+                                //     //         value: starttime.S_end,
+                                //     //         name: S_end.current.name,
+                                //     //       },
+                                //     //     });
+                                //     //   }
+                                //     // }
+                                //   }
+                                // }}
                                 height={15}
                                 viewBox="-2 -4 10 10"
                                 fill="none"
@@ -1689,27 +1800,27 @@ function Main() {
                               </svg>
                               <svg
                                 width={15}
-                                onClick={() => {
-                                  if (selectedfield == "S_start") {
-                                    S_start.current.stepDown();
-                                    changearrowhandle({
-                                      target: {
-                                        value: S_start.current.value,
-                                        name: S_start.current.name,
-                                      },
-                                    });
-                                  }
-                                  if (selectedfield == "S_end") {
-                                    S_end.current.stepDown();
+                                // onClick={() => {
+                                //   if (selectedfield == "S_start") {
+                                //     S_start.current.stepDown();
+                                //     changearrowhandle({
+                                //       target: {
+                                //         value: S_start.current.value,
+                                //         name: S_start.current.name,
+                                //       },
+                                //     });
+                                //   }
+                                //   if (selectedfield == "S_end") {
+                                //     S_end.current.stepDown();
 
-                                    changearrowhandle({
-                                      target: {
-                                        value: S_end.current.value,
-                                        name: S_end.current.name,
-                                      },
-                                    });
-                                  }
-                                }}
+                                //     changearrowhandle({
+                                //       target: {
+                                //         value: S_end.current.value,
+                                //         name: S_end.current.name,
+                                //       },
+                                //     });
+                                //   }
+                                // }}
                                 height={15}
                                 viewBox="-2 9 10 10"
                                 fill="none"
@@ -1739,62 +1850,31 @@ function Main() {
                                 background: "transparent",
                               }}
                             /> */}
-                            <input
-                              onBlur={onBlur}
-                              type="number"
-                              // min={Number(starttime.S_start) + 1}
-                              max={Number(timeformate.endtime.split(":")[0])}
+                            <ReactInputMask
+                              onBlur={Blur2}
                               style={{
-                                width: "25px",
+                                margin: "0 !important",
+                                width: "50px",
                                 border: "none",
-                                background: "none",
+                                background: "transparent",
+                                textIndent: "4px",
                               }}
-                              onClick={() => {
-                                setselectedfield2("E_start");
+                              mask="12:34"
+                              alwaysShowMask={true}
+                              formatChars={{
+                                1: "[0-5]",
+                                2: "[0-9]",
+                                3: "[0-5]",
+                                4: "[0-9]",
                               }}
-                              onChange={changearrowhandle}
-                              name="E_start"
-                              ref={E_start}
-                              value={
-                                Number(starttime.E_start) <= 9
-                                  ? `${starttime.E_start}`
-                                  : starttime.E_start
-                              }
-                            />
-                            <span
-                              style={{ fontSize: "18px", fontWeight: "bold" }}
-                            >
-                              :
-                            </span>
+                              value={starttime.E_start + starttime.E_end}
+                              onChange={(e) => {
+                                let [start, end] = e.target.value.split(":");
 
-                            <input
-                              type="number"
-                              style={{
-                                width: "25px",
-                                border: "none",
-                                background: "none",
+                                setstarttime((ert) => {
+                                  return { ...ert, E_start: start, E_end: end };
+                                });
                               }}
-                              onClick={() => {
-                                setselectedfield2("E_end");
-                              }}
-                              ref={E_end}
-                              // min={Number(starttime.S_end) + 1}
-                              min={
-                                Number(starttime.E_start) ===
-                                Number(starttime.S_start)
-                                  ? Number(starttime.S_end) + 1
-                                  : 0
-                              }
-                              // min={0}
-                              max={59}
-                              onChange={changearrowhandle}
-                              onBlur={onBlur}
-                              name="E_end"
-                              value={
-                                Number(starttime.E_end) <= 9
-                                  ? `${starttime.E_end}`
-                                  : starttime.E_end
-                              }
                             />
                             <div
                               style={{
@@ -1805,34 +1885,34 @@ function Main() {
                               }}
                             >
                               <svg
-                                onClick={() => {
-                                  if (selectedfield2 == "E_start") {
-                                    E_start.current.stepUp();
-                                    if (
-                                      starttime.E_start <
-                                      Math.floor(metadata.duration / 60)
-                                    ) {
-                                      if (Number(E_start.current.value) <= 59) {
-                                        changearrowhandle({
-                                          target: {
-                                            value: E_start.current.value,
-                                            name: E_start.current.name,
-                                          },
-                                        });
-                                      }
-                                    }
-                                  }
-                                  if (selectedfield2 == "E_end") {
-                                    E_end.current.stepUp();
+                                // onClick={() => {
+                                //   if (selectedfield2 == "E_start") {
+                                //     E_start.current.stepUp();
+                                //     if (
+                                //       starttime.E_start <
+                                //       Math.floor(metadata.duration / 60)
+                                //     ) {
+                                //       if (Number(E_start.current.value) <= 59) {
+                                //         changearrowhandle({
+                                //           target: {
+                                //             value: E_start.current.value,
+                                //             name: E_start.current.name,
+                                //           },
+                                //         });
+                                //       }
+                                //     }
+                                //   }
+                                //   if (selectedfield2 == "E_end") {
+                                //     E_end.current.stepUp();
 
-                                    changearrowhandle({
-                                      target: {
-                                        value: E_end.current.value,
-                                        name: E_end.current.name,
-                                      },
-                                    });
-                                  }
-                                }}
+                                //     changearrowhandle({
+                                //       target: {
+                                //         value: E_end.current.value,
+                                //         name: E_end.current.name,
+                                //       },
+                                //     });
+                                //   }
+                                // }}
                                 width={15}
                                 height={15}
                                 viewBox="-2 -4 10 10"
@@ -1845,26 +1925,26 @@ function Main() {
                                 />
                               </svg>
                               <svg
-                                onClick={() => {
-                                  if (selectedfield2 == "E_start") {
-                                    E_start.current.stepDown();
-                                    changearrowhandle({
-                                      target: {
-                                        value: E_start.current.value,
-                                        name: E_start.current.name,
-                                      },
-                                    });
-                                  }
-                                  if (selectedfield2 == "E_end") {
-                                    E_end.current.stepDown();
-                                    changearrowhandle({
-                                      target: {
-                                        value: E_end.current.value,
-                                        name: E_end.current.name,
-                                      },
-                                    });
-                                  }
-                                }}
+                                // onClick={() => {
+                                //   if (selectedfield2 == "E_start") {
+                                //     E_start.current.stepDown();
+                                //     changearrowhandle({
+                                //       target: {
+                                //         value: E_start.current.value,
+                                //         name: E_start.current.name,
+                                //       },
+                                //     });
+                                //   }
+                                //   if (selectedfield2 == "E_end") {
+                                //     E_end.current.stepDown();
+                                //     changearrowhandle({
+                                //       target: {
+                                //         value: E_end.current.value,
+                                //         name: E_end.current.name,
+                                //       },
+                                //     });
+                                //   }
+                                // }}
                                 width={15}
                                 height={15}
                                 viewBox="-2 9 10 10"
@@ -1898,8 +1978,12 @@ function Main() {
                               <img src="/FPS_Icon.png" alt="" />
                               <b>30</b> Max
                             </span>
-                            <span>
-                              <CgDanger />
+                            <span
+                              className="icon info"
+                              style={{ fontSize: "17px" }}
+                            >
+                              {" "}
+                              <BiInfoCircle />
                             </span>
                           </div>
                         </div>
