@@ -20,7 +20,7 @@ import { formatSizeUnits, niceBytes } from "../bytetomb";
 import Modaldemo from "../Modaldemo";
 import { Alert, Button } from "react-bootstrap";
 import { timechange } from "../timetomilisecond";
-import ReactInputMask from "react-input-mask";
+import Inputmask from "react-input-mask";
 
 const HeaderMemo = React.memo(Newrange);
 function Main() {
@@ -1220,37 +1220,40 @@ function Main() {
       //       ? `0${Number(timeformate.endtime.split(":")[1])}`
       //       : Number(timeformate.endtime.split(":")[1]),
       // });
+    
+      let timeinformate = toHHMMSS(timings[0].start);
+
       setstarttime((pre) => {
         return {
           ...pre,
           S_start:
-            Number(timeformate.starttime.split(":")[0]) < 10
-              ? `0${Number(timeformate.starttime.split(":")[0])}`
-              : Number(timeformate.starttime.split(":")[0]),
+            Number(timeinformate.split(":")[0]) < 10
+              ? `0${Number(timeinformate.split(":")[0])}`
+              : Number(timeinformate.split(":")[0]),
 
           S_end:
-            Number(timeformate.starttime.split(":")[1]) < 10
-              ? `0${Number(timeformate.starttime.split(":")[1])}`
-              : Number(timeformate.starttime.split(":")[1]),
+            Number(timeinformate.split(":")[1]) < 10
+              ? `0${Number(timeinformate.split(":")[1])}`
+              : Number(timeinformate.split(":")[1]),
         };
       });
       dynamicdata(
-        Number(timeformate.starttime.split(":")[0]) * 60 +
-          Number(timeformate.starttime.split(":")[1]),
+        Number(timeinformate.split(":")[0]) * 60 +
+          Number(timeinformate.split(":")[1]),
         metadata.duration
       );
       setsliderpoints({
         ...sliderpoints,
         start:
-          Number(timeformate.starttime.split(":")[0]) * 60 * 1000 +
-          Number(timeformate.starttime.split(":")[1]) * 1000,
+          Number(timeinformate.split(":")[0]) * 60 * 1000 +
+          Number(timeinformate.split(":")[1]) * 1000,
       });
       setTimings([
         {
           ...timings[0],
           start:
-            Number(timeformate.starttime.split(":")[1]) +
-            Number(timeformate.starttime.split(":")[0]) * 60,
+            Number(timeinformate.split(":")[1]) +
+            Number(timeinformate.split(":")[0]) * 60,
         },
       ]);
     }
@@ -1281,32 +1284,33 @@ function Main() {
         },
       ]);
     } else {
+      let timeinformateend = toHHMMSS(timings[0].end);
       setstarttime((pre) => {
         return {
           ...pre,
           E_start:
-            Number(timeformate.endtime.split(":")[0]) < 10
-              ? `0${Number(timeformate.endtime.split(":")[0])}`
-              : Number(timeformate.endtime.split(":")[0]),
+            Number(timeinformateend.split(":")[0]) < 10
+              ? `0${Number(timeinformateend.split(":")[0])}`
+              : Number(timeinformateend.split(":")[0]),
 
           E_end:
-            Number(timeformate.endtime.split(":")[1]) < 10
-              ? `0${Number(timeformate.endtime.split(":")[1])}`
-              : Number(timeformate.endtime.split(":")[1]),
+            Number(timeinformateend.split(":")[1]) < 10
+              ? `0${Number(timeinformateend.split(":")[1])}`
+              : Number(timeinformateend.split(":")[1]),
         };
       });
       setsliderpoints({
         ...sliderpoints,
         end:
-          Number(timeformate.endtime.split(":")[0]) * 60 * 1000 +
-          Number(timeformate.endtime.split(":")[1]) * 1000,
+          Number(timeinformateend.split(":")[0]) * 60 * 1000 +
+          Number(timeinformateend.split(":")[1]) * 1000,
       });
       setTimings([
         {
           ...timings[0],
           end:
-            Number(timeformate.endtime.split(":")[1]) +
-            Number(timeformate.endtime.split(":")[0]) * 60,
+            Number(timeinformateend.split(":")[1]) +
+            Number(timeinformateend.split(":")[0]) * 60,
         },
       ]);
     }
@@ -1711,7 +1715,7 @@ function Main() {
                               }}
                             /> */}
 
-                            <ReactInputMask
+                            <Inputmask
                               onBlur={Blur}
                               style={{
                                 margin: "0 !important",
@@ -1721,7 +1725,7 @@ function Main() {
                                 textIndent: "4px",
                               }}
                               mask="12:34"
-                              alwaysShowMask={true}
+                              alwaysShowMask={true}     
                               formatChars={{
                                 1: "[0-5]",
                                 2: "[0-9]",
@@ -1748,44 +1752,66 @@ function Main() {
                               <svg
                                 disabled
                                 width={15}
-                                // onClick={() => {
-                                //   // selectedfield=="S_start"
-                                //   if (selectedfield == "S_start") {
-                                //     S_start.current.stepUp();
-                                //     changearrowhandle({
-                                //       target: {
-                                //         value: S_start.current.value,
-                                //         name: S_start.current.name,
-                                //       },
-                                //     });
-                                //   }
-                                //   if (selectedfield == "S_end") {
-                                //     S_end.current.stepUp();
-                                //     changearrowhandle({
-                                //       target: {
-                                //         value: S_end.current.value,
-                                //         name: S_end.current.name,
-                                //       },
-                                //     });
-                                //     // if (starttime.S_start < starttime.E_start) {
-                                //     //   if (Number(S_end.current.value <= 59)) {
-                                //     //     changearrowhandle({
-                                //     //       target: {
-                                //     //         value: S_end.current.value,
-                                //     //         name: S_end.current.name,
-                                //     //       },
-                                //     //     });
-                                //     //   } else {
-                                //     //     changearrowhandle({
-                                //     //       target: {
-                                //     //         value: starttime.S_end,
-                                //     //         name: S_end.current.name,
-                                //     //       },
-                                //     //     });
-                                //     //   }
-                                //     // }
-                                //   }
-                                // }}
+                                onClick={() => {
+                                  if (
+                                    Number(starttime.S_start) * 60 +
+                                      Number(starttime.S_end) ===
+                                    Number(starttime.E_start) * 60 +
+                                      Number(starttime.E_end) -
+                                      1
+                                  ) {
+                                    return false;
+                                  }
+
+                                  setstarttime((oldvalues) => {
+                                    let newvalue = Number(oldvalues.S_end) + 1;
+                                    let abc = {
+                                      S_start: oldvalues.S_start,
+                                      S_end:
+                                        newvalue < 10
+                                          ? `0${newvalue}`
+                                          : newvalue,
+                                    };
+                                    if (newvalue > 59) {
+                                      abc = {
+                                        S_end: "00",
+                                        S_start:
+                                          Number(oldvalues.S_start) + 1 < 10
+                                            ? `0${
+                                                Number(oldvalues.S_start) + 1
+                                              }`
+                                            : Number(oldvalues.S_start) + 1,
+                                      };
+                                    }
+                                   
+                                    dynamicdata(
+                                      Number(abc?.S_start) * 60 +
+                                        Number(abc?.S_end),
+                                      metadata.duration
+                                    );
+                                    setsliderpoints({
+                                      ...sliderpoints,
+                                      start:
+                                        Number(abc?.S_start) * 60 * 1000 +
+                                        Number(abc?.S_end) * 1000,
+                                    });
+                                    setTimings([
+                                      {
+                                        ...timings[0],
+                                        start:
+                                          Number(abc?.S_end) +
+                                          Number(abc?.S_start) * 60,
+                                      },
+                                    ]);
+                                    return {
+                                      ...oldvalues,
+
+                                      ...abc,
+                                    };
+                                  });
+
+                                  
+                                }}
                                 height={15}
                                 viewBox="-2 -4 10 10"
                                 fill="none"
@@ -1800,27 +1826,64 @@ function Main() {
                               </svg>
                               <svg
                                 width={15}
-                                // onClick={() => {
-                                //   if (selectedfield == "S_start") {
-                                //     S_start.current.stepDown();
-                                //     changearrowhandle({
-                                //       target: {
-                                //         value: S_start.current.value,
-                                //         name: S_start.current.name,
-                                //       },
-                                //     });
-                                //   }
-                                //   if (selectedfield == "S_end") {
-                                //     S_end.current.stepDown();
+                                onClick={() => {
+                                  if (
+                                    Number(starttime.S_start) * 60 +
+                                      Number(starttime.S_end) ===
+                                    0
+                                  ) {
+                                    return false;
+                                  }
 
-                                //     changearrowhandle({
-                                //       target: {
-                                //         value: S_end.current.value,
-                                //         name: S_end.current.name,
-                                //       },
-                                //     });
-                                //   }
-                                // }}
+                                  setstarttime((oldvalues) => {
+                                    let newvalue = Number(oldvalues.S_end) - 1;
+                                    let abc = {
+                                      S_start: oldvalues.S_start,
+                                      S_end:
+                                        newvalue < 10
+                                          ? `0${newvalue}`
+                                          : newvalue,
+                                    };
+                                    if (newvalue < 0) {
+                                      abc = {
+                                        S_end: "59",
+                                        S_start:
+                                          Number(oldvalues.S_start) - 1 < 10
+                                            ? `0${
+                                                Number(oldvalues.S_start) - 1
+                                              }`
+                                            : Number(oldvalues.S_start) - 1,
+                                      };
+                                    }
+                                    dynamicdata(
+                                      Number(abc?.S_start) * 60 +
+                                        Number(abc?.S_end),
+                                      metadata.duration
+                                    );
+                                    setsliderpoints({
+                                      ...sliderpoints,
+                                      start:
+                                        Number(abc?.S_start) * 60 * 1000 +
+                                        Number(abc?.S_end) * 1000,
+                                    });
+                                    setTimings([
+                                      {
+                                        ...timings[0],
+                                        start:
+                                          Number(abc?.S_end) +
+                                          Number(abc?.S_start) * 60,
+                                      },
+                                    ]);
+
+                                    return {
+                                      ...oldvalues,
+
+                                      ...abc,
+                                    };
+                                  });
+
+                                  
+                                }}
                                 height={15}
                                 viewBox="-2 9 10 10"
                                 fill="none"
@@ -1850,7 +1913,7 @@ function Main() {
                                 background: "transparent",
                               }}
                             /> */}
-                            <ReactInputMask
+                            <Inputmask
                               onBlur={Blur2}
                               style={{
                                 margin: "0 !important",
@@ -1885,34 +1948,55 @@ function Main() {
                               }}
                             >
                               <svg
-                                // onClick={() => {
-                                //   if (selectedfield2 == "E_start") {
-                                //     E_start.current.stepUp();
-                                //     if (
-                                //       starttime.E_start <
-                                //       Math.floor(metadata.duration / 60)
-                                //     ) {
-                                //       if (Number(E_start.current.value) <= 59) {
-                                //         changearrowhandle({
-                                //           target: {
-                                //             value: E_start.current.value,
-                                //             name: E_start.current.name,
-                                //           },
-                                //         });
-                                //       }
-                                //     }
-                                //   }
-                                //   if (selectedfield2 == "E_end") {
-                                //     E_end.current.stepUp();
-
-                                //     changearrowhandle({
-                                //       target: {
-                                //         value: E_end.current.value,
-                                //         name: E_end.current.name,
-                                //       },
-                                //     });
-                                //   }
-                                // }}
+                                onClick={() => {
+                                  if (
+                                    Number(starttime.E_start) * 60 +
+                                      Number(starttime.E_end) ===
+                                    Math.floor(Number(metadata.duration))
+                                  ) {
+                                    return false;
+                                  }
+                                  setstarttime((oldvalues) => {
+                                    let newvalue = Number(oldvalues.E_end) + 1;
+                                    let abc = {
+                                      E_start: oldvalues.E_start,
+                                      E_end:
+                                        newvalue < 10
+                                          ? `0${newvalue}`
+                                          : newvalue,
+                                    };
+                                    if (newvalue > 59) {
+                                      abc = {
+                                        E_end: "00",
+                                        E_start:
+                                          Number(oldvalues.E_start) + 1 < 10
+                                            ? `0${
+                                                Number(oldvalues.E_start) + 1
+                                              }`
+                                            : Number(oldvalues.E_start) + 1,
+                                      };
+                                    }
+                                    setsliderpoints({
+                                      ...sliderpoints,
+                                      end:
+                                        Number(abc?.E_start) * 60 * 1000 +
+                                        Number(abc?.E_end) * 1000,
+                                    });
+                                    setTimings([
+                                      {
+                                        ...timings[0],
+                                        end:
+                                          Number(abc?.E_end) +
+                                          Number(abc?.E_start) * 60,
+                                      },
+                                    ]);
+                                    return {
+                                      ...oldvalues,
+                                      ...abc,
+                                    };
+                                  });
+                                  
+                                }}
                                 width={15}
                                 height={15}
                                 viewBox="-2 -4 10 10"
@@ -1925,26 +2009,57 @@ function Main() {
                                 />
                               </svg>
                               <svg
-                                // onClick={() => {
-                                //   if (selectedfield2 == "E_start") {
-                                //     E_start.current.stepDown();
-                                //     changearrowhandle({
-                                //       target: {
-                                //         value: E_start.current.value,
-                                //         name: E_start.current.name,
-                                //       },
-                                //     });
-                                //   }
-                                //   if (selectedfield2 == "E_end") {
-                                //     E_end.current.stepDown();
-                                //     changearrowhandle({
-                                //       target: {
-                                //         value: E_end.current.value,
-                                //         name: E_end.current.name,
-                                //       },
-                                //     });
-                                //   }
-                                // }}
+                                onClick={() => {
+                                  if (
+                                    Number(starttime.E_start) * 60 +
+                                      Number(starttime.E_end) ===
+                                    Number(starttime.S_start) * 60 +
+                                      Number(starttime.S_end) +
+                                      1
+                                  ) {
+                                    return false;
+                                  }
+                                  setstarttime((oldvalues) => {
+                                    let newvalue = Number(oldvalues.E_end) - 1;
+                                    let abc = {
+                                      E_start: oldvalues.E_start,
+                                      E_end:
+                                        newvalue < 10
+                                          ? `0${newvalue}`
+                                          : newvalue,
+                                    };
+                                    if (newvalue < 0) {
+                                      abc = {
+                                        E_end: "59",
+                                        E_start:
+                                          Number(oldvalues.E_start) - 1 < 10
+                                            ? `0${
+                                                Number(oldvalues.E_start) - 1
+                                              }`
+                                            : Number(oldvalues.E_start) - 1,
+                                      };
+                                    }
+                                    setsliderpoints({
+                                      ...sliderpoints,
+                                      end:
+                                        Number(abc?.E_start) * 60 * 1000 +
+                                        Number(abc?.E_end) * 1000,
+                                    });
+                                    setTimings([
+                                      {
+                                        ...timings[0],
+                                        end:
+                                          Number(abc?.E_end) +
+                                          Number(abc?.E_start) * 60,
+                                      },
+                                    ]);
+                                    return {
+                                      ...oldvalues,
+
+                                      ...abc,
+                                    };
+                                  });
+                                }}
                                 width={15}
                                 height={15}
                                 viewBox="-2 9 10 10"
