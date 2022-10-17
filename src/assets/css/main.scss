@@ -111,6 +111,8 @@
     justify-content: center;
     align-items: center;
     padding-bottom: 8px;
+    position: relative;
+    left: 7px;
     .xe{
       font-weight: bold;
       font-size: 26px;
@@ -203,6 +205,7 @@
         position: relative;
         top: -1px;
         left: 0px;
+
       }
     }
   }
@@ -238,7 +241,7 @@
     border-radius: 5px;
     top: -62px;
     display: flex;
-    width: 74px;
+    width: 76px;
     background-color: whitesmoke;
     &.left {
       left: -84px;
