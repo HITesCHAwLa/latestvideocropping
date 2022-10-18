@@ -1222,7 +1222,7 @@ function Main() {
       //       ? `0${Number(timeformate.endtime.split(":")[1])}`
       //       : Number(timeformate.endtime.split(":")[1]),
       // });
-    
+
       let timeinformate = toHHMMSS(timings[0].start);
 
       setstarttime((pre) => {
@@ -1323,38 +1323,50 @@ function Main() {
     console.log(e.target.value);
     ref.current.seekTo(Number(e.target.value) / 1000);
   }
-  // useEffect(() => {
-  //   if (check || sliderpoints.end != 0) {
-  //     if (check) {
-  //       const root = ReactDOM.createRoot(
-  //         document.getElementsByClassName("noUi-connect")[0]
-  //       );
-  //       root.render(
-  //         <InnerSlide
-  //           min={sliderpoints.start}
-  //           max={sliderpoints.end}
-  //           refdata={ref}
-  //           isPlaying={isPlaying}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   //   let abc = document.getElementsByClassName("noUi-connect")[0];
-  //   //   console.log(abc, "abc");
+  useEffect(() => {
+    if (check || sliderpoints.end != 0) {
+      if (check) {
+        const root = ReactDOM.createRoot(
+          document.getElementsByClassName("noUi-connect")[0]
+        );
+        root.render(
+          <InnerSlide
+            min={sliderpoints.start}
+            max={sliderpoints.end}
+            refdata={ref}
+            isPlaying={isPlaying}
+          />
+        );
+        //#region For change using click
+        // document
+        //   .getElementsByClassName("noUi-connect")[0]
+        //   .addEventListener("click", (e) => {
+        //     console.log(e.layerX);
+        //     // transform: translate(0px, 0px);
+        //     const abc = document.getElementsByClassName("box")[0];
+        //     abc.style.transform = `translate(${e.layerX}px, 0px)`;
+        //   });
+        //#endregion
+      }
+    }
 
-  //   //   // ✅ Set Attributes on Element
-  //   //   el.setAttribute("type", "range");
-  //   //   el.setAttribute("style", "width:100%");
-  //   //   el.setAttribute("min", Number(metadata.start) * 1000);
-  //   //   el.setAttribute("max", Number(metadata.duration) * 1000);
-  //   //   el.addEventListener("input", handlechange);
-  //   //   // el.setAttribute("disabled", "");
-  //   //   abc.append(el);
-  //   //   console.log(timings[0], metadata);
-  //   // }
-  //   // el.setAttribute("min", Number(sliderpoints.start));
-  //   // el.setAttribute("max", Number(sliderpoints.end));
-  // }, [check, sliderpoints.start, sliderpoints.end]);
+    //   let abc = document.getElementsByClassName("noUi-connect")[0];
+    //   console.log(abc, "abc");
+
+    //   // ✅ Set Attributes on Element
+    //   el.setAttribute("type", "range");
+    //   el.setAttribute("style", "width:100%");
+    //   el.setAttribute("min", Number(metadata.start) * 1000);
+    //   el.setAttribute("max", Number(metadata.duration) * 1000);
+    //   el.addEventListener("input", handlechange);
+    //   // el.setAttribute("disabled", "");
+    //   abc.append(el);
+    //   console.log(timings[0], metadata);
+    // }
+    // el.setAttribute("min", Number(sliderpoints.start));
+    // el.setAttribute("max", Number(sliderpoints.end));
+  }, [check, sliderpoints.start, sliderpoints.end]);
+
   // console.log(isPlaying, "isPlaying");
   return (
     ready && (
@@ -1765,7 +1777,7 @@ function Main() {
                                 textIndent: "4px",
                               }}
                               mask="12:34"
-                              alwaysShowMask={true}     
+                              alwaysShowMask={true}
                               formatChars={{
                                 1: "[0-5]",
                                 2: "[0-9]",
@@ -1823,7 +1835,7 @@ function Main() {
                                             : Number(oldvalues.S_start) + 1,
                                       };
                                     }
-                                   
+
                                     dynamicdata(
                                       Number(abc?.S_start) * 60 +
                                         Number(abc?.S_end),
@@ -1849,8 +1861,6 @@ function Main() {
                                       ...abc,
                                     };
                                   });
-
-                                  
                                 }}
                                 height={15}
                                 viewBox="-2 -4 10 10"
@@ -1921,8 +1931,6 @@ function Main() {
                                       ...abc,
                                     };
                                   });
-
-                                  
                                 }}
                                 height={15}
                                 viewBox="-2 9 10 10"
@@ -2035,7 +2043,6 @@ function Main() {
                                       ...abc,
                                     };
                                   });
-                                  
                                 }}
                                 width={15}
                                 height={15}

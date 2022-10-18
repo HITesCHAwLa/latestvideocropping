@@ -127,6 +127,11 @@ function Newrange({
     </section>
   ) : (
     <Nouislider
+    // instanceRef={instance => {
+    //   if (instance && !ref) {
+    //     this.setState({ ref: instance });
+    //   }
+    // }}
       range={{ min: timeduration.start, max: timeduration.end }}
       start={[sliderpoints.start, sliderpoints.end]}
       connect

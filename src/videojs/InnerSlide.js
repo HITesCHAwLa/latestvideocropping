@@ -1,6 +1,7 @@
 import Nouislider from "nouislider-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "nouislider/distribute/nouislider.css";
+import Draggable from "react-draggable";
 import "./innerSlide.css";
 function InnerSlide({ min, max, refdata, point, setPoint, duration }) {
   function changehandle(e) {
@@ -10,7 +11,15 @@ function InnerSlide({ min, max, refdata, point, setPoint, duration }) {
     );
     // setPoint((Number(e.target.value) / 1000).toFixed(2));
   }
+  const [activeDrags, setActiveDrags] = useState(0);
+  const onStart = () => {
+    setActiveDrags(activeDrags + 1);
+  };
 
+  const onStop = () => {
+    setActiveDrags(activeDrags - 1);
+  };
+  const dragHandlers = { onStart: onStart, onStop: onStop };
   return (
     // <input
     //   type="range"
@@ -20,19 +29,19 @@ function InnerSlide({ min, max, refdata, point, setPoint, duration }) {
     //   onChange={changehandle}
     //   //   value={refdata.current.player.prevPlayed || 0}
     // />
-    <div class="slidecontainer">
-      <input
-        style={{ width: "100%" }}
-        type="range"
-        min={min}
-        max={max}
-        step={100}
-        onChange={changehandle}
-        // value={point}
-        class="slider"
-        id="myRange"
-      />
-    </div>
+    <Draggable bounds="parent" {...dragHandlers}>
+      <div
+        className="box"
+        style={{
+          color: "red",
+          width: "5px",
+          height: "100%",
+          background: "#f5cd05",
+          zIndex: "999",
+          cursor: "pointer",
+        }}
+      ></div>
+    </Draggable>
   );
 }
 
