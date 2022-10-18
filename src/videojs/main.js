@@ -5,6 +5,7 @@ import { getVideoDimensionsOf } from "./getmetadata";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import ReactPlayer from "react-player";
+import ReactDOM from "react-dom/client";
 import { MdHorizontalSplit, MdBorderVertical } from "react-icons/md";
 import { BsClockHistory, BsFillClockFill } from "react-icons/bs";
 import { BiInfoCircle } from "react-icons/bi";
@@ -21,6 +22,7 @@ import Modaldemo from "../Modaldemo";
 import { Alert, Button } from "react-bootstrap";
 import { timechange } from "../timetomilisecond";
 import Inputmask from "react-input-mask";
+import InnerSlide from "./InnerSlide";
 
 const HeaderMemo = React.memo(Newrange);
 function Main() {
@@ -1316,6 +1318,44 @@ function Main() {
     }
   }
 
+  let counteffect = 0;
+  function handlechange(e) {
+    console.log(e.target.value);
+    ref.current.seekTo(Number(e.target.value) / 1000);
+  }
+  // useEffect(() => {
+  //   if (check || sliderpoints.end != 0) {
+  //     if (check) {
+  //       const root = ReactDOM.createRoot(
+  //         document.getElementsByClassName("noUi-connect")[0]
+  //       );
+  //       root.render(
+  //         <InnerSlide
+  //           min={sliderpoints.start}
+  //           max={sliderpoints.end}
+  //           refdata={ref}
+  //           isPlaying={isPlaying}
+  //         />
+  //       );
+  //     }
+  //   }
+  //   //   let abc = document.getElementsByClassName("noUi-connect")[0];
+  //   //   console.log(abc, "abc");
+
+  //   //   // ✅ Set Attributes on Element
+  //   //   el.setAttribute("type", "range");
+  //   //   el.setAttribute("style", "width:100%");
+  //   //   el.setAttribute("min", Number(metadata.start) * 1000);
+  //   //   el.setAttribute("max", Number(metadata.duration) * 1000);
+  //   //   el.addEventListener("input", handlechange);
+  //   //   // el.setAttribute("disabled", "");
+  //   //   abc.append(el);
+  //   //   console.log(timings[0], metadata);
+  //   // }
+  //   // el.setAttribute("min", Number(sliderpoints.start));
+  //   // el.setAttribute("max", Number(sliderpoints.end));
+  // }, [check, sliderpoints.start, sliderpoints.end]);
+  // console.log(isPlaying, "isPlaying");
   return (
     ready && (
       <div className="video-main-box">

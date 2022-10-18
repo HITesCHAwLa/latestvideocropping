@@ -108,19 +108,19 @@ section.range-slider input[type="range"] {
 .noUi-horizontal .noUi-handle.noUi-handle-lower:after {
   content: url("/public/left.svg");
   position: absolute;
-  top: 20%;
-  left: -27%;
+  top: 16px;
+  left: -14%;
   display: block;
-  transform: scale(0.8);
+  transform: scale(0.6);
   display: block;
 }
 .noUi-horizontal .noUi-handle.noUi-handle-upper::after {
   content: url("/public/right.svg");
   position: absolute;
-  top: 20%;
-  left: -60%;
+  top: 16px;
+  left: -40%;
   display: block;
-  transform: scale(0.8);
+  transform: scale(0.6);
   padding-left: 10px;
 }
 .noUi-horizontal .noUi-handle.noUi-handle-lower,
@@ -231,4 +231,18 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield !important;
+}
+
+/* 18 Oct  */
+.noUi-connect input[type="range"]::-webkit-slider-thumb {
+  height: 65px;
+  width: 3px;
+  border-radius: 28px;
+  background-color: #f0b354;
+  position: relative;
+  margin: 0px 0;
+  cursor: pointer;
+  appearance: none;
+  pointer-events: all;
+  box-shadow: 0 1px 4px 0.5px rgb(0 0 0 / 25%);
 }

@@ -29,7 +29,8 @@ img {
 .ReactCrop .ord-n::after {
   border-left: none !important;
   position: relative;
-  left: -16px;
+  left: 0;
+  transform: translate(-50%, 0%);
 }
 .ReactCrop .ord-ne::after {
   border-left: none !important;
@@ -54,8 +55,26 @@ img {
 .ReactCrop .ord-s::after {
   border: none !important;
   border-bottom: 13px solid #f0b354 !important;
-  left: -16px;
+  left: 0px;
+  transform: translate(-50%, 0%);
 }
+.ReactCrop .ord-n {
+  margin-left: 0px !important;
+}
+.ReactCrop .ord-s {
+  margin-left: 0px !important;
+}
+.ReactCrop .ord-w::after {
+  left: 0;
+  top: 0;
+  transform: translate(0%, -50%);
+}
+.ReactCrop .ord-e::after {
+  right: 0;
+  top: 0;
+  transform: translate(0%, -50%);
+}
+
 .ReactCrop__crop-selection {
   /* backdrop-filter: grayscale(1); */
   box-shadow: none !important;
