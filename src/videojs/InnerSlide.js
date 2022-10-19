@@ -3,7 +3,16 @@ import React, { useEffect, useState } from "react";
 import "nouislider/distribute/nouislider.css";
 import Draggable from "react-draggable";
 import "./innerSlide.css";
-function InnerSlide({ min, max, refdata, point, setPoint, duration }) {
+function InnerSlide({
+  min,
+  max,
+  refdata,
+  point,
+  setPoint,
+  duration,
+  totalwidth,
+  setslider,
+}) {
   function changehandle(e) {
     refdata.current.seekTo(
       (Number(e.target.value) / 1000).toFixed(2),
@@ -12,14 +21,34 @@ function InnerSlide({ min, max, refdata, point, setPoint, duration }) {
     // setPoint((Number(e.target.value) / 1000).toFixed(2));
   }
   const [activeDrags, setActiveDrags] = useState(0);
+
   const onStart = () => {
+    setslider(true);
     setActiveDrags(activeDrags + 1);
   };
 
   const onStop = () => {
     setActiveDrags(activeDrags - 1);
+    setslider(false);
   };
-  const dragHandlers = { onStart: onStart, onStop: onStop };
+  console.log(document.getElementsByClassName("main-video-playpoint"));
+  const onControlledDrag = (e, position) => {
+    console.log(e, "ert");
+
+    const { x, y } = position;
+    let xpercentage = x * 100;
+    let gettotalpercentage = (xpercentage / totalwidth).toFixed(2);
+    console.log(((duration * gettotalpercentage) / 100).toFixed(2), "Seconds");
+    let gettime = ((duration * gettotalpercentage) / 100).toFixed(2);
+    refdata.current.seekTo(Number(gettime), "seconds");
+    // this.setState({ controlledPosition: { x, y } });
+    console.log(gettime, "EVENT");
+  };
+  const dragHandlers = {
+    onStart: onStart,
+    onStop: onStop,
+    onDrag: onControlledDrag,
+  };
   return (
     // <input
     //   type="range"

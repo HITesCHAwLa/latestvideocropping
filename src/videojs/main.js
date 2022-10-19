@@ -10,7 +10,7 @@ import { MdHorizontalSplit, MdBorderVertical } from "react-icons/md";
 import { BsClockHistory, BsFillClockFill } from "react-icons/bs";
 import { BiInfoCircle } from "react-icons/bi";
 import { CgDanger } from "react-icons/cg";
-
+import Draggable from "react-draggable";
 import { generateVideoThumbnails } from "@rajesh896/video-thumbnails-generator";
 import Newrange from "../dualrangeslider/Newrange";
 import {
@@ -1323,18 +1323,21 @@ function Main() {
     console.log(e.target.value);
     ref.current.seekTo(Number(e.target.value) / 1000);
   }
+
   useEffect(() => {
     if (check || sliderpoints.end != 0) {
       if (check) {
-        const root = ReactDOM.createRoot(
-          document.getElementsByClassName("noUi-connect")[0]
-        );
+        let abc = document.getElementsByClassName("noUi-connect")[0];
+        const root = ReactDOM.createRoot(abc);
         root.render(
           <InnerSlide
             min={sliderpoints.start}
             max={sliderpoints.end}
             refdata={ref}
             isPlaying={isPlaying}
+            totalwidth={abc.clientWidth}
+            duration={metadata.duration}
+            setslider={setslider}
           />
         );
         //#region For change using click
@@ -1366,7 +1369,19 @@ function Main() {
     // el.setAttribute("min", Number(sliderpoints.start));
     // el.setAttribute("max", Number(sliderpoints.end));
   }, [check, sliderpoints.start, sliderpoints.end]);
+  // const onStart = () => {
+  //   console.log("e");
+  //   setActiveDrags(activeDrags + 1);
+  // };
 
+  // const onStop = () => {
+  //   setActiveDrags(activeDrags - 1);
+  // };
+  // const dragHandlers = {
+  //   onStart: onStart,
+  //   onStop: onStop,
+  //   onDrag: onControlledDrag,
+  // };
   // console.log(isPlaying, "isPlaying");
   return (
     ready && (
@@ -1467,11 +1482,13 @@ function Main() {
                           if (e.playedSeconds === e.loadedSeconds) {
                             setisPlaying(false);
                             setslider(false);
+                            ref.current.seekTo(timings[0].start, "seconds");
                           }
 
                           if (e.playedSeconds.toFixed(2) >= timings[0].end) {
                             setisPlaying(false);
                             setslider(false);
+                            ref.current.seekTo(timings[0].start, "seconds");
                           }
 
                           dynamicdata(
@@ -1701,6 +1718,7 @@ function Main() {
                               setsliderpoints={setsliderpoints}
                             />
                           </div>
+                          {/* <Draggable bounds="parent" {...dragHandlers}> */}
                           <div
                             className="main-video-playpoint"
                             style={{
@@ -1723,6 +1741,7 @@ function Main() {
                               )}
                             </div>
                           </div>
+                          {/* </Draggable> */}
                           <div
                             className="main-video-playpoint"
                             style={{
