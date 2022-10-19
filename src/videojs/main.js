@@ -1363,10 +1363,9 @@ function Main() {
 
     const { x, y } = position;
     let xpercentage = x * 100;
-    let gettotalpercentage = (
-      xpercentage /
-      (first?.current.clientWidth - widthoffram)
-    ).toFixed(2);
+    let gettotalpercentage = (xpercentage / first?.current.clientWidth).toFixed(
+      2
+    );
 
     let gettime = ((metadata.duration * gettotalpercentage) / 100).toFixed(2);
 
@@ -1374,6 +1373,12 @@ function Main() {
     //   return false;
 
     // }
+    if (
+      Number(gettime) * 1000 >= sliderpoints.end ||
+      Number(gettime) * 1000 <= sliderpoints.start
+    ) {
+      return false;
+    }
     ref.current.seekTo(Number(gettime), "seconds");
     // // this.setState({ controlledPosition: { x, y } });
     // console.log(gettime, "EVENT");
