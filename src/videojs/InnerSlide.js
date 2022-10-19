@@ -31,18 +31,18 @@ function InnerSlide({
     setActiveDrags(activeDrags - 1);
     setslider(false);
   };
-  console.log(document.getElementsByClassName("main-video-playpoint"));
+  
   const onControlledDrag = (e, position) => {
-    console.log(e, "ert");
+
 
     const { x, y } = position;
     let xpercentage = x * 100;
     let gettotalpercentage = (xpercentage / totalwidth).toFixed(2);
-    console.log(((duration * gettotalpercentage) / 100).toFixed(2), "Seconds");
+ 
     let gettime = ((duration * gettotalpercentage) / 100).toFixed(2);
     refdata.current.seekTo(Number(gettime), "seconds");
     // this.setState({ controlledPosition: { x, y } });
-    console.log(gettime, "EVENT");
+   
   };
   const dragHandlers = {
     onStart: onStart,

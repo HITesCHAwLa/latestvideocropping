@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Draggable from "react-draggable";
 function DragableDemo() {
-  console.log(window);
+  
   const [activeDrags, setActiveDrags] = useState(0);
   const onStart = () => {
     setActiveDrags(activeDrags + 1);

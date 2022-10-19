@@ -305,10 +305,11 @@
   // }
   .main-video-playpoint {
     position: absolute;
-    width: 2px;
+    width: 4px;
     height: 100%;
     background-color: #f5cd05;
-    left: 0;
+    // left: 0;
+    cursor: pointer;
 }
   .play-button {
     position: absolute;

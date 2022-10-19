@@ -13,6 +13,7 @@ import { CgDanger } from "react-icons/cg";
 import Draggable from "react-draggable";
 import { generateVideoThumbnails } from "@rajesh896/video-thumbnails-generator";
 import Newrange from "../dualrangeslider/Newrange";
+
 import {
   millisToMinutesAndSeconds,
   secondtomilisecond,
@@ -1323,52 +1324,110 @@ function Main() {
     console.log(e.target.value);
     ref.current.seekTo(Number(e.target.value) / 1000);
   }
+  const [activeDrags, setActiveDrags] = useState(0);
 
+  const onStart = () => {
+    setslider(true);
+    setActiveDrags(activeDrags + 1);
+  };
+
+  const onStop = () => {
+    setActiveDrags(activeDrags - 1);
+    setslider(false);
+  };
+  const first = useRef(null);
   useEffect(() => {
-    if (check || sliderpoints.end != 0) {
-      if (check) {
-        let abc = document.getElementsByClassName("noUi-connect")[0];
-        const root = ReactDOM.createRoot(abc);
-        root.render(
-          <InnerSlide
-            min={sliderpoints.start}
-            max={sliderpoints.end}
-            refdata={ref}
-            isPlaying={isPlaying}
-            totalwidth={abc.clientWidth}
-            duration={metadata.duration}
-            setslider={setslider}
-          />
-        );
-        //#region For change using click
-        // document
-        //   .getElementsByClassName("noUi-connect")[0]
-        //   .addEventListener("click", (e) => {
-        //     console.log(e.layerX);
-        //     // transform: translate(0px, 0px);
-        //     const abc = document.getElementsByClassName("box")[0];
-        //     abc.style.transform = `translate(${e.layerX}px, 0px)`;
-        //   });
-        //#endregion
-      }
+    if (check) {
+      first.current = document.getElementsByClassName("noUi-connect")[0];
     }
+  }, [check]);
 
-    //   let abc = document.getElementsByClassName("noUi-connect")[0];
-    //   console.log(abc, "abc");
-
-    //   // ✅ Set Attributes on Element
-    //   el.setAttribute("type", "range");
-    //   el.setAttribute("style", "width:100%");
-    //   el.setAttribute("min", Number(metadata.start) * 1000);
-    //   el.setAttribute("max", Number(metadata.duration) * 1000);
-    //   el.addEventListener("input", handlechange);
-    //   // el.setAttribute("disabled", "");
-    //   abc.append(el);
-    //   console.log(timings[0], metadata);
+  const onControlledDrag = (e, position) => {
+    // if (
+    //   sliderpoints.start / 1000 <
+    //     millisToMinutesAndSeconds(
+    //       ((loadtimeforright * metadata.duration) / 100) * 1000
+    //     ) &&
+    //   sliderpoints.start / 1000 <
+    //     millisToMinutesAndSeconds(
+    //       ((loadedtime * metadata.duration) / 100) * 1000
+    //     )
+    // ) {
+    //   console.log("hello");
     // }
-    // el.setAttribute("min", Number(sliderpoints.start));
-    // el.setAttribute("max", Number(sliderpoints.end));
-  }, [check, sliderpoints.start, sliderpoints.end]);
+    const abc = first.current.style.transform;
+    // Object.values(abc);
+    let xyz = abc.split(" ")[0].split("(")[1].split(",")[0].replace("%", "");
+
+    let widthoffram = (first?.current.clientWidth * Number(xyz)) / 100;
+
+    const { x, y } = position;
+    let xpercentage = x * 100;
+    let gettotalpercentage = (
+      xpercentage /
+      (first?.current.clientWidth - widthoffram)
+    ).toFixed(2);
+
+    let gettime = ((metadata.duration * gettotalpercentage) / 100).toFixed(2);
+
+    // if (gettime >= timings[0].end || gettime <= timings[0].start) {
+    //   return false;
+
+    // }
+    ref.current.seekTo(Number(gettime), "seconds");
+    // // this.setState({ controlledPosition: { x, y } });
+    // console.log(gettime, "EVENT");
+  };
+  const dragHandlers = {
+    onStart: onStart,
+    onStop: onStop,
+    onDrag: onControlledDrag,
+  };
+  // useEffect(() => {
+  //   if (check || sliderpoints.end != 0) {
+  //     if (check) {
+  //       let abc = document.getElementsByClassName("noUi-connect")[0];
+  //       const root = ReactDOM.createRoot(abc);
+  //       root.render(
+  //         <InnerSlide
+  //           min={sliderpoints.start}
+  //           max={sliderpoints.end}
+  //           refdata={ref}
+  //           isPlaying={isPlaying}
+  //           totalwidth={abc.clientWidth}
+  //           duration={metadata.duration}
+  //           setslider={setslider}
+  //         />
+  //       );
+  //       //#region For change using click
+  //       // document
+  //       //   .getElementsByClassName("noUi-connect")[0]
+  //       //   .addEventListener("click", (e) => {
+  //       //     console.log(e.layerX);
+  //       //     // transform: translate(0px, 0px);
+  //       //     const abc = document.getElementsByClassName("box")[0];
+  //       //     abc.style.transform = `translate(${e.layerX}px, 0px)`;
+  //       //   });
+  //       //#endregion
+  //     }
+  //   }
+
+  //   //   let abc = document.getElementsByClassName("noUi-connect")[0];
+  //   //   console.log(abc, "abc");
+
+  //   //   // ✅ Set Attributes on Element
+  //   //   el.setAttribute("type", "range");
+  //   //   el.setAttribute("style", "width:100%");
+  //   //   el.setAttribute("min", Number(metadata.start) * 1000);
+  //   //   el.setAttribute("max", Number(metadata.duration) * 1000);
+  //   //   el.addEventListener("input", handlechange);
+  //   //   // el.setAttribute("disabled", "");
+  //   //   abc.append(el);
+  //   //   console.log(timings[0], metadata);
+  //   // }
+  //   // el.setAttribute("min", Number(sliderpoints.start));
+  //   // el.setAttribute("max", Number(sliderpoints.end));
+  // }, [check, sliderpoints.start, sliderpoints.end]);
   // const onStart = () => {
   //   console.log("e");
   //   setActiveDrags(activeDrags + 1);
@@ -1718,30 +1777,118 @@ function Main() {
                               setsliderpoints={setsliderpoints}
                             />
                           </div>
-                          {/* <Draggable bounds="parent" {...dragHandlers}> */}
-                          <div
-                            className="main-video-playpoint"
-                            style={{
-                              left: `${loadedtime > 100 ? 100 : loadedtime}%`,
-                            }}
-                          >
+                          {isPlaying ? (
                             <div
-                              className="video-playpoint"
-                              style={{ left: `${loadedtime}%` }}
+                              className="main-video-playpoint"
+                              style={{
+                                transform: `translate(${
+                                  (first?.current?.clientWidth * loadedtime) /
+                                  100
+                                }px, 0px) `,
+                                // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
+                              }}
                             >
-                              {(slider || isPlaying) && (
-                                <div className="tool-tip">
-                                  <span>
-                                    {millisToMinutesAndSeconds(
-                                      ((loadedtime * metadata.duration) / 100) *
-                                        1000
-                                    )}
-                                  </span>
-                                </div>
-                              )}
+                              <div
+                                className="video-playpoint"
+                                style={
+                                  {
+                                    // transform: `translate(${
+                                    //   (first?.current?.clientWidth * loadedtime) /
+                                    //   100
+                                    // }px, 0px) `,
+                                    // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
+                                  }
+                                }
+                              >
+                                {(slider || isPlaying) && (
+                                  <div className="tool-tip">
+                                    <span>
+                                      {millisToMinutesAndSeconds(
+                                        ((loadedtime * metadata.duration) /
+                                          100) *
+                                          1000
+                                      )}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          {/* </Draggable> */}
+                          ) : (
+                            <Draggable bounds="parent" {...dragHandlers}>
+                              <div
+                                className="main-video-playpoint"
+                                style={{
+                                  transform: `translate(${
+                                    (first?.current?.clientWidth * loadedtime) /
+                                    100
+                                  }px, 0px) `,
+                                  // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
+                                }}
+                              >
+                                <div
+                                  className="video-playpoint"
+                                  style={
+                                    {
+                                      // transform: `translate(${
+                                      //   (first?.current?.clientWidth * loadedtime) /
+                                      //   100
+                                      // }px, 0px) `,
+                                      // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
+                                    }
+                                  }
+                                >
+                                  {(slider || isPlaying) && (
+                                    <div className="tool-tip">
+                                      <span>
+                                        {millisToMinutesAndSeconds(
+                                          ((loadedtime * metadata.duration) /
+                                            100) *
+                                            1000
+                                        )}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </Draggable>
+                          )}
+                          {/* <Draggable bounds="parent" {...dragHandlers}>
+                            <div
+                              className="main-video-playpoint"
+                              style={{
+                                transform: `translate(${
+                                  (first?.current?.clientWidth * loadedtime) /
+                                  100
+                                }px, 0px) `,
+                                // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
+                              }}
+                            >
+                              <div
+                                className="video-playpoint"
+                                style={
+                                  {
+                                    // transform: `translate(${
+                                    //   (first?.current?.clientWidth * loadedtime) /
+                                    //   100
+                                    // }px, 0px) `,
+                                    // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
+                                  }
+                                }
+                              >
+                                {(slider || isPlaying) && (
+                                  <div className="tool-tip">
+                                    <span>
+                                      {millisToMinutesAndSeconds(
+                                        ((loadedtime * metadata.duration) /
+                                          100) *
+                                          1000
+                                      )}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </Draggable> */}
                           <div
                             className="main-video-playpoint"
                             style={{
