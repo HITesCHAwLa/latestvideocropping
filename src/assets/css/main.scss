@@ -397,6 +397,7 @@
   min-width: 10000vw;
   width: 10000vw;
   backdrop-filter: grayscale(1);
+  pointer-events: none;
 }
 .noUi-target .noUi-connect:after {
   content: "" !important;
@@ -408,6 +409,7 @@
   width: 10000vw !important;
   -webkit-backdrop-filter: grayscale(1) !important;
   backdrop-filter: grayscale(1) !important;
+  pointer-events: none;
 }
 // Media Query
 @media screen and (max-width: 1440px) {

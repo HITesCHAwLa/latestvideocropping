@@ -151,7 +151,7 @@ function Newrange({
       tooltips={false}
       margin={1000}
       onChange={(e) => {
-        refdata.current.seekTo(Number(e[0]), "seconds");
+        // refdata.current.seekTo(Number(e[0]), "seconds");
         setsliderpoints({
           start: Number(e[0]) * 1000,
           end: Number(e[1]) * 1000,
@@ -169,6 +169,7 @@ function Newrange({
       }}
       onSlide={(e, handle) => {
         if (handle === 0) {
+          refdata.current.seekTo(Number(e[0]), "seconds");
           dynamicdata(Number(e[0]), Number(videoduration));
         }
         if (handle === 1) {

@@ -1379,32 +1379,33 @@ function Main() {
     onDrag: onControlledDrag,
   };
   //#region  clickable
-  // useEffect(() => {
-  //   if (first.current) {
-  //     first.current.addEventListener(
-  //       "click",
-  //       (e) => {
-  //         setDragposition({ ...Dragposition, x: e.layerX });
-  //         let xpercentage = e.layerX.toFixed(2) * 100;
-  //         let gettotalpercentage = (
-  //           xpercentage / first?.current.clientWidth
-  //         ).toFixed(2);
+  useEffect(() => {
+    if (first.current) {
+      first.current.addEventListener(
+        "click",
+        (e) => {
+        
+          setDragposition({ ...Dragposition, x: e.layerX });
+          let xpercentage = e.layerX.toFixed(2) * 100;
+          let gettotalpercentage = (
+            xpercentage / first?.current.clientWidth
+          ).toFixed(2);
 
-  //         let gettime = (
-  //           (metadata.duration * gettotalpercentage) /
-  //           100
-  //         ).toFixed(2);
-  //         ref.current.seekTo(Number(gettime), "seconds");
-  //         // const abc = document.getElementsByClassName("box")[0];
-  //         // abc.style.transform = `translate(${e.layerX}px, 0px)`;
-  //       },
-  //       false
-  //     );
-  //   }
-  // }, [first.current]);
+          let gettime = (
+            (metadata.duration * gettotalpercentage) /
+            100
+          ).toFixed(2);
+          ref.current.seekTo(Number(gettime), "seconds");
+          // const abc = document.getElementsByClassName("box")[0];
+          // abc.style.transform = `translate(${e.layerX}px, 0px)`;
+        },
+        false
+      );
+    }
+  }, [first.current]);
   //#endregion
   useEffect(() => {
-    if (check) {
+    if (check && DRAG.current) {
       if (
         Number(loadtimeforright).toFixed(2) - Number(loadedtime).toFixed(2) <
         1
@@ -1738,8 +1739,8 @@ function Main() {
                       </div>
                       <div className="video-frame-box">
                         <div className="video-frame">
-                          {imagedata.map((e) => {
-                            return <img src={e} alt="" />;
+                          {imagedata.map((e,index) => {
+                            return <img src={e} alt="" key={`imagesdata${index}`}/>;
                           })}
                           <div className="video-slider">
                             <HeaderMemo
@@ -1851,19 +1852,7 @@ function Main() {
                             // nodeRef={DRAG}
                             position={Dragposition}
                           >
-                            <div
-                              ref={DRAG}
-                              className="main-video-playpoint"
-                              style={
-                                {
-                                  // transform: `translate(${
-                                  //   (first?.current?.clientWidth * loadedtime) /
-                                  //   100
-                                  // }px, 0px) `,
-                                  // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
-                                }
-                              }
-                            >
+                            <div ref={DRAG} className="main-video-playpoint">
                               <div
                                 className="video-playpoint"
                                 style={
