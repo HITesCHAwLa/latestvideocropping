@@ -1984,7 +1984,7 @@ function Main() {
                               onBlur={Blur}
                               style={{
                                 margin: "0 !important",
-                                width: "50px",
+                                width: "60px",
                                 border: "none",
                                 background: "transparent",
                                 textIndent: "4px",
@@ -2178,7 +2178,7 @@ function Main() {
                               onBlur={Blur2}
                               style={{
                                 margin: "0 !important",
-                                width: "50px",
+                                width: "60px",
                                 border: "none",
                                 background: "transparent",
                                 textIndent: "4px",
