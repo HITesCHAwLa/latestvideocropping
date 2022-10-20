@@ -1364,7 +1364,6 @@ function Main() {
     let widthoffram = (first?.current.clientWidth * Number(xyz)) / 100;
 
     const { x, y } = position;
-
     setDragposition({ x, y });
     let xpercentage = x * 100;
     let gettotalpercentage = (xpercentage / first?.current.clientWidth).toFixed(
@@ -1373,16 +1372,13 @@ function Main() {
 
     let gettime = ((metadata.duration * gettotalpercentage) / 100).toFixed(2);
 
-    // if (gettime >= timings[0].end || gettime <= timings[0].start) {
-    //   return false;
-
-    // }
-    // if (
-    //   Number(gettime) * 1000 >= sliderpoints.end ||
-    //   Number(gettime) * 1000 <= sliderpoints.start
-    // ) {
-    //   return false;
-    // }
+    if (
+      Number(gettime) * 1000 >= sliderpoints.end ||
+      Number(gettime) * 1000 <= sliderpoints.start
+    ) {
+      // setDragposition({ ...Dragposition, x: 256.75710227272725 });
+      return false;
+    }
     ref.current.seekTo(Number(gettime), "seconds");
     // // this.setState({ controlledPosition: { x, y } });
     // console.log(gettime, "EVENT");
@@ -1393,6 +1389,25 @@ function Main() {
     onStop: onStop,
     onDrag: onControlledDrag,
   };
+  // useEffect(() => {
+  //   if (first.current) {
+  //     first.current.addEventListener("click", (e) => {
+  //       setDragposition({ ...Dragposition, x: e.layerX });
+  //       let xpercentage = e.layerX.toFixed(2) * 100;
+  //       let gettotalpercentage = (
+  //         xpercentage / first?.current.clientWidth
+  //       ).toFixed(2);
+
+  //       let gettime = ((metadata.duration * gettotalpercentage) / 100).toFixed(
+  //         2
+  //       );
+  //       ref.current.seekTo(Number(gettime), "seconds");
+  //       // const abc = document.getElementsByClassName("box")[0];
+  //       // abc.style.transform = `translate(${e.layerX}px, 0px)`;
+  //     });
+  //   }
+  // }, [first.current]);
+
   // useEffect(() => {
   //   if (check || sliderpoints.end != 0) {
   //     if (check) {
@@ -1452,15 +1467,16 @@ function Main() {
   //   onDrag: onControlledDrag,
   // };
   // console.log(isPlaying, "isPlaying");
+  // if (first.current) {
+  //   first.current.addEventListener("click", (e) => {
+  //     console.log(e.layerX);
+  //     setDragposition({ ...Dragposition, x: e.layerX });
+  //     // const abc = document.getElementsByClassName("box")[0];
+  //     // abc.style.transform = `translate(${e.layerX}px, 0px)`;
+  //   });
+  // }
   useEffect(() => {
-    console.log(loadedtime, "");
     if (check) {
-      console.log(
-        loadtimeforright.toFixed(2),
-        "loadtimeforright",
-        loadedtime.toFixed(2),
-        "loadedtime"
-      );
       if (
         Number(loadtimeforright).toFixed(2) - Number(loadedtime).toFixed(2) <
         1
@@ -1469,15 +1485,25 @@ function Main() {
           (first?.current?.clientWidth * Number(loadtimeforright).toFixed(2)) /
           100
         }px, 0px) `;
+        setDragposition({
+          ...Dragposition,
+          x:
+            (first?.current?.clientWidth *
+              Number(loadtimeforright).toFixed(2)) /
+            100,
+        });
       } else {
         DRAG.current.style.transform = `translate(${
           (first?.current?.clientWidth * loadedtime) / 100
         }px, 0px) `;
+        setDragposition({
+          ...Dragposition,
+          x: (first?.current?.clientWidth * loadedtime) / 100,
+        });
       }
-      console.log(DRAG.current.style.transform, "DRAG");
     }
   }, [check, loadedtime, loadtimeforright]);
-
+  console.log(Dragposition, "Dragposition");
   return (
     ready && (
       <div className="video-main-box">
