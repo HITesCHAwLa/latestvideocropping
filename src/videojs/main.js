@@ -285,6 +285,7 @@ function Main() {
     let a = playtime * 100;
     let b = a / metadata.duration;
     setloadtimeforright(b);
+    // setloadedtime(b);
     setslidenew(true);
     setslider(false);
   }
@@ -1336,6 +1337,7 @@ function Main() {
     setslider(false);
   };
   const first = useRef(null);
+  const [Dragposition, setDragposition] = useState({ x: 0, y: 0 });
   useEffect(() => {
     if (check) {
       first.current = document.getElementsByClassName("noUi-connect")[0];
@@ -1362,6 +1364,8 @@ function Main() {
     let widthoffram = (first?.current.clientWidth * Number(xyz)) / 100;
 
     const { x, y } = position;
+
+    setDragposition({ x, y });
     let xpercentage = x * 100;
     let gettotalpercentage = (xpercentage / first?.current.clientWidth).toFixed(
       2
@@ -1373,16 +1377,17 @@ function Main() {
     //   return false;
 
     // }
-    if (
-      Number(gettime) * 1000 >= sliderpoints.end ||
-      Number(gettime) * 1000 <= sliderpoints.start
-    ) {
-      return false;
-    }
+    // if (
+    //   Number(gettime) * 1000 >= sliderpoints.end ||
+    //   Number(gettime) * 1000 <= sliderpoints.start
+    // ) {
+    //   return false;
+    // }
     ref.current.seekTo(Number(gettime), "seconds");
     // // this.setState({ controlledPosition: { x, y } });
     // console.log(gettime, "EVENT");
   };
+  const DRAG = useRef(null);
   const dragHandlers = {
     onStart: onStart,
     onStop: onStop,
@@ -1447,6 +1452,32 @@ function Main() {
   //   onDrag: onControlledDrag,
   // };
   // console.log(isPlaying, "isPlaying");
+  useEffect(() => {
+    console.log(loadedtime, "");
+    if (check) {
+      console.log(
+        loadtimeforright.toFixed(2),
+        "loadtimeforright",
+        loadedtime.toFixed(2),
+        "loadedtime"
+      );
+      if (
+        Number(loadtimeforright).toFixed(2) - Number(loadedtime).toFixed(2) <
+        1
+      ) {
+        DRAG.current.style.transform = `translate(${
+          (first?.current?.clientWidth * Number(loadtimeforright).toFixed(2)) /
+          100
+        }px, 0px) `;
+      } else {
+        DRAG.current.style.transform = `translate(${
+          (first?.current?.clientWidth * loadedtime) / 100
+        }px, 0px) `;
+      }
+      console.log(DRAG.current.style.transform, "DRAG");
+    }
+  }, [check, loadedtime, loadtimeforright]);
+
   return (
     ready && (
       <div className="video-main-box">
@@ -1782,7 +1813,7 @@ function Main() {
                               setsliderpoints={setsliderpoints}
                             />
                           </div>
-                          {isPlaying ? (
+                          {/* {isPlaying ? (
                             <div
                               className="main-video-playpoint"
                               style={{
@@ -1856,17 +1887,28 @@ function Main() {
                                 </div>
                               </div>
                             </Draggable>
-                          )}
-                          {/* <Draggable bounds="parent" {...dragHandlers}>
+                          )} */}
+
+                          <Draggable
+                            axis="x"
+                            bounds="parent"
+                            {...dragHandlers}
+                            // allowAnyClick={true}
+                            // nodeRef={DRAG}
+                            position={Dragposition}
+                          >
                             <div
+                              ref={DRAG}
                               className="main-video-playpoint"
-                              style={{
-                                transform: `translate(${
-                                  (first?.current?.clientWidth * loadedtime) /
-                                  100
-                                }px, 0px) `,
-                                // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
-                              }}
+                              style={
+                                {
+                                  // transform: `translate(${
+                                  //   (first?.current?.clientWidth * loadedtime) /
+                                  //   100
+                                  // }px, 0px) `,
+                                  // left: `${loadedtime > 100 ? 100 : loadedtime}%`,
+                                }
+                              }
                             >
                               <div
                                 className="video-playpoint"
@@ -1893,7 +1935,7 @@ function Main() {
                                 )}
                               </div>
                             </div>
-                          </Draggable> */}
+                          </Draggable>
                           <div
                             className="main-video-playpoint"
                             style={{
