@@ -1345,18 +1345,6 @@ function Main() {
   }, [check]);
 
   const onControlledDrag = (e, position) => {
-    // if (
-    //   sliderpoints.start / 1000 <
-    //     millisToMinutesAndSeconds(
-    //       ((loadtimeforright * metadata.duration) / 100) * 1000
-    //     ) &&
-    //   sliderpoints.start / 1000 <
-    //     millisToMinutesAndSeconds(
-    //       ((loadedtime * metadata.duration) / 100) * 1000
-    //     )
-    // ) {
-    //   console.log("hello");
-    // }
     const abc = first.current.style.transform;
     // Object.values(abc);
     let xyz = abc.split(" ")[0].split("(")[1].split(",")[0].replace("%", "");
@@ -1373,13 +1361,14 @@ function Main() {
     let gettime = ((metadata.duration * gettotalpercentage) / 100).toFixed(2);
 
     if (
-      Number(gettime) * 1000 >= sliderpoints.end ||
-      Number(gettime) * 1000 <= sliderpoints.start
+      Number(gettime) * 1000 > sliderpoints.end ||
+      Number(gettime) * 1000 < sliderpoints.start
     ) {
-      // setDragposition({ ...Dragposition, x: 256.75710227272725 });
+      setDragposition({ ...Dragposition, x: parseInt(Dragposition.x) });
       return false;
+    } else {
+      ref.current.seekTo(Number(gettime), "seconds");
     }
-    ref.current.seekTo(Number(gettime), "seconds");
     // // this.setState({ controlledPosition: { x, y } });
     // console.log(gettime, "EVENT");
   };
@@ -1389,92 +1378,31 @@ function Main() {
     onStop: onStop,
     onDrag: onControlledDrag,
   };
+  //#region  clickable
   // useEffect(() => {
   //   if (first.current) {
-  //     first.current.addEventListener("click", (e) => {
-  //       setDragposition({ ...Dragposition, x: e.layerX });
-  //       let xpercentage = e.layerX.toFixed(2) * 100;
-  //       let gettotalpercentage = (
-  //         xpercentage / first?.current.clientWidth
-  //       ).toFixed(2);
+  //     first.current.addEventListener(
+  //       "click",
+  //       (e) => {
+  //         setDragposition({ ...Dragposition, x: e.layerX });
+  //         let xpercentage = e.layerX.toFixed(2) * 100;
+  //         let gettotalpercentage = (
+  //           xpercentage / first?.current.clientWidth
+  //         ).toFixed(2);
 
-  //       let gettime = ((metadata.duration * gettotalpercentage) / 100).toFixed(
-  //         2
-  //       );
-  //       ref.current.seekTo(Number(gettime), "seconds");
-  //       // const abc = document.getElementsByClassName("box")[0];
-  //       // abc.style.transform = `translate(${e.layerX}px, 0px)`;
-  //     });
+  //         let gettime = (
+  //           (metadata.duration * gettotalpercentage) /
+  //           100
+  //         ).toFixed(2);
+  //         ref.current.seekTo(Number(gettime), "seconds");
+  //         // const abc = document.getElementsByClassName("box")[0];
+  //         // abc.style.transform = `translate(${e.layerX}px, 0px)`;
+  //       },
+  //       false
+  //     );
   //   }
   // }, [first.current]);
-
-  // useEffect(() => {
-  //   if (check || sliderpoints.end != 0) {
-  //     if (check) {
-  //       let abc = document.getElementsByClassName("noUi-connect")[0];
-  //       const root = ReactDOM.createRoot(abc);
-  //       root.render(
-  //         <InnerSlide
-  //           min={sliderpoints.start}
-  //           max={sliderpoints.end}
-  //           refdata={ref}
-  //           isPlaying={isPlaying}
-  //           totalwidth={abc.clientWidth}
-  //           duration={metadata.duration}
-  //           setslider={setslider}
-  //         />
-  //       );
-  //       //#region For change using click
-  //       // document
-  //       //   .getElementsByClassName("noUi-connect")[0]
-  //       //   .addEventListener("click", (e) => {
-  //       //     console.log(e.layerX);
-  //       //     // transform: translate(0px, 0px);
-  //       //     const abc = document.getElementsByClassName("box")[0];
-  //       //     abc.style.transform = `translate(${e.layerX}px, 0px)`;
-  //       //   });
-  //       //#endregion
-  //     }
-  //   }
-
-  //   //   let abc = document.getElementsByClassName("noUi-connect")[0];
-  //   //   console.log(abc, "abc");
-
-  //   //   // ✅ Set Attributes on Element
-  //   //   el.setAttribute("type", "range");
-  //   //   el.setAttribute("style", "width:100%");
-  //   //   el.setAttribute("min", Number(metadata.start) * 1000);
-  //   //   el.setAttribute("max", Number(metadata.duration) * 1000);
-  //   //   el.addEventListener("input", handlechange);
-  //   //   // el.setAttribute("disabled", "");
-  //   //   abc.append(el);
-  //   //   console.log(timings[0], metadata);
-  //   // }
-  //   // el.setAttribute("min", Number(sliderpoints.start));
-  //   // el.setAttribute("max", Number(sliderpoints.end));
-  // }, [check, sliderpoints.start, sliderpoints.end]);
-  // const onStart = () => {
-  //   console.log("e");
-  //   setActiveDrags(activeDrags + 1);
-  // };
-
-  // const onStop = () => {
-  //   setActiveDrags(activeDrags - 1);
-  // };
-  // const dragHandlers = {
-  //   onStart: onStart,
-  //   onStop: onStop,
-  //   onDrag: onControlledDrag,
-  // };
-  // console.log(isPlaying, "isPlaying");
-  // if (first.current) {
-  //   first.current.addEventListener("click", (e) => {
-  //     console.log(e.layerX);
-  //     setDragposition({ ...Dragposition, x: e.layerX });
-  //     // const abc = document.getElementsByClassName("box")[0];
-  //     // abc.style.transform = `translate(${e.layerX}px, 0px)`;
-  //   });
-  // }
+  //#endregion
   useEffect(() => {
     if (check) {
       if (
@@ -1503,7 +1431,7 @@ function Main() {
       }
     }
   }, [check, loadedtime, loadtimeforright]);
-  console.log(Dragposition, "Dragposition");
+
   return (
     ready && (
       <div className="video-main-box">
@@ -1916,7 +1844,7 @@ function Main() {
                           )} */}
 
                           <Draggable
-                            axis="x"
+                            // axis="x"
                             bounds="parent"
                             {...dragHandlers}
                             // allowAnyClick={true}
